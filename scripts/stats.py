@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -16,7 +18,7 @@ REGIONS = ROOT / "config" / "regions.csv"
 REQUIRED_FIELDS = (
     "record_id", "year", "region", "paper_type", "subject", "title",
     "source_url", "source_type", "license_status", "availability", "status",
-    "notes",
+    "sha256", "notes",
 )
 STATUSES = {"planned", "discovered", "indexed", "verified", "withdrawn"}
 AVAILABILITIES = {"none", "external", "local"}
@@ -57,6 +59,17 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
             errors.append(f"line {number}: local availability requires local_path")
         if availability != "local" and row.get("local_path", "").strip():
             errors.append(f"line {number}: local_path is only valid for local availability")
+        digest = row.get("sha256", "").strip()
+        if digest and not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
+            errors.append(f"line {number}: sha256 must be 64 hexadecimal characters")
+        if availability == "local" and digest:
+            path = ROOT / row["local_path"].strip()
+            if not path.is_file():
+                errors.append(f"line {number}: local file not found: {row['local_path']}")
+            else:
+                actual = hashlib.sha256(path.read_bytes()).hexdigest()
+                if actual.lower() != digest.lower():
+                    errors.append(f"line {number}: sha256 mismatch for {row['local_path']}")
     return errors
 
 

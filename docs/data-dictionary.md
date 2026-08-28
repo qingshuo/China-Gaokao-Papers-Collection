@@ -16,6 +16,7 @@
 | `availability` | `none`（只有线索）、`external`（外部可访问）或 `local`（文件在仓库） |
 | `status` | `planned`、`discovered`、`indexed`、`verified`、`withdrawn` |
 | `local_path` | `availability=local` 时的仓库相对路径 |
+| `sha256` | 本地文件的 SHA-256 校验值，用于发现内容被替换 |
 | `notes` | 核验、授权和版本差异说明 |
 
 ### 省份范围
