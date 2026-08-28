@@ -19,7 +19,9 @@ jobs:
         run: python scripts/stats.py --check
       - name: Run tests
         run: python -m unittest discover -s tests -v
-      - name: Rebuild report
-        run: python scripts/stats.py --write docs/coverage.md
-      - name: Check generated report
-        run: git diff --exit-code -- docs/coverage.md
+      - name: Rebuild reports
+        run: |
+          python scripts/stats.py --write docs/coverage.md
+          python scripts/stats.py --write-index docs/papers-index.md
+      - name: Check generated reports
+        run: git diff --exit-code -- docs/coverage.md docs/papers-index.md

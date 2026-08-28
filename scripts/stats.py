@@ -9,6 +9,7 @@ import hashlib
 import re
 from collections import Counter
 from pathlib import Path
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "data" / "exams.csv"
@@ -127,13 +128,65 @@ def render_markdown(summary: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
+def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]) -> str:
+    active = [
+        row for row in rows
+        if row.get("status") != "withdrawn" and row.get("availability") == "local"
+    ]
+    subjects = sorted({row["subject"] for row in active})
+    lines = [
+        "# 历年试卷索引",
+        "",
+        "本页由 `python3 scripts/stats.py --write-index docs/papers-index.md` 自动生成。",
+        "",
+        "## 按学科",
+        "",
+    ]
+    for subject in subjects:
+        count = sum(row["subject"] == subject for row in active)
+        lines.append(f"- [{subject}（{count} 份）](#{subject})")
+    for subject in subjects:
+        lines += ["", f"## {subject}", ""]
+        subject_years = sorted(
+            {row["year"] for row in active if row["subject"] == subject},
+            reverse=True,
+        )
+        lines += [" · ".join(f"[{year}](#{year}-{subject})" for year in subject_years), ""]
+        for year in subject_years:
+            matches = sorted(
+                (row for row in active if row["year"] == year and row["subject"] == subject),
+                key=lambda row: (row["region"], row["title"]),
+            )
+            lines += [
+                f"### {year} {subject}", "",
+                "| 试卷 | 地区 | 类型 | 格式 | 授权 |",
+                "| --- | --- | --- | --- | --- |",
+            ]
+            for row in matches:
+                target = "../" + quote(row["local_path"], safe="/")
+                title = row["title"].replace("|", "\\|")
+                region = region_names.get(row["region"], row["region"])
+                if row["region"] == "全国" and "(" in row["title"]:
+                    region = "全国/多省"
+                extension = Path(row["local_path"]).suffix.lstrip(".").upper()
+                license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
+                lines.append(
+                    f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} |"
+                )
+            lines.append("")
+    lines += ["> 返回 [README](../README.md) 查看年份总览。", ""]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate data and exit")
     parser.add_argument("--write", metavar="PATH", help="write the markdown report")
+    parser.add_argument("--write-index", metavar="PATH", help="write the paper index")
     args = parser.parse_args()
     rows = read_csv(CATALOG)
-    region_codes = {row["code"] for row in read_csv(REGIONS)}
+    region_rows = read_csv(REGIONS)
+    region_codes = {row["code"] for row in region_rows}
     errors = validate_catalog(rows, region_codes)
     if errors:
         for error in errors:
@@ -147,7 +200,14 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_markdown(summary), encoding="utf-8")
-    if args.check or not args.write:
+    if args.write_index:
+        output = Path(args.write_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        region_names = {row["code"]: row["name"] for row in region_rows}
+        output.write_text(render_papers_index(rows, region_names), encoding="utf-8")
+    if args.check or not (args.write or args.write_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 

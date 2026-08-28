@@ -1,48 +1,30 @@
 # 中国高考试卷资料库
 
-按年份、省份、科目和试卷类型整理高考试卷的开放索引项目。项目优先保存可追溯的元数据和来源链接；只有在确认拥有再发布权限后，才把文件放入仓库。
+按年份、地区和学科整理的高考试卷归档。目前收录 **230 份试卷**，覆盖 **2017–2026 年**，包含数学和物理。
 
-## 当前状态
+[查看全部试卷索引](docs/papers-index.md) · [项目说明](docs/project.md) · [覆盖统计](docs/coverage.md) · [参与贡献](CONTRIBUTING.md)
 
-截至当前版本，仓库已归档 230 份 PDF：105 份数学卷和 125 份物理卷。语文、英语、地理的候选文档来源已登记，但因许可证未知暂未复制。已发现的外部线索见 [`data/sources.csv`](data/sources.csv)，正式收录记录见 [`data/exams.csv`](data/exams.csv)。运行统计脚本后，报告会写入 [`docs/coverage.md`](docs/coverage.md)。第三方归属说明见 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md)。
+## 历年试卷
 
-```text
-data/exams.csv       正式试卷索引（唯一事实源）
-data/sources.csv     外部项目和候选来源，不代表已取得授权
-config/regions.csv   省级行政区清单
-scripts/stats.py     数据校验与覆盖统计
-docs/coverage.md     自动生成的统计报告
-```
+点击数量可查看该年份、该学科的全部试卷。
 
-## 快速开始
+| 年份 | 数学 | 物理 | 合计 |
+| ---: | ---: | ---: | ---: |
+| 2026 | [6 份](docs/papers-index.md#2026-数学) | [15 份](docs/papers-index.md#2026-物理) | **21** |
+| 2025 | [8 份](docs/papers-index.md#2025-数学) | [25 份](docs/papers-index.md#2025-物理) | **33** |
+| 2024 | [8 份](docs/papers-index.md#2024-数学) | [22 份](docs/papers-index.md#2024-物理) | **30** |
+| 2023 | [9 份](docs/papers-index.md#2023-数学) | [18 份](docs/papers-index.md#2023-物理) | **27** |
+| 2022 | [10 份](docs/papers-index.md#2022-数学) | [17 份](docs/papers-index.md#2022-物理) | **27** |
+| 2021 | [10 份](docs/papers-index.md#2021-数学) | [17 份](docs/papers-index.md#2021-物理) | **27** |
+| 2020 | [13 份](docs/papers-index.md#2020-数学) | [11 份](docs/papers-index.md#2020-物理) | **24** |
+| 2019 | [13 份](docs/papers-index.md#2019-数学) | - | **13** |
+| 2018 | [13 份](docs/papers-index.md#2018-数学) | - | **13** |
+| 2017 | [15 份](docs/papers-index.md#2017-数学) | - | **15** |
+| **合计** | **105** | **125** | **230** |
 
-需要 Python 3.10 或更高版本，不需要第三方依赖：
+## 按学科查看
 
-```bash
-python3 scripts/stats.py --check
-python3 scripts/stats.py --write docs/coverage.md
-python3 -m unittest discover -s tests -v
-```
+- [数学试卷：105 份](docs/papers-index.md#数学)
+- [物理试卷：125 份](docs/papers-index.md#物理)
 
-## 收录原则
-
-- 每条记录必须能回溯到来源 URL，并注明来源类型、可用性和授权状态。
-- `discovered` 只表示发现了线索，`indexed` 表示已整理元数据，`verified` 才表示已核验内容和来源。
-- `license_status=unknown` 的文件不复制到仓库；收到权利人通知后立即处理下架或替换链接。
-- 扫描件、答案、解析可以分别建记录，避免把不同版本混成一条。
-- 文件命名建议为 `papers/<year>/<region>/<subject>/<paper_type>.<ext>`，路径写入 `local_path`。
-
-## 如何新增记录
-
-1. 复制 [`data/exams.csv`](data/exams.csv) 中的表头，填写一条完整记录。
-2. 使用 `python3 scripts/stats.py --check` 检查字段、年份和状态值。
-3. 运行 `python3 scripts/stats.py --write docs/coverage.md` 更新报告。
-4. 提交来源页面、授权说明和必要的校验信息，便于审核。
-
-## 现有公开项目
-
-GitHub 上已有一些有价值但范围不完整的项目，例如 [shaodongtang/gaokao_exam](https://github.com/shaodongtang/gaokao_exam)、[ajsadhotmail/2024-China-Gaokao-Math](https://github.com/ajsadhotmail/2024-China-Gaokao-Math)、[fihyer/NCEE](https://github.com/fihyer/NCEE) 和 [xihong-m/gaokao-math](https://github.com/xihong-m/gaokao-math)。本项目只记录它们作为线索，不重新分发其内容，也不替它们声明授权。
-
-## 许可
-
-项目中的脚本和文档按 MIT 许可发布。试卷、图片、答案和第三方链接的版权及使用条件以各自权利人和来源页面为准。
+> 试卷来自公开网络来源。每份文件的原始链接、授权状态和 SHA-256 均记录在 [`data/exams.csv`](data/exams.csv)；使用前请查看 [第三方资料归属](THIRD-PARTY-NOTICES.md)。

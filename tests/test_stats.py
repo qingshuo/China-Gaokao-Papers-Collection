@@ -29,6 +29,16 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(summary["verified"], 1)
         self.assertEqual(summary["years"], ["2024"])
 
+    def test_index_labels_multi_region_national_paper(self):
+        row = {
+            "year": "2024", "region": "全国", "subject": "数学",
+            "status": "indexed", "availability": "local", "title": "2024全国1(北京,上海)",
+            "local_path": "papers/example.pdf", "paper_type": "普通高考",
+            "license_status": "permitted",
+        }
+        index = stats.render_papers_index([row], {})
+        self.assertIn("全国/多省", index)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -11,6 +11,7 @@
 ```bash
 python3 scripts/stats.py --check
 python3 scripts/stats.py --write docs/coverage.md
+python3 scripts/stats.py --write-index docs/papers-index.md
 python3 -m unittest discover -s tests -v
 ```
 
