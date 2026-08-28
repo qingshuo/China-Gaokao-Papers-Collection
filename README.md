@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-截至当前版本，仓库已归档 230 份 PDF：105 份数学卷和 125 份物理卷。已发现的外部线索见 [`data/sources.csv`](data/sources.csv)，正式收录记录见 [`data/exams.csv`](data/exams.csv)。运行统计脚本后，报告会写入 [`docs/coverage.md`](docs/coverage.md)。第三方归属说明见 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md)。
+截至当前版本，仓库已归档 230 份 PDF：105 份数学卷和 125 份物理卷。语文、英语、地理的候选文档来源已登记，但因许可证未知暂未复制。已发现的外部线索见 [`data/sources.csv`](data/sources.csv)，正式收录记录见 [`data/exams.csv`](data/exams.csv)。运行统计脚本后，报告会写入 [`docs/coverage.md`](docs/coverage.md)。第三方归属说明见 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md)。
 
 ```text
 data/exams.csv       正式试卷索引（唯一事实源）

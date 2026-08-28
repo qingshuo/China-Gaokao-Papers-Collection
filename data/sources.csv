@@ -5,3 +5,6 @@ fihyer/NCEE,https://github.com/fihyer/NCEE,历年高考数学试卷,github,unkno
 xihong-m/gaokao-math,https://github.com/xihong-m/gaokao-math,新高考以来数学真题,github,unknown,范围和文件状态待人工核验
 deekur/gaokaomath,https://github.com/deekur/gaokaomath,1952-2026 高考数学真题（本项目同步 2017-2026 普通高考 PDF）,github,permitted,上游仓库声明 CC-BY-4.0；同步文件保留原文件名并在索引中记录原始 URL
 deekur/gaokaophysics,https://github.com/deekur/gaokaophysics,1952-2026 高考物理真题（本项目同步 2020-2026 普通高考 PDF）,github,unknown,公开仓库提供 2020-2026 物理 PDF；上游许可证字段未明确，保留来源链接并待人工核验
+Zaxaerith/GaokaoCHN,https://github.com/Zaxaerith/GaokaoCHN,2019-2025 高考语文文档候选,github,unknown,公开目录含 DOCX/PDF，但未声明许可证；暂不复制
+Zaxaerith/GaokaoENG,https://github.com/Zaxaerith/GaokaoENG,2017-2024 高考英语文档候选,github,unknown,公开目录含 DOC/DOCX，但未声明许可证；暂不复制
+Zaxaerith/GaokaoGEO,https://github.com/Zaxaerith/GaokaoGEO,2009-2024 高考地理文档候选,github,unknown,公开目录含 DOC/DOCX/PDF，但未声明许可证；暂不复制
