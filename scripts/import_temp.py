@@ -10,6 +10,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import zipfile
 from pathlib import Path
 from urllib.parse import quote, unquote
 
@@ -25,6 +26,7 @@ NOISE = (
     "一轮复习", "二轮复习", "考点帮", "压轴题一览", "模拟题", "预测题",
     "知识点", "专项练习", "专题练习", "作业题",
 )
+DOCX_NOISE = ("公众号", "微信", "网盘", "加群", "二维码", "关注我们", "扫码", "QQ群", "大才酷")
 SUBJECTS = ("语文", "数学", "英语", "日语", "物理", "化学", "生物", "地理", "历史", "政治")
 REGIONS = (
     ("内蒙古", "NM"), ("黑龙江", "HL"), ("宁夏", "NX"), ("新疆", "XJ"),
@@ -90,10 +92,26 @@ def classify(path: Path) -> tuple[str | None, str, str, str]:
     return year, region, subject, variant
 
 
+def docx_contains_noise(path: Path) -> bool:
+    """Check document XML, including headers, for embedded promotion text."""
+    try:
+        with zipfile.ZipFile(path) as archive:
+            content = "\n".join(
+                archive.read(name).decode("utf-8", errors="ignore")
+                for name in archive.namelist()
+                if name.endswith(".xml")
+            )
+    except zipfile.BadZipFile:
+        return False
+    return any(token in content for token in DOCX_NOISE)
+
+
 def is_candidate(path: Path, years: set[str]) -> bool:
     if path.suffix.lower() not in SUPPORTED or path.name == ".DS_Store":
         return False
     if any(token in str(path) for token in NOISE):
+        return False
+    if path.suffix.lower() == ".docx" and docx_contains_noise(path):
         return False
     year, _, subject, _ = classify(path)
     if year not in years or not subject:
@@ -145,6 +163,10 @@ def main() -> int:
     parser.add_argument("--report", default="docs/temp-import-report.csv")
     parser.add_argument("--convert-doc", action="store_true", help="convert legacy .doc files to PDF")
     parser.add_argument(
+        "--extensions", default=",".join(sorted(SUPPORTED)),
+        help="comma-separated extensions to import, for example .pdf,.docx",
+    )
+    parser.add_argument(
         "--repair-local-paths", action="store_true",
         help="move earlier imports from ignored papers/temp/ to the standard papers/ layout",
     )
@@ -152,7 +174,18 @@ def main() -> int:
         "--restore-legacy-docs", metavar="REPORT",
         help="restore original DOC files when PDF conversion fails visual QA",
     )
+    parser.add_argument(
+        "--purge-content-noise", action="store_true",
+        help="remove earlier temp imports whose DOCX XML contains promotion text",
+    )
+    parser.add_argument("--trash-dir", help="explicit directory used with --purge-content-noise")
+    parser.add_argument(
+        "--normalize-local-filenames", action="store_true",
+        help="remove importer hash suffixes when the original name is available",
+    )
     args = parser.parse_args()
+    start, end = (int(part) for part in args.years.split("-", 1))
+    years = {str(year) for year in range(start, end + 1)}
     if args.repair_local_paths:
         with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
             fieldnames = list(csv.DictReader(handle).fieldnames or [])
@@ -215,9 +248,65 @@ def main() -> int:
         print(f"restored={restored}")
         return 0
 
-    start, end = (int(part) for part in args.years.split("-", 1))
-    years = {str(year) for year in range(start, end + 1)}
-    candidates = sorted(path for path in TEMP.rglob("*") if path.is_file() and is_candidate(path, years))
+    if args.purge_content_noise:
+        if not args.trash_dir:
+            parser.error("--purge-content-noise requires --trash-dir")
+        trash_dir = Path(args.trash_dir)
+        with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+            fieldnames = list(csv.DictReader(handle).fieldnames or [])
+        with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+            rows = list(csv.DictReader(handle))
+        kept: list[dict[str, str]] = []
+        withdrawn = 0
+        for row in rows:
+            local = ROOT / row.get("local_path", "")
+            is_temp_docx = row.get("record_id", "").startswith("temp-") and local.suffix.lower() == ".docx"
+            if is_temp_docx and row.get("year") in years and local.is_file() and docx_contains_noise(local):
+                destination = trash_dir / local.relative_to(ROOT)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(local, destination)
+                withdrawn += 1
+                continue
+            kept.append(row)
+        with CATALOG.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(kept)
+        print(f"withdrawn={withdrawn}")
+        return 0
+
+    if args.normalize_local_filenames:
+        with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+            fieldnames = list(csv.DictReader(handle).fieldnames or [])
+        with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+            rows = list(csv.DictReader(handle))
+        normalized = 0
+        for row in rows:
+            local = ROOT / row.get("local_path", "")
+            suffix = f"--{row.get('sha256', '')[:8]}"
+            if not suffix or not local.is_file() or not local.stem.endswith(suffix):
+                continue
+            destination = local.with_name(f"{local.stem[:-len(suffix)]}{local.suffix}")
+            if destination.exists():
+                continue
+            shutil.move(local, destination)
+            row["local_path"] = str(destination.relative_to(ROOT))
+            normalized += 1
+        with CATALOG.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"normalized={normalized}")
+        return 0
+
+    extensions = {suffix.strip().lower() for suffix in args.extensions.split(",") if suffix.strip()}
+    unsupported = extensions - SUPPORTED
+    if unsupported:
+        parser.error(f"unsupported extensions: {', '.join(sorted(unsupported))}")
+    candidates = sorted(
+        path for path in TEMP.rglob("*")
+        if path.is_file() and path.suffix.lower() in extensions and is_candidate(path, years)
+    )
     seen = existing_hashes()
     report_rows: list[dict[str, str]] = []
     catalog_rows: list[list[str]] = []
