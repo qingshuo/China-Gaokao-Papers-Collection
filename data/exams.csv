@@ -1,0 +1,6 @@
+record_id,year,region,paper_type,subject,title,source_url,source_type,license_status,availability,status,local_path,notes
+2024-全国-数学-新高考I卷,2024,全国,新高考I卷,数学,2024年普通高等学校招生全国统一考试数学（新高考I卷）,https://github.com/ajsadhotmail/2024-China-Gaokao-Math,github,unknown,external,discovered,,GitHub 上的候选版本；尚未复制到本仓库，等待授权和完整性核验
+2025-全国-数学-全国一卷,2025,全国,全国一卷,数学,2025年高考数学全国一卷,https://github.com/xihong-m/gaokao-math/blob/main/2025%E5%85%A8%E5%9B%BD%E4%B8%80%E5%8D%B7.pdf,github,unknown,external,discovered,,依据公开仓库文件名登记；尚未核验内容、授权和是否为完整试卷
+2025-全国-数学-全国二卷,2025,全国,全国二卷,数学,2025年高考数学全国二卷,https://github.com/xihong-m/gaokao-math/blob/main/2025%E5%85%A8%E5%9B%BD%E4%BA%8C%E5%8D%B7.pdf,github,unknown,external,discovered,,依据公开仓库文件名登记；尚未核验内容、授权和是否为完整试卷
+2025-BJ-数学-地方卷,2025,BJ,地方卷,数学,2025年北京高考数学,https://github.com/xihong-m/gaokao-math/blob/main/2025%E5%8C%97%E4%BA%AC%E6%95%B0%E5%AD%A6.pdf,github,unknown,external,discovered,,依据公开仓库文件名登记；尚未核验内容、授权和是否为完整试卷
+2026-全国-数学-全国一卷,2026,全国,全国一卷,数学,2026年高考数学全国一卷,https://github.com/xihong-m/gaokao-math/blob/main/2026%E5%85%A8%E5%9B%BD%E4%B8%80%E5%8D%B7%E6%95%B0%E5%AD%A6_4.pdf,github,unknown,external,discovered,,依据公开仓库文件名登记；尚未核验内容、授权和是否为完整试卷
