@@ -1,5 +1,6 @@
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -24,6 +25,11 @@ TRACEABILITY_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_traceabilit
 TRACEABILITY_SPEC = importlib.util.spec_from_file_location("audit_traceability", TRACEABILITY_SCRIPT)
 audit_traceability = importlib.util.module_from_spec(TRACEABILITY_SPEC)
 TRACEABILITY_SPEC.loader.exec_module(audit_traceability)
+
+LAYOUT_SCRIPT = Path(__file__).parents[1] / "scripts" / "normalize_paper_layout.py"
+LAYOUT_SPEC = importlib.util.spec_from_file_location("normalize_paper_layout", LAYOUT_SCRIPT)
+normalize_paper_layout = importlib.util.module_from_spec(LAYOUT_SPEC)
+LAYOUT_SPEC.loader.exec_module(normalize_paper_layout)
 
 
 class StatsTests(unittest.TestCase):
@@ -130,6 +136,18 @@ class StatsTests(unittest.TestCase):
         summary = audit_traceability.summarize([web, local])
         self.assertEqual(summary["source_scope"]["公开 URL"], 1)
         self.assertEqual(summary["source_scope"]["仅本地导入来源"], 1)
+
+    def test_layout_normalization_moves_legacy_source_directories(self):
+        row = {
+            "availability": "local", "local_path": "papers/deekur/数学/2024/2024北京.pdf",
+            "year": "2024", "region": "BJ", "subject": "数学", "sha256": "a" * 64,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory) / "papers" / "2024" / "BJ" / "数学"
+            self.assertEqual(
+                normalize_paper_layout.unique_destination(parent, "2024北京.pdf", row["sha256"]),
+                parent / "2024北京.pdf",
+            )
 
 
 if __name__ == "__main__":
