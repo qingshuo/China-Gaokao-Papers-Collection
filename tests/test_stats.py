@@ -31,6 +31,11 @@ LAYOUT_SPEC = importlib.util.spec_from_file_location("normalize_paper_layout", L
 normalize_paper_layout = importlib.util.module_from_spec(LAYOUT_SPEC)
 LAYOUT_SPEC.loader.exec_module(normalize_paper_layout)
 
+NATIONAL_REGIONS_SCRIPT = Path(__file__).parents[1] / "scripts" / "normalize_national_regions.py"
+NATIONAL_REGIONS_SPEC = importlib.util.spec_from_file_location("normalize_national_regions", NATIONAL_REGIONS_SCRIPT)
+normalize_national_regions = importlib.util.module_from_spec(NATIONAL_REGIONS_SPEC)
+NATIONAL_REGIONS_SPEC.loader.exec_module(normalize_national_regions)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -148,6 +153,12 @@ class StatsTests(unittest.TestCase):
                 normalize_paper_layout.unique_destination(parent, "2024北京.pdf", row["sha256"]),
                 parent / "2024北京.pdf",
             )
+
+    def test_national_region_normalization_requires_explicit_nationwide_title(self):
+        nationwide = {"region": "GD", "title": "2024全国新高考卷", "availability": "local"}
+        provincial = {"region": "GD", "title": "2024广东高考卷", "availability": "local"}
+        self.assertTrue(normalize_national_regions.is_nationwide_paper(nationwide))
+        self.assertFalse(normalize_national_regions.is_nationwide_paper(provincial))
 
 
 if __name__ == "__main__":

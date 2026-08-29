@@ -14,6 +14,7 @@ scripts/stats.py     数据校验、统计和索引生成
 scripts/audit_duplicates.py 生成候选重复的人工核验队列
 scripts/audit_traceability.py 生成来源可追溯性审计
 scripts/normalize_paper_layout.py 将旧来源目录迁入统一布局
+scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
 docs/papers-index.md 自动生成的试卷索引
 docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
@@ -44,6 +45,7 @@ python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
 python3 scripts/normalize_paper_layout.py --apply
+python3 scripts/normalize_national_regions.py --apply
 python3 -m unittest discover -s tests -v
 ```
 
