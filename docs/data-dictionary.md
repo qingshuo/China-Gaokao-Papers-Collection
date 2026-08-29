@@ -25,6 +25,8 @@
 
 本地 PDF 与 DOCX 文件还会在 `python3 scripts/stats.py --check` 中检查文件头是否与扩展名相符；这能防止下载错误页或损坏文件仅靠扩展名进入目录。
 
+`python3 scripts/audit_pdf_integrity.py --write docs/pdf-integrity.md` 进一步用 PDF 解析器检查本地 PDF 是否可打开，并将页数不超过一页的主卷列为人工复核候选。
+
 ### 官方入口登记
 
 `data/official-portals.csv` 是教育部教育考试院和省级教育考试机构的优先核查入口。它不等同于试卷来源，也不表示站点提供下载或已授权再发布；具体文件必须另行记录到 `source_url`。

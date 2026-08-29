@@ -56,6 +56,11 @@ AUTHENTICITY_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_authenti
 authenticity_audit = importlib.util.module_from_spec(AUTHENTICITY_AUDIT_SPEC)
 AUTHENTICITY_AUDIT_SPEC.loader.exec_module(authenticity_audit)
 
+PDF_INTEGRITY_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_pdf_integrity.py"
+PDF_INTEGRITY_SPEC = importlib.util.spec_from_file_location("audit_pdf_integrity", PDF_INTEGRITY_SCRIPT)
+pdf_integrity = importlib.util.module_from_spec(PDF_INTEGRITY_SPEC)
+PDF_INTEGRITY_SPEC.loader.exec_module(pdf_integrity)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -243,6 +248,10 @@ class StatsTests(unittest.TestCase):
         supporting = {**main, "material_type": "附属资料", "title": "2024 高考数学解析版"}
         findings = authenticity_audit.suspicious_complete_papers([main, supporting])
         self.assertEqual(findings, [(main, ["模拟"])])
+
+    def test_pdf_integrity_extracts_page_count_from_pdfinfo_output(self):
+        self.assertEqual(pdf_integrity.pages_from_pdfinfo("Title: test\nPages:          7\n"), 7)
+        self.assertIsNone(pdf_integrity.pages_from_pdfinfo("Title: test\n"))
 
     def test_traceability_audit_distinguishes_local_provenance(self):
         web = {"status": "indexed", "material_type": "完整试卷", "source_url": "https://example.test/paper", "year": "2024", "source_type": "official", "license_status": "permitted"}
