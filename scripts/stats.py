@@ -172,6 +172,7 @@ def summarize(
         "by_subject": Counter(row.get("subject", "") for row in complete),
         "external_sources": len(source_rows),
         "official_portals": len(portal_rows or []),
+        "portal_by_status": Counter(row.get("portal_status", "") for row in portal_rows or []),
         "official_evidence": len(evidence_rows or []),
         "official_evidence_records": len({row.get("record_id") for row in evidence_rows or []}),
     }
@@ -182,6 +183,7 @@ def render_markdown(summary: dict[str, object]) -> str:
     by_year = summary["by_year"]
     by_region = summary["by_region"]
     by_subject = summary["by_subject"]
+    portal_by_status = summary["portal_by_status"]
     lines = [
         "# 覆盖统计",
         "",
@@ -206,6 +208,12 @@ def render_markdown(summary: dict[str, object]) -> str:
     ]
     for status in sorted(STATUSES):
         lines.append(f"| {status} | {by_status.get(status, 0)} |")
+    lines += [
+        "", "## 官方入口核查进度", "",
+        "此处衡量教育考试机构入口是否已核查；不代表这些站点提供试卷下载，也不代表试卷库覆盖率。", "",
+        "| 入口状态 | 数量 |", "| --- | ---: |",
+    ]
+    lines += [f"| {status} | {portal_by_status.get(status, 0)} |" for status in sorted(PORTAL_STATUSES)]
     lines += ["", "## 完整试卷按年份", "", "| 年份 | 数量 |", "| ---: | ---: |"]
     lines += [f"| {year} | {by_year[year]} |" for year in sorted(by_year)] or ["| 暂无 | 0 |"]
     lines += ["", "## 完整试卷按区域", "", "| 区域 | 数量 |", "| --- | ---: |"]
@@ -231,7 +239,7 @@ def render_readme(summary: dict[str, object]) -> str:
         "",
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
         "[按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
-        "[覆盖统计](docs/coverage.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
+        "[覆盖统计](docs/coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
         "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · "
         "[收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)",
         "",
@@ -466,6 +474,43 @@ def render_official_evidence_index(
     return "\n".join(lines)
 
 
+def render_official_portals_index(portal_rows: list[dict[str, str]], region_names: dict[str, str]) -> str:
+    """Render the official source-research queue for contributors."""
+    status_labels = {
+        "pending_manual_check": "待人工核查",
+        "checked": "已核查",
+        "download_available": "发现可下载文件",
+        "announcement_only": "仅公告/评析",
+        "unavailable": "入口不可用",
+    }
+    ordered = sorted(
+        portal_rows,
+        key=lambda row: (row["region"] != "全国", region_names.get(row["region"], row["region"])),
+    )
+    lines = [
+        "# 官方渠道核查",
+        "",
+        "本页由 `python3 scripts/stats.py --write-official-portals-index docs/official-portals.md` 自动生成。",
+        "每行是教育考试机构的优先核查入口，而非试卷文件来源；请在找到具体公告或文件后，将链接记录到 `data/exams.csv` 或 `data/official-evidence.csv`。",
+        "",
+        "| 地区 | 机构 | 入口 | 范围 | 状态 | 核查说明 |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in ordered:
+        region = region_names.get(row["region"], row["region"])
+        status = status_labels[row["portal_status"]]
+        notes = row["notes"].replace("|", "\\|")
+        lines.append(
+            f"| {region} | {row['agency']} | [访问入口]({row['portal_url']}) | {row['scope']} | {status} | {notes} |"
+        )
+    lines += [
+        "",
+        "> 核查时优先寻找原卷下载页、正式公告或试题评析；没有明确授权时，只登记链接和核验说明，不复制文件。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate data and exit")
@@ -476,6 +521,7 @@ def main() -> int:
     parser.add_argument("--write-region-index", metavar="PATH", help="write the region-first paper index")
     parser.add_argument("--write-supplements-index", metavar="PATH", help="write the supporting-material index")
     parser.add_argument("--write-official-evidence-index", metavar="PATH", help="write the official identity-evidence index")
+    parser.add_argument("--write-official-portals-index", metavar="PATH", help="write the official source-research index")
     args = parser.parse_args()
     rows = read_csv(CATALOG)
     region_rows = read_csv(REGIONS)
@@ -539,7 +585,14 @@ def main() -> int:
         region_names = {row["code"]: row["name"] for row in region_rows}
         rows_by_id = {row["record_id"]: row for row in rows}
         output.write_text(render_official_evidence_index(evidence_rows, rows_by_id, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index):
+    if args.write_official_portals_index:
+        output = Path(args.write_official_portals_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        region_names = {row["code"]: row["name"] for row in region_rows}
+        output.write_text(render_official_portals_index(portal_rows, region_names), encoding="utf-8")
+    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 

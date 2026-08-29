@@ -24,6 +24,18 @@
 | verified | 0 |
 | withdrawn | 0 |
 
+## 官方入口核查进度
+
+此处衡量教育考试机构入口是否已核查；不代表这些站点提供试卷下载，也不代表试卷库覆盖率。
+
+| 入口状态 | 数量 |
+| --- | ---: |
+| announcement_only | 0 |
+| checked | 1 |
+| download_available | 0 |
+| pending_manual_check | 31 |
+| unavailable | 0 |
+
 ## 完整试卷按年份
 
 | 年份 | 数量 |

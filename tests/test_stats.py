@@ -113,6 +113,15 @@ class StatsTests(unittest.TestCase):
         self.assertIn("https://official.test/analysis", index)
         self.assertIn("../papers/2024/BJ/", index)
 
+    def test_official_portals_index_displays_research_status(self):
+        row = {
+            "region": "BJ", "agency": "北京教育考试院", "portal_url": "https://example.test",
+            "scope": "北京高考", "portal_status": "announcement_only", "notes": "只找到公告",
+        }
+        index = stats.render_official_portals_index([row], {"BJ": "北京"})
+        self.assertIn("仅公告/评析", index)
+        self.assertIn("[访问入口](https://example.test)", index)
+
     def test_material_classification_preserves_complete_papers_with_answers(self):
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学答案"}), "附属资料")
