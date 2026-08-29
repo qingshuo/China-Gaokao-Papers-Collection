@@ -2,7 +2,7 @@
 
 按年份、学科和地区整理高考试卷。主库当前收录 **398 份完整试卷**，覆盖 **2017-2026 年**，包含语文、数学、英语、日语、物理、化学、生物、地理、历史、政治及文综/理综。
 
-**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
+**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
 答案、解析等附属资料（137 份）及作文题、实验题等片段资料（6 份）已单独整理，不计入下方完整试卷统计。
 

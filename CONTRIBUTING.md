@@ -14,6 +14,7 @@ python3 scripts/stats.py --write docs/coverage.md
 python3 scripts/stats.py --write-index docs/papers-index.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
+python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 -m unittest discover -s tests -v
 ```
 

@@ -15,6 +15,11 @@ DEDUPLICATE_SPEC = importlib.util.spec_from_file_location("deduplicate_formats",
 deduplicate_formats = importlib.util.module_from_spec(DEDUPLICATE_SPEC)
 DEDUPLICATE_SPEC.loader.exec_module(deduplicate_formats)
 
+AUDIT_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_duplicates.py"
+AUDIT_SPEC = importlib.util.spec_from_file_location("audit_duplicates", AUDIT_SCRIPT)
+audit_duplicates = importlib.util.module_from_spec(AUDIT_SPEC)
+AUDIT_SPEC.loader.exec_module(audit_duplicates)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -104,6 +109,15 @@ class StatsTests(unittest.TestCase):
         another_paper = {**base, "title": "北京数学另一卷", "local_path": "papers/2024/BJ/数学/另一卷.docx"}
         pairs = deduplicate_formats.pdf_format_duplicates([pdf, docx, another_paper], "2024")
         self.assertEqual(pairs, [(pdf, docx)])
+
+    def test_duplicate_audit_groups_title_variants_without_deleting(self):
+        base = {"year": "2025", "region": "BJ", "subject": "数学", "status": "indexed", "material_type": "完整试卷"}
+        first = {**base, "title": "2025年北京高考数学"}
+        second = {**base, "title": "2025北京"}
+        different_paper = {**base, "title": "2025全国一卷数学"}
+        groups = audit_duplicates.candidate_groups([first, second, different_paper])
+        self.assertEqual([group[0] for group in groups], [("2025", "BJ", "数学", "北京")])
+        self.assertEqual(groups[0][1], [first, second])
 
 
 if __name__ == "__main__":
