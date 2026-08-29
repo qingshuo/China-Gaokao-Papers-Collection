@@ -51,6 +51,11 @@ BINARY_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_binary_duplica
 binary_audit = importlib.util.module_from_spec(BINARY_AUDIT_SPEC)
 BINARY_AUDIT_SPEC.loader.exec_module(binary_audit)
 
+AUTHENTICITY_AUDIT_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_authenticity.py"
+AUTHENTICITY_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_authenticity", AUTHENTICITY_AUDIT_SCRIPT)
+authenticity_audit = importlib.util.module_from_spec(AUTHENTICITY_AUDIT_SPEC)
+AUTHENTICITY_AUDIT_SPEC.loader.exec_module(authenticity_audit)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -216,6 +221,12 @@ class StatsTests(unittest.TestCase):
         withdrawn = {**base, "record_id": "four", "status": "withdrawn"}
         groups = binary_audit.exact_hash_groups([base, same, distinct, withdrawn])
         self.assertEqual(groups, [("a" * 64, [base, same])])
+
+    def test_authenticity_audit_flags_only_main_library_risk_terms(self):
+        main = {"status": "indexed", "material_type": "完整试卷", "title": "2024 高考数学模拟卷", "notes": ""}
+        supporting = {**main, "material_type": "附属资料", "title": "2024 高考数学解析版"}
+        findings = authenticity_audit.suspicious_complete_papers([main, supporting])
+        self.assertEqual(findings, [(main, ["模拟"])])
 
     def test_traceability_audit_distinguishes_local_provenance(self):
         web = {"status": "indexed", "material_type": "完整试卷", "source_url": "https://example.test/paper", "year": "2024", "source_type": "official", "license_status": "permitted"}
