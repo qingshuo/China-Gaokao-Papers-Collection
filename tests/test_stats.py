@@ -131,6 +131,7 @@ class StatsTests(unittest.TestCase):
         self.assertIn("**2 份完整试卷**", readme)
         self.assertIn("附属资料 **1 份**", readme)
         self.assertIn("| 2024 | 1 |", readme)
+        self.assertIn("PDF 完整性审计", readme)
 
     def test_official_evidence_index_keeps_origin_and_identity_evidence_separate(self):
         paper = {
