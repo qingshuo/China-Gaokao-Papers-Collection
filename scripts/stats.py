@@ -52,6 +52,17 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def file_format_error(path: Path) -> str | None:
+    """Return an error when a common paper-file extension disagrees with its signature."""
+    header = path.read_bytes()[:8]
+    suffix = path.suffix.lower()
+    if suffix == ".pdf" and not header.startswith(b"%PDF-"):
+        return "PDF extension does not have a PDF signature"
+    if suffix == ".docx" and not header.startswith(b"PK\x03\x04"):
+        return "DOCX extension does not have an Office ZIP signature"
+    return None
+
+
 def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
@@ -98,6 +109,9 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 if actual.lower() != digest.lower():
                     errors.append(f"line {number}: sha256 mismatch for {row['local_path']}")
+                format_error = file_format_error(path)
+                if format_error:
+                    errors.append(f"line {number}: {format_error}: {row['local_path']}")
     return errors
 
 

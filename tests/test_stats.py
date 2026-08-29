@@ -84,6 +84,19 @@ class StatsTests(unittest.TestCase):
         errors = stats.validate_catalog([row], {"BJ"})
         self.assertTrue(any("requires local_path" in error for error in errors))
 
+    def test_local_file_signature_validation_detects_mismatched_pdf_and_docx(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bad_pdf = root / "paper.pdf"
+            bad_pdf.write_bytes(b"not-a-pdf")
+            bad_docx = root / "paper.docx"
+            bad_docx.write_bytes(b"not-a-docx")
+            good_pdf = root / "paper-good.pdf"
+            good_pdf.write_bytes(b"%PDF-1.7")
+            self.assertIn("PDF extension", stats.file_format_error(bad_pdf) or "")
+            self.assertIn("DOCX extension", stats.file_format_error(bad_docx) or "")
+            self.assertIsNone(stats.file_format_error(good_pdf))
+
     def test_only_local_records_require_sha256(self):
         row = {field: "value" for field in stats.REQUIRED_FIELDS}
         row.update({"year": "2024", "region": "BJ", "status": "discovered", "availability": "external", "sha256": ""})
