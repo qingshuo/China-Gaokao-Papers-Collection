@@ -1,6 +1,6 @@
 region,agency,portal_url,scope,portal_status,notes
 全国,教育部教育考试院,https://gaokao.neea.edu.cn/,全国普通高考政策、考试大纲与试题评析,checked,已于2026-08-29核对普通高考栏目：公开政策、考试大纲和试题评析；未发现历年原卷统一下载库，具体文件来源与授权须另行登记
-BJ,北京教育考试院,https://www.bjeea.cn/,北京高考,pending_manual_check,从高考栏目和站内公告检索试题或答案的公开发布记录
+BJ,北京教育考试院,https://www.bjeea.cn/html/gkgz/index.html,北京高考高招栏目,announcement_only,已于2026-08-29核对高考高招栏目：当前提供报名、成绩、录取和政策公告；当前栏目页未发现历年统考原卷下载入口
 TJ,天津市教育招生考试院,https://www.zhaokao.net/,天津高考,pending_manual_check,从普通高考栏目和站内公告检索
 HE,河北省教育考试院,https://www.hebeea.edu.cn/,河北高考,pending_manual_check,从普通高考栏目和站内公告检索
 SX,山西省招生考试管理中心,https://www.sxkszx.cn/,山西高考,pending_manual_check,从普通高考栏目和站内公告检索
@@ -8,7 +8,7 @@ NM,内蒙古自治区教育招生考试中心,https://www.nm.zsks.cn/,内蒙古�
 LN,辽宁省招生考试办公室,https://www.lnzsks.com/,辽宁高考,pending_manual_check,从普通高考栏目和站内公告检索
 JL,吉林省教育考试院,https://www.jleea.com.cn/,吉林高考,pending_manual_check,从普通高考栏目和站内公告检索
 HL,黑龙江省招生考试信息港,https://www.lzk.hl.cn/,黑龙江高考,pending_manual_check,从普通高考栏目和站内公告检索
-SH,上海市教育考试院,https://www.shmeea.edu.cn/,上海高考,pending_manual_check,从普通高考栏目和站内公告检索
+SH,上海市教育考试院,https://www.shmeea.edu.cn/page/02000/index.html,上海高考学考栏目,announcement_only,已于2026-08-29核对高考学考栏目：当前提供秋季高考、学业考、成绩和招生公告，另有信息技术模拟练习；当前栏目页未发现历年统考原卷下载入口
 JS,江苏省教育考试院,https://www.jseea.cn/,江苏高考,pending_manual_check,从普通高考栏目和站内公告检索
 ZJ,浙江省教育考试院,https://www.zjzs.net/,浙江高考与选考,pending_manual_check,分别检索一月和六月考试资料
 AH,安徽省教育招生考试院,https://www.ahzsks.cn/,安徽高考,pending_manual_check,从普通高考栏目和站内公告检索

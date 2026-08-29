@@ -30,10 +30,10 @@
 
 | 入口状态 | 数量 |
 | --- | ---: |
-| announcement_only | 0 |
+| announcement_only | 2 |
 | checked | 1 |
 | download_available | 0 |
-| pending_manual_check | 31 |
+| pending_manual_check | 29 |
 | unavailable | 0 |
 
 ## 完整试卷按年份
