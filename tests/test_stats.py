@@ -46,6 +46,11 @@ TARGET_COVERAGE_SPEC = importlib.util.spec_from_file_location("target_coverage",
 target_coverage = importlib.util.module_from_spec(TARGET_COVERAGE_SPEC)
 TARGET_COVERAGE_SPEC.loader.exec_module(target_coverage)
 
+BINARY_AUDIT_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_binary_duplicates.py"
+BINARY_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_binary_duplicates", BINARY_AUDIT_SCRIPT)
+binary_audit = importlib.util.module_from_spec(BINARY_AUDIT_SPEC)
+BINARY_AUDIT_SPEC.loader.exec_module(binary_audit)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -200,6 +205,17 @@ class StatsTests(unittest.TestCase):
         groups = audit_duplicates.candidate_groups([first, second, different_paper])
         self.assertEqual([group[0] for group in groups], [("2025", "BJ", "数学", "北京")])
         self.assertEqual(groups[0][1], [first, second])
+
+    def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
+        base = {
+            "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local",
+            "sha256": "a" * 64, "record_id": "one", "local_path": "papers/one.pdf", "title": "一", "material_type": "完整试卷",
+        }
+        same = {**base, "record_id": "two", "local_path": "papers/two.pdf"}
+        distinct = {**base, "record_id": "three", "sha256": "b" * 64}
+        withdrawn = {**base, "record_id": "four", "status": "withdrawn"}
+        groups = binary_audit.exact_hash_groups([base, same, distinct, withdrawn])
+        self.assertEqual(groups, [("a" * 64, [base, same])])
 
     def test_traceability_audit_distinguishes_local_provenance(self):
         web = {"status": "indexed", "material_type": "完整试卷", "source_url": "https://example.test/paper", "year": "2024", "source_type": "official", "license_status": "permitted"}

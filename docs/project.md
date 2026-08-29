@@ -14,6 +14,7 @@ data/paper-targets.csv 已声明的实际卷制目标
 config/regions.csv   省级行政区清单
 scripts/stats.py     数据校验、统计和索引生成
 scripts/audit_duplicates.py 生成候选重复的人工核验队列
+scripts/audit_binary_duplicates.py 生成完全相同文件的 SHA-256 审计
 scripts/audit_traceability.py 生成来源可追溯性审计
 scripts/normalize_paper_layout.py 将旧来源目录迁入统一布局
 scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
@@ -23,6 +24,7 @@ docs/papers-index.md 自动生成的试卷索引
 docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
 docs/candidate-duplicates.md 自动生成的候选重复核验队列
+docs/binary-duplicates.md 完全相同文件审计
 docs/traceability.md 来源可追溯性审计
 docs/local-only-sources.md 本地导入来源的补充队列
 docs/official-evidence.md 官方身份佐证索引
@@ -57,6 +59,7 @@ python3 scripts/stats.py --write-official-portals-index docs/official-portals.md
 python3 scripts/target_coverage.py --check
 python3 scripts/target_coverage.py --write docs/target-coverage.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
+python3 scripts/audit_binary_duplicates.py --write docs/binary-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
 python3 scripts/audit_traceability.py --write-local-only-index docs/local-only-sources.md
 python3 scripts/normalize_paper_layout.py --apply
