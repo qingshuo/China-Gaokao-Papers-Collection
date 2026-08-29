@@ -36,6 +36,11 @@ NATIONAL_REGIONS_SPEC = importlib.util.spec_from_file_location("normalize_nation
 normalize_national_regions = importlib.util.module_from_spec(NATIONAL_REGIONS_SPEC)
 NATIONAL_REGIONS_SPEC.loader.exec_module(normalize_national_regions)
 
+CONTENT_REVIEW_SCRIPT = Path(__file__).parents[1] / "scripts" / "apply_content_review.py"
+CONTENT_REVIEW_SPEC = importlib.util.spec_from_file_location("apply_content_review", CONTENT_REVIEW_SCRIPT)
+apply_content_review = importlib.util.module_from_spec(CONTENT_REVIEW_SPEC)
+CONTENT_REVIEW_SPEC.loader.exec_module(apply_content_review)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -159,6 +164,12 @@ class StatsTests(unittest.TestCase):
         provincial = {"region": "GD", "title": "2024广东高考卷", "availability": "local"}
         self.assertTrue(normalize_national_regions.is_nationwide_paper(nationwide))
         self.assertFalse(normalize_national_regions.is_nationwide_paper(provincial))
+
+    def test_content_review_only_applies_explicit_evidence_backed_actions(self):
+        self.assertEqual(apply_content_review.review_action("deekur-2025-53-math"), "remove")
+        self.assertEqual(apply_content_review.review_action("deekur-2025-physics-023"), "supplement")
+        self.assertEqual(apply_content_review.review_action("temp-2025-物理-d1cb17271a18"), "partial")
+        self.assertEqual(apply_content_review.review_action("unrelated-record"), "keep")
 
 
 if __name__ == "__main__":

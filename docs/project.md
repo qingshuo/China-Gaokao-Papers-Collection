@@ -15,11 +15,13 @@ scripts/audit_duplicates.py 生成候选重复的人工核验队列
 scripts/audit_traceability.py 生成来源可追溯性审计
 scripts/normalize_paper_layout.py 将旧来源目录迁入统一布局
 scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
+scripts/apply_content_review.py 应用经过内容核验的去重与分类结论
 docs/papers-index.md 自动生成的试卷索引
 docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
 docs/candidate-duplicates.md 自动生成的候选重复核验队列
 docs/traceability.md 来源可追溯性审计
+docs/content-review.md 已执行内容审查的依据与结论
 docs/coverage.md     自动生成的覆盖统计
 ```
 
@@ -46,6 +48,7 @@ python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
 python3 scripts/normalize_paper_layout.py --apply
 python3 scripts/normalize_national_regions.py --apply
+python3 scripts/apply_content_review.py --apply
 python3 -m unittest discover -s tests -v
 ```
 
