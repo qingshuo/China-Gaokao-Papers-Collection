@@ -208,6 +208,18 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(summary["source_scope"]["公开 URL"], 1)
         self.assertEqual(summary["source_scope"]["仅本地导入来源"], 1)
 
+    def test_local_only_source_queue_lists_only_complete_local_provenance(self):
+        local = {
+            "record_id": "local-1", "year": "2024", "region": "BJ", "subject": "数学", "paper_type": "北京卷",
+            "title": "北京数学", "status": "indexed", "material_type": "完整试卷", "source_url": "local://temp/paper.pdf",
+            "local_path": "papers/2024/BJ/数学/北京数学.pdf",
+        }
+        web = {**local, "record_id": "web-1", "source_url": "https://example.test/paper"}
+        index = audit_traceability.render_local_only_index([local, web], {"BJ": "北京"})
+        self.assertIn("local-1", index)
+        self.assertNotIn("web-1", index)
+        self.assertIn("../papers/2024/BJ/", index)
+
     def test_layout_normalization_moves_legacy_source_directories(self):
         row = {
             "availability": "local", "local_path": "papers/deekur/数学/2024/2024北京.pdf",

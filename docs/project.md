@@ -24,6 +24,7 @@ docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
 docs/candidate-duplicates.md 自动生成的候选重复核验队列
 docs/traceability.md 来源可追溯性审计
+docs/local-only-sources.md 本地导入来源的补充队列
 docs/official-evidence.md 官方身份佐证索引
 docs/official-portals.md 省级教育考试机构官方渠道核查索引
 docs/target-coverage.md 已声明卷制目标的覆盖与缺口
@@ -57,6 +58,7 @@ python3 scripts/target_coverage.py --check
 python3 scripts/target_coverage.py --write docs/target-coverage.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
+python3 scripts/audit_traceability.py --write-local-only-index docs/local-only-sources.md
 python3 scripts/normalize_paper_layout.py --apply
 python3 scripts/normalize_national_regions.py --apply
 python3 scripts/apply_content_review.py --apply
