@@ -79,6 +79,17 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(summary["verified"], 1)
         self.assertEqual(summary["years"], ["2024"])
 
+    def test_readme_uses_current_complete_paper_counts(self):
+        rows = [
+            {"year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local"},
+            {"year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local", "material_type": "附属资料"},
+            {"year": "2023", "region": "SH", "subject": "语文", "status": "indexed", "availability": "local"},
+        ]
+        readme = stats.render_readme(stats.summarize(rows, []))
+        self.assertIn("**2 份完整试卷**", readme)
+        self.assertIn("附属资料 **1 份**", readme)
+        self.assertIn("| 2024 | 1 |", readme)
+
     def test_material_classification_preserves_complete_papers_with_answers(self):
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学答案"}), "附属资料")

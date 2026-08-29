@@ -183,6 +183,59 @@ def render_markdown(summary: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
+def render_readme(summary: dict[str, object]) -> str:
+    """Render the repository landing page from the same catalog as the indexes."""
+    by_year = summary["by_year"]
+    by_subject = summary["by_subject"]
+    years = sorted(by_year, reverse=True)
+    subjects = sorted(by_subject)
+    lines = [
+        "# 中国高考试卷资料库",
+        "",
+        "按年份、学科和地区整理高考试卷。主库当前收录 "
+        f"**{summary['complete_papers']} 份完整试卷**，覆盖 **{min(years)}-{max(years)} 年**；"
+        "答案、解析和片段资料均单独归档，不混入主卷索引。",
+        "",
+        "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
+        "[按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
+        "[覆盖统计](docs/coverage.md) · [来源可追溯性](docs/traceability.md) · "
+        "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · "
+        "[收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)",
+        "",
+        f"附属资料 **{summary['supplementary_files']} 份**、片段资料 **{summary['partial_files']} 份**已单独整理，"
+        "不计入下方完整试卷统计。",
+        "",
+        "## 年份总览",
+        "",
+        "点击年份后，可打开当年所有学科、地区和卷种的完整试卷。",
+        "",
+        "| 年份 | 试卷数 | 查看索引 |",
+        "| ---: | ---: | --- |",
+    ]
+    lines += [f"| {year} | {by_year[year]} | [{year} 年试卷](docs/year-index.md#{year}-年) |" for year in years]
+    lines += [
+        "",
+        "## 学科入口",
+        "",
+        "| 学科 | 数量 | 索引 |",
+        "| --- | ---: | --- |",
+    ]
+    lines += [f"| {subject} | {by_subject[subject]} | [查看](docs/papers-index.md#{subject}) |" for subject in subjects]
+    lines += [
+        "",
+        "## 目录结构",
+        "",
+        "完整试卷放在 `papers/<年份>/<地区>/<学科>/`；答案、解析放在 `papers/supplements/`，"
+        "片段资料放在 `papers/partials/`。PDF 可直接在线预览，DOCX/DOC 适合继续编辑。 "
+        "每份文件的来源、SHA-256、格式、资料类别和授权状态记录在 [`data/exams.csv`](data/exams.csv)。",
+        "",
+        "本仓库只记录当前收集到的资料，不代表试卷全集。导入时会排除带推广、网盘或引流内容的文档；"
+        "资料授权状态默认标记为“待核验”，使用和再分发前请查看 [第三方资料归属](THIRD-PARTY-NOTICES.md)。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]) -> str:
     active = [
         row for row in rows
@@ -342,6 +395,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate data and exit")
     parser.add_argument("--write", metavar="PATH", help="write the markdown report")
+    parser.add_argument("--write-readme", metavar="PATH", help="write the repository landing-page index")
     parser.add_argument("--write-index", metavar="PATH", help="write the paper index")
     parser.add_argument("--write-year-index", metavar="PATH", help="write the year-first paper index")
     parser.add_argument("--write-region-index", metavar="PATH", help="write the region-first paper index")
@@ -365,6 +419,12 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_markdown(summary), encoding="utf-8")
+    if args.write_readme:
+        output = Path(args.write_readme)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(render_readme(summary), encoding="utf-8")
     if args.write_index:
         output = Path(args.write_index)
         if not output.is_absolute():
@@ -393,7 +453,7 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         region_names = {row["code"]: row["name"] for row in region_rows}
         output.write_text(render_supplements_index(rows, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index):
+    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 

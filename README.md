@@ -1,10 +1,10 @@
 # 中国高考试卷资料库
 
-按年份、学科和地区整理高考试卷。主库当前收录 **398 份完整试卷**，覆盖 **2017-2026 年**，包含语文、数学、英语、日语、物理、化学、生物、地理、历史、政治及文综/理综。
+按年份、学科和地区整理高考试卷。主库当前收录 **381 份完整试卷**，覆盖 **2017-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
 
 **快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [来源可追溯性](docs/traceability.md) · [内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
-答案、解析等附属资料（137 份）及作文题、实验题等片段资料（6 份）已单独整理，不计入下方完整试卷统计。
+附属资料 **145 份**、片段资料 **7 份**已单独整理，不计入下方完整试卷统计。
 
 ## 年份总览
 
@@ -13,10 +13,10 @@
 | 年份 | 试卷数 | 查看索引 |
 | ---: | ---: | --- |
 | 2026 | 31 | [2026 年试卷](docs/year-index.md#2026-年) |
-| 2025 | 70 | [2025 年试卷](docs/year-index.md#2025-年) |
+| 2025 | 55 | [2025 年试卷](docs/year-index.md#2025-年) |
 | 2024 | 106 | [2024 年试卷](docs/year-index.md#2024-年) |
-| 2023 | 29 | [2023 年试卷](docs/year-index.md#2023-年) |
-| 2022 | 62 | [2022 年试卷](docs/year-index.md#2022-年) |
+| 2023 | 28 | [2023 年试卷](docs/year-index.md#2023-年) |
+| 2022 | 61 | [2022 年试卷](docs/year-index.md#2022-年) |
 | 2021 | 35 | [2021 年试卷](docs/year-index.md#2021-年) |
 | 2020 | 24 | [2020 年试卷](docs/year-index.md#2020-年) |
 | 2019 | 13 | [2019 年试卷](docs/year-index.md#2019-年) |
@@ -31,17 +31,17 @@
 | 历史 | 14 | [查看](docs/papers-index.md#历史) |
 | 地理 | 20 | [查看](docs/papers-index.md#地理) |
 | 政治 | 10 | [查看](docs/papers-index.md#政治) |
-| 数学 | 124 | [查看](docs/papers-index.md#数学) |
+| 数学 | 123 | [查看](docs/papers-index.md#数学) |
 | 日语 | 1 | [查看](docs/papers-index.md#日语) |
-| 物理 | 164 | [查看](docs/papers-index.md#物理) |
+| 物理 | 149 | [查看](docs/papers-index.md#物理) |
 | 生物 | 15 | [查看](docs/papers-index.md#生物) |
 | 综合文综 | 1 | [查看](docs/papers-index.md#综合文综) |
 | 综合理综 | 2 | [查看](docs/papers-index.md#综合理综) |
 | 英语 | 7 | [查看](docs/papers-index.md#英语) |
-| 语文 | 10 | [查看](docs/papers-index.md#语文) |
+| 语文 | 9 | [查看](docs/papers-index.md#语文) |
 
 ## 目录结构
 
-完整试卷放在 `papers/<年份>/<地区>/<学科>/`；答案、解析放在 `papers/supplements/`，片段资料放在 `papers/partials/`。PDF 可直接在线预览，DOCX/DOC 适合继续编辑。每份文件的来源、SHA-256、格式、资料类别和授权状态记录在 [`data/exams.csv`](data/exams.csv)。
+完整试卷放在 `papers/<年份>/<地区>/<学科>/`；答案、解析放在 `papers/supplements/`，片段资料放在 `papers/partials/`。PDF 可直接在线预览，DOCX/DOC 适合继续编辑。 每份文件的来源、SHA-256、格式、资料类别和授权状态记录在 [`data/exams.csv`](data/exams.csv)。
 
 本仓库只记录当前收集到的资料，不代表试卷全集。导入时会排除带推广、网盘或引流内容的文档；资料授权状态默认标记为“待核验”，使用和再分发前请查看 [第三方资料归属](THIRD-PARTY-NOTICES.md)。
