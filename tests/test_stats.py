@@ -1,12 +1,19 @@
 import importlib.util
+import sys
 import unittest
 from pathlib import Path
 
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "stats.py"
+sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("stats", SCRIPT)
 stats = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(stats)
+
+DEDUPLICATE_SCRIPT = Path(__file__).parents[1] / "scripts" / "deduplicate_formats.py"
+DEDUPLICATE_SPEC = importlib.util.spec_from_file_location("deduplicate_formats", DEDUPLICATE_SCRIPT)
+deduplicate_formats = importlib.util.module_from_spec(DEDUPLICATE_SPEC)
+DEDUPLICATE_SPEC.loader.exec_module(deduplicate_formats)
 
 
 class StatsTests(unittest.TestCase):
@@ -58,6 +65,17 @@ class StatsTests(unittest.TestCase):
         }
         index = stats.render_papers_index([row], {})
         self.assertIn("全国/多省", index)
+
+    def test_pdf_format_deduplication_requires_exact_catalog_identity(self):
+        base = {
+            "year": "2024", "region": "BJ", "subject": "数学", "paper_type": "原卷",
+            "material_type": "完整试卷", "title": "北京数学", "availability": "local",
+        }
+        pdf = {**base, "local_path": "papers/2024/BJ/数学/北京数学.pdf"}
+        docx = {**base, "local_path": "papers/2024/BJ/数学/北京数学.docx"}
+        another_paper = {**base, "title": "北京数学另一卷", "local_path": "papers/2024/BJ/数学/另一卷.docx"}
+        pairs = deduplicate_formats.pdf_format_duplicates([pdf, docx, another_paper], "2024")
+        self.assertEqual(pairs, [(pdf, docx)])
 
 
 if __name__ == "__main__":

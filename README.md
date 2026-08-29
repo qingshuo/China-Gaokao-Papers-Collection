@@ -1,10 +1,10 @@
 # 中国高考试卷资料库
 
-按年份、学科和地区整理高考试卷。主库当前收录 **473 份完整试卷**，覆盖 **2017-2026 年**，包含语文、数学、英语、日语、物理、化学、生物、地理、历史、政治及文综/理综。
+按年份、学科和地区整理高考试卷。主库当前收录 **398 份完整试卷**，覆盖 **2017-2026 年**，包含语文、数学、英语、日语、物理、化学、生物、地理、历史、政治及文综/理综。
 
 **快速入口：** [历年试卷索引](docs/papers-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [项目说明](docs/project.md) · [参与贡献](CONTRIBUTING.md)
 
-答案、解析等附属资料（212 份）及作文题、实验题等片段资料（6 份）已单独整理，不计入下方完整试卷统计。
+答案、解析等附属资料（137 份）及作文题、实验题等片段资料（6 份）已单独整理，不计入下方完整试卷统计。
 
 ## 年份总览
 
@@ -14,7 +14,7 @@
 | ---: | ---: | --- |
 | 2026 | 31 | [2026 年试卷](docs/papers-index.md#2026-化学) |
 | 2025 | 70 | [2025 年试卷](docs/papers-index.md#2025-化学) |
-| 2024 | 181 | [2024 年试卷](docs/papers-index.md#2024-化学) |
+| 2024 | 106 | [2024 年试卷](docs/papers-index.md#2024-化学) |
 | 2023 | 29 | [2023 年试卷](docs/papers-index.md#2023-数学) |
 | 2022 | 62 | [2022 年试卷](docs/papers-index.md#2022-数学) |
 | 2021 | 35 | [2021 年试卷](docs/papers-index.md#2021-数学) |
@@ -27,18 +27,18 @@
 
 | 学科 | 数量 | 索引 |
 | --- | ---: | --- |
-| 化学 | 44 | [查看](docs/papers-index.md#化学) |
-| 历史 | 21 | [查看](docs/papers-index.md#历史) |
-| 地理 | 33 | [查看](docs/papers-index.md#地理) |
-| 政治 | 15 | [查看](docs/papers-index.md#政治) |
-| 数学 | 129 | [查看](docs/papers-index.md#数学) |
+| 化学 | 30 | [查看](docs/papers-index.md#化学) |
+| 历史 | 14 | [查看](docs/papers-index.md#历史) |
+| 地理 | 20 | [查看](docs/papers-index.md#地理) |
+| 政治 | 10 | [查看](docs/papers-index.md#政治) |
+| 数学 | 124 | [查看](docs/papers-index.md#数学) |
 | 日语 | 1 | [查看](docs/papers-index.md#日语) |
-| 物理 | 179 | [查看](docs/papers-index.md#物理) |
-| 生物 | 24 | [查看](docs/papers-index.md#生物) |
+| 物理 | 164 | [查看](docs/papers-index.md#物理) |
+| 生物 | 15 | [查看](docs/papers-index.md#生物) |
 | 综合文综 | 1 | [查看](docs/papers-index.md#综合文综) |
 | 综合理综 | 2 | [查看](docs/papers-index.md#综合理综) |
-| 英语 | 11 | [查看](docs/papers-index.md#英语) |
-| 语文 | 13 | [查看](docs/papers-index.md#语文) |
+| 英语 | 7 | [查看](docs/papers-index.md#英语) |
+| 语文 | 10 | [查看](docs/papers-index.md#语文) |
 
 ## 目录结构
 
