@@ -18,7 +18,7 @@ def split_ids(value: str) -> list[str]:
 
 
 def validate_targets(
-    targets: list[dict[str, str]], record_ids: set[str], evidence_ids: set[str], region_codes: set[str]
+    targets: list[dict[str, str]], records_by_id: dict[str, dict[str, str]], evidence_by_id: dict[str, dict[str, str]], region_codes: set[str]
 ) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
@@ -41,11 +41,18 @@ def validate_targets(
         if len(linked) != len(set(linked)):
             errors.append(f"targets line {number}: duplicate linked_record_id")
         for record_id in linked:
-            if record_id not in record_ids:
+            if record_id not in records_by_id:
                 errors.append(f"targets line {number}: unknown linked_record_id {record_id}")
+                continue
+            record = records_by_id[record_id]
+            for field in ("year", "region", "subject"):
+                if record.get(field) != row.get(field):
+                    errors.append(f"targets line {number}: linked_record_id {record_id} has a different {field}")
         for evidence_id in split_ids(row.get("official_evidence_ids", "")):
-            if evidence_id not in evidence_ids:
+            if evidence_id not in evidence_by_id:
                 errors.append(f"targets line {number}: unknown official_evidence_id {evidence_id}")
+            elif evidence_by_id[evidence_id].get("record_id") not in linked:
+                errors.append(f"targets line {number}: official_evidence_id {evidence_id} is not linked to this target's record")
     return errors
 
 
@@ -107,7 +114,7 @@ def render_markdown(
         )
     lines += [
         "",
-        "> 当前目标清单以 2020 年全国一、二、三卷数学/理综物理，以及 2021 年全国甲乙卷数学/物理为经官方佐证的试点。后续应以官方公告、命题说明或可追溯使用范围逐年扩充，而不是从已有文件反推“应有卷数”。",
+        "> 当前目标清单以 2017–2020 年全国一、二、三卷数学（并含 2020 年理综物理）及 2021 年全国甲乙卷数学/物理为经官方佐证的试点。后续应以官方公告、命题说明或可追溯使用范围逐年扩充，而不是从已有文件反推“应有卷数”。",
         "",
     ]
     return "\n".join(lines)
@@ -122,12 +129,9 @@ def main() -> int:
     records = read_csv(CATALOG)
     evidence = read_csv(OFFICIAL_EVIDENCE)
     region_rows = read_csv(REGIONS)
-    errors = validate_targets(
-        targets,
-        {row["record_id"] for row in records},
-        {row["evidence_id"] for row in evidence},
-        {row["code"] for row in region_rows},
-    )
+    records_by_id = {row["record_id"]: row for row in records}
+    evidence_by_id = {row["evidence_id"]: row for row in evidence}
+    errors = validate_targets(targets, records_by_id, evidence_by_id, {row["code"] for row in region_rows})
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
@@ -138,7 +142,7 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(
-            render_markdown(targets, {row["record_id"]: row for row in records}, {row["code"]: row["name"] for row in region_rows}),
+            render_markdown(targets, records_by_id, {row["code"]: row["name"] for row in region_rows}),
             encoding="utf-8",
         )
     if args.check or not args.write:

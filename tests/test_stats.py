@@ -157,7 +157,10 @@ class StatsTests(unittest.TestCase):
             "official_evidence_ids": "evidence-1", "notes": "",
         }
         records = {"paper-1": {"status": "indexed", "availability": "local", "material_type": "完整试卷"}}
-        self.assertEqual(target_coverage.validate_targets([target], {"paper-1"}, {"evidence-1"}, {"BJ"}), [])
+        evidence = {"evidence-1": {"record_id": "paper-1"}}
+        self.assertEqual(target_coverage.validate_targets([target], {"paper-1": {**records["paper-1"], "year": "2024", "region": "BJ", "subject": "数学"}}, evidence, {"BJ"}), [])
+        wrong_evidence = {"evidence-1": {"record_id": "another-paper"}}
+        self.assertTrue(target_coverage.validate_targets([target], {"paper-1": {**records["paper-1"], "year": "2024", "region": "BJ", "subject": "数学"}}, wrong_evidence, {"BJ"}))
         self.assertEqual(target_coverage.target_state(target, records), "已入库")
         report = target_coverage.render_markdown([target], records, {"BJ": "北京"})
         self.assertIn("不能**代表全国所有高考试卷", report)
