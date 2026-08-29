@@ -10,6 +10,7 @@ data/exams.csv       正式试卷索引（唯一事实源）
 data/sources.csv     外部项目和候选来源
 data/official-portals.csv 教育考试机构入口登记
 data/official-evidence.csv 官方考试身份佐证
+data/paper-targets.csv 已声明的实际卷制目标
 config/regions.csv   省级行政区清单
 scripts/stats.py     数据校验、统计和索引生成
 scripts/audit_duplicates.py 生成候选重复的人工核验队列
@@ -17,6 +18,7 @@ scripts/audit_traceability.py 生成来源可追溯性审计
 scripts/normalize_paper_layout.py 将旧来源目录迁入统一布局
 scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
 scripts/apply_content_review.py 应用经过内容核验的去重与分类结论
+scripts/target_coverage.py 校验卷制目标并生成缺口报告
 docs/papers-index.md 自动生成的试卷索引
 docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
@@ -24,6 +26,7 @@ docs/candidate-duplicates.md 自动生成的候选重复核验队列
 docs/traceability.md 来源可追溯性审计
 docs/official-evidence.md 官方身份佐证索引
 docs/official-portals.md 省级教育考试机构官方渠道核查索引
+docs/target-coverage.md 已声明卷制目标的覆盖与缺口
 docs/content-review.md 已执行内容审查的依据与结论
 docs/coverage.md     自动生成的覆盖统计
 ```
@@ -50,6 +53,8 @@ python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 scripts/stats.py --write-official-evidence-index docs/official-evidence.md
 python3 scripts/stats.py --write-official-portals-index docs/official-portals.md
+python3 scripts/target_coverage.py --check
+python3 scripts/target_coverage.py --write docs/target-coverage.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
 python3 scripts/normalize_paper_layout.py --apply

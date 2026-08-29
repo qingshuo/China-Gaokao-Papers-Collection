@@ -41,6 +41,11 @@ CONTENT_REVIEW_SPEC = importlib.util.spec_from_file_location("apply_content_revi
 apply_content_review = importlib.util.module_from_spec(CONTENT_REVIEW_SPEC)
 CONTENT_REVIEW_SPEC.loader.exec_module(apply_content_review)
 
+TARGET_COVERAGE_SCRIPT = Path(__file__).parents[1] / "scripts" / "target_coverage.py"
+TARGET_COVERAGE_SPEC = importlib.util.spec_from_file_location("target_coverage", TARGET_COVERAGE_SCRIPT)
+target_coverage = importlib.util.module_from_spec(TARGET_COVERAGE_SPEC)
+TARGET_COVERAGE_SPEC.loader.exec_module(target_coverage)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -121,6 +126,19 @@ class StatsTests(unittest.TestCase):
         index = stats.render_official_portals_index([row], {"BJ": "北京"})
         self.assertIn("仅公告/评析", index)
         self.assertIn("[访问入口](https://example.test)", index)
+
+    def test_target_coverage_keeps_declared_targets_separate_from_files(self):
+        target = {
+            "target_id": "target-1", "year": "2024", "region": "BJ", "subject": "数学",
+            "paper_type": "北京卷", "title": "北京数学", "scope": "北京", "linked_record_ids": "paper-1",
+            "official_evidence_ids": "evidence-1", "notes": "",
+        }
+        records = {"paper-1": {"status": "indexed", "availability": "local", "material_type": "完整试卷"}}
+        self.assertEqual(target_coverage.validate_targets([target], {"paper-1"}, {"evidence-1"}, {"BJ"}), [])
+        self.assertEqual(target_coverage.target_state(target, records), "已入库")
+        report = target_coverage.render_markdown([target], records, {"BJ": "北京"})
+        self.assertIn("不能**代表全国所有高考试卷", report)
+        self.assertIn("已入库", report)
 
     def test_material_classification_preserves_complete_papers_with_answers(self):
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")
