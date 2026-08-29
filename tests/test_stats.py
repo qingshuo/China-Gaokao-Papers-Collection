@@ -29,6 +29,26 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(summary["verified"], 1)
         self.assertEqual(summary["years"], ["2024"])
 
+    def test_material_classification_preserves_complete_papers_with_answers(self):
+        self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")
+        self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学答案"}), "附属资料")
+        self.assertEqual(stats.classify_material({"paper_type": "解析版", "title": "2024 高考数学解析"}), "附属资料")
+        self.assertEqual(stats.classify_material({"paper_type": "原卷", "title": "2025 高考河北化学实验题"}), "片段资料")
+        self.assertEqual(stats.classify_material({"paper_type": "原卷", "title": "2025 江西选择性考试物理"}), "完整试卷")
+
+    def test_main_index_excludes_supporting_materials(self):
+        base = {
+            "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed",
+            "availability": "local", "local_path": "papers/example.pdf", "paper_type": "原卷",
+            "license_status": "permitted",
+        }
+        complete = {**base, "title": "完整试卷", "material_type": "完整试卷"}
+        answer = {**base, "title": "答案", "material_type": "附属资料"}
+        index = stats.render_papers_index([complete, answer], {"BJ": "北京"})
+        self.assertIn("完整试卷", index)
+        self.assertNotIn("](<../papers/example.pdf>)", index)
+        self.assertNotIn("| [答案]", index)
+
     def test_index_labels_multi_region_national_paper(self):
         row = {
             "year": "2024", "region": "全国", "subject": "数学",

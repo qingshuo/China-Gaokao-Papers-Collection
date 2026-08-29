@@ -14,6 +14,8 @@ import zipfile
 from pathlib import Path
 from urllib.parse import quote, unquote
 
+from stats import classify_material
+
 ROOT = Path(__file__).resolve().parents[1]
 TEMP = ROOT / "temp"
 CATALOG = ROOT / "data" / "exams.csv"
@@ -309,7 +311,7 @@ def main() -> int:
     )
     seen = existing_hashes()
     report_rows: list[dict[str, str]] = []
-    catalog_rows: list[list[str]] = []
+    catalog_rows: list[dict[str, str]] = []
     temp_conversion = Path(tempfile.mkdtemp(prefix="gaokao-import-"))
     try:
         for source in candidates:
@@ -341,12 +343,18 @@ def main() -> int:
                 shutil.copy2(source_for_copy, destination_path)
                 destination = str(destination_path.relative_to(ROOT))
                 seen.add(digest)
-                catalog_rows.append([
-                    f"temp-{year}-{subject}-{digest[:12]}", year, region, variant, subject,
-                    source_for_copy.stem, f"local://temp/{quote(str(source.relative_to(TEMP)), safe='/')}",
-                    "local-upload", "unknown", "local", "indexed", destination, digest,
-                    f"用户 temp 目录导入；原始相对路径：{source.relative_to(TEMP)}；格式：{imported_ext.lstrip('.')}",
-                ])
+                row = {
+                    "record_id": f"temp-{year}-{subject}-{digest[:12]}", "year": year,
+                    "region": region, "paper_type": variant, "subject": subject,
+                    "title": source_for_copy.stem,
+                    "source_url": f"local://temp/{quote(str(source.relative_to(TEMP)), safe='/')}",
+                    "source_type": "local-upload", "license_status": "unknown",
+                    "availability": "local", "status": "indexed", "local_path": destination,
+                    "sha256": digest,
+                    "notes": f"用户 temp 目录导入；原始相对路径：{source.relative_to(TEMP)}；格式：{imported_ext.lstrip('.')}",
+                }
+                row["material_type"] = classify_material(row)
+                catalog_rows.append(row)
             report_rows.append({
                 "source": str(source.relative_to(ROOT)), "year": year or "", "region": region,
                 "subject": subject, "variant": variant, "source_sha256": sha256(source),
@@ -362,8 +370,19 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(report_rows)
     if args.copy and catalog_rows:
+        with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+            fieldnames = list(csv.DictReader(handle).fieldnames or [])
+        if "material_type" not in fieldnames:
+            fieldnames.append("material_type")
+            with CATALOG.open(newline="", encoding="utf-8-sig") as handle:
+                existing_rows = list(csv.DictReader(handle))
+            with CATALOG.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(existing_rows)
         with CATALOG.open("a", newline="", encoding="utf-8") as handle:
-            csv.writer(handle).writerows(catalog_rows)
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writerows(catalog_rows)
     print(f"candidates={len(candidates)} imported={sum(row['action'] == 'candidate' for row in report_rows)} duplicates={sum(row['action'] == 'duplicate' for row in report_rows)}")
     return 0
 

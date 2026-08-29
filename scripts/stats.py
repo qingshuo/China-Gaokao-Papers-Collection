@@ -23,6 +23,24 @@ REQUIRED_FIELDS = (
 )
 STATUSES = {"planned", "discovered", "indexed", "verified", "withdrawn"}
 AVAILABILITIES = {"none", "external", "local"}
+MATERIAL_TYPES = {"完整试卷", "附属资料", "片段资料"}
+
+
+def classify_material(row: dict[str, str]) -> str:
+    """Classify a file for the main paper library or a supporting index."""
+    title = row.get("title", "")
+    paper_type = row.get("paper_type", "")
+    if any(token in title for token in ("作文题目", "实验题", "部分试题", "压轴题", "单项选择题", "选择题汇编")):
+        return "片段资料"
+    if paper_type == "答案" and not any(token in title for token in ("无答案", "含答案")):
+        return "附属资料"
+    if paper_type in {"解析版", "试题答案解析"}:
+        return "附属资料"
+    return "完整试卷"
+
+
+def material_type(row: dict[str, str]) -> str:
+    return row.get("material_type") or classify_material(row)
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -60,6 +78,9 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
             errors.append(f"line {number}: local availability requires local_path")
         if availability != "local" and row.get("local_path", "").strip():
             errors.append(f"line {number}: local_path is only valid for local availability")
+        category = row.get("material_type", "").strip()
+        if category and category not in MATERIAL_TYPES:
+            errors.append(f"line {number}: unknown material_type: {category}")
         digest = row.get("sha256", "").strip()
         if digest and not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
             errors.append(f"line {number}: sha256 must be 64 hexadecimal characters")
@@ -76,18 +97,22 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
 
 def summarize(rows: list[dict[str, str]], source_rows: list[dict[str, str]]) -> dict[str, object]:
     active = [row for row in rows if row.get("status") != "withdrawn"]
+    complete = [row for row in active if material_type(row) == "完整试卷"]
     return {
         "records": len(rows),
         "active_records": len(active),
-        "verified": sum(row.get("status") == "verified" for row in active),
+        "complete_papers": len(complete),
+        "supplementary_files": sum(material_type(row) == "附属资料" for row in active),
+        "partial_files": sum(material_type(row) == "片段资料" for row in active),
+        "verified": sum(row.get("status") == "verified" for row in complete),
         "local_files": sum(row.get("availability") == "local" for row in active),
-        "years": sorted({row["year"] for row in active if row.get("year")}),
-        "regions": sorted({row["region"] for row in active if row.get("region")}),
-        "subjects": sorted({row["subject"] for row in active if row.get("subject")}),
-        "by_status": Counter(row.get("status", "") for row in active),
-        "by_year": Counter(row.get("year", "") for row in active),
-        "by_region": Counter(row.get("region", "") for row in active),
-        "by_subject": Counter(row.get("subject", "") for row in active),
+        "years": sorted({row["year"] for row in complete if row.get("year")}),
+        "regions": sorted({row["region"] for row in complete if row.get("region")}),
+        "subjects": sorted({row["subject"] for row in complete if row.get("subject")}),
+        "by_status": Counter(row.get("status", "") for row in complete),
+        "by_year": Counter(row.get("year", "") for row in complete),
+        "by_region": Counter(row.get("region", "") for row in complete),
+        "by_subject": Counter(row.get("subject", "") for row in complete),
         "external_sources": len(source_rows),
     }
 
@@ -100,29 +125,30 @@ def render_markdown(summary: dict[str, object]) -> str:
     lines = [
         "# 覆盖统计",
         "",
-        "本报告由 `python3 scripts/stats.py --write docs/coverage.md` 生成。撤回记录不计入覆盖统计。",
+        "本报告由 `python3 scripts/stats.py --write docs/coverage.md` 生成。主统计只计完整试卷；答案、解析和片段资料另列。",
         "",
         "## 总览",
         "",
-        f"- 索引记录：**{summary['records']}**（有效记录 {summary['active_records']}）",
-        f"- 已核验：**{summary['verified']}**",
-        f"- 仓库本地文件：**{summary['local_files']}**",
+        f"- 完整试卷：**{summary['complete_papers']}**",
+        f"- 附属资料：**{summary['supplementary_files']}**；片段资料：**{summary['partial_files']}**",
+        f"- 索引记录：**{summary['records']}**（有效记录 {summary['active_records']}，本地文件 {summary['local_files']}）",
+        f"- 完整试卷中已核验：**{summary['verified']}**",
         f"- 已发现外部来源：**{summary['external_sources']}**",
         f"- 覆盖年份：{', '.join(summary['years']) if summary['years'] else '暂无'}",
         f"- 覆盖省级区域：{', '.join(summary['regions']) if summary['regions'] else '暂无'}",
         "",
-        "## 按状态",
+        "## 完整试卷按状态",
         "",
         "| 状态 | 数量 |",
         "| --- | ---: |",
     ]
     for status in sorted(STATUSES):
         lines.append(f"| {status} | {by_status.get(status, 0)} |")
-    lines += ["", "## 按年份", "", "| 年份 | 数量 |", "| ---: | ---: |"]
+    lines += ["", "## 完整试卷按年份", "", "| 年份 | 数量 |", "| ---: | ---: |"]
     lines += [f"| {year} | {by_year[year]} |" for year in sorted(by_year)] or ["| 暂无 | 0 |"]
-    lines += ["", "## 按区域", "", "| 区域 | 数量 |", "| --- | ---: |"]
+    lines += ["", "## 完整试卷按区域", "", "| 区域 | 数量 |", "| --- | ---: |"]
     lines += [f"| {region} | {by_region[region]} |" for region in sorted(by_region)] or ["| 暂无 | 0 |"]
-    lines += ["", "## 按科目", "", "| 科目 | 数量 |", "| --- | ---: |"]
+    lines += ["", "## 完整试卷按科目", "", "| 科目 | 数量 |", "| --- | ---: |"]
     lines += [f"| {subject} | {by_subject[subject]} |" for subject in sorted(by_subject)] or ["| 暂无 | 0 |"]
     lines += ["", "> 统计只反映本仓库 CSV 中的记录，不等同于全国试卷全集。", ""]
     return "\n".join(lines)
@@ -132,6 +158,7 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
     active = [
         row for row in rows
         if row.get("status") != "withdrawn" and row.get("availability") == "local"
+        and material_type(row) == "完整试卷"
     ]
     subjects = sorted({row["subject"] for row in active})
     lines = [
@@ -178,11 +205,39 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
     return "\n".join(lines)
 
 
+def render_supplements_index(rows: list[dict[str, str]], region_names: dict[str, str]) -> str:
+    active = [
+        row for row in rows
+        if row.get("status") != "withdrawn" and row.get("availability") == "local"
+        and material_type(row) != "完整试卷"
+    ]
+    lines = [
+        "# 附属资料索引", "",
+        "本页收录答案、解析与片段资料；它们不计入主试卷库统计。",
+    ]
+    for category in ("附属资料", "片段资料"):
+        matches = sorted(
+            (row for row in active if material_type(row) == category),
+            key=lambda row: (row["year"], row["subject"], row["region"], row["title"]),
+            reverse=True,
+        )
+        lines += ["", f"## {category}（{len(matches)} 份）", "", "| 年份 | 科目 | 地区 | 资料 | 格式 |", "| ---: | --- | --- | --- | --- |"]
+        for row in matches:
+            target = "../" + quote(row["local_path"], safe="/")
+            region = region_names.get(row["region"], row["region"])
+            extension = Path(row["local_path"]).suffix.lstrip(".").upper()
+            title = row["title"].replace("|", "\\|")
+            lines.append(f"| {row['year']} | {row['subject']} | {region} | [{title}]({target}) | {extension} |")
+    lines += ["", "> 返回 [README](../README.md) 查看完整试卷。", ""]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate data and exit")
     parser.add_argument("--write", metavar="PATH", help="write the markdown report")
     parser.add_argument("--write-index", metavar="PATH", help="write the paper index")
+    parser.add_argument("--write-supplements-index", metavar="PATH", help="write the supporting-material index")
     args = parser.parse_args()
     rows = read_csv(CATALOG)
     region_rows = read_csv(REGIONS)
@@ -207,7 +262,14 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         region_names = {row["code"]: row["name"] for row in region_rows}
         output.write_text(render_papers_index(rows, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_index):
+    if args.write_supplements_index:
+        output = Path(args.write_supplements_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        region_names = {row["code"]: row["name"] for row in region_rows}
+        output.write_text(render_supplements_index(rows, region_names), encoding="utf-8")
+    if args.check or not (args.write or args.write_index or args.write_supplements_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 
