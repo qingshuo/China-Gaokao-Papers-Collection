@@ -16,9 +16,13 @@
 | `availability` | `none`（只有线索）、`external`（外部可访问）或 `local`（文件在仓库） |
 | `status` | `planned`、`discovered`、`indexed`、`verified`、`withdrawn` |
 | `local_path` | `availability=local` 时的仓库相对路径 |
-| `sha256` | 本地文件的 SHA-256 校验值，用于发现内容被替换 |
+| `sha256` | `availability=local` 时必填的 SHA-256 校验值，用于发现内容被替换 |
 | `notes` | 核验、授权和版本差异说明 |
 
 ### 省份范围
 
 `config/regions.csv` 收录中国大陆 31 个省级行政区。全国统一试卷不是省份，因此用单独的 `全国` 值表示，统计时不会把它错误展开成 31 份。
+
+### 官方入口登记
+
+`data/official-portals.csv` 是教育部教育考试院和省级教育考试机构的优先核查入口。它不等同于试卷来源，也不表示站点提供下载或已授权再发布；具体文件必须另行记录到 `source_url`。

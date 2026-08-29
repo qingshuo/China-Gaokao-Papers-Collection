@@ -2,26 +2,26 @@
 
 按年份、学科和地区整理高考试卷。主库当前收录 **398 份完整试卷**，覆盖 **2017-2026 年**，包含语文、数学、英语、日语、物理、化学、生物、地理、历史、政治及文综/理综。
 
-**快速入口：** [历年试卷索引](docs/papers-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [项目说明](docs/project.md) · [参与贡献](CONTRIBUTING.md)
+**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
 答案、解析等附属资料（137 份）及作文题、实验题等片段资料（6 份）已单独整理，不计入下方完整试卷统计。
 
 ## 年份总览
 
-点击年份后，可在对应学科小节中按地区和试卷类型打开文件。
+点击年份后，可打开当年所有学科、地区和卷种的完整试卷。
 
 | 年份 | 试卷数 | 查看索引 |
 | ---: | ---: | --- |
-| 2026 | 31 | [2026 年试卷](docs/papers-index.md#2026-化学) |
-| 2025 | 70 | [2025 年试卷](docs/papers-index.md#2025-化学) |
-| 2024 | 106 | [2024 年试卷](docs/papers-index.md#2024-化学) |
-| 2023 | 29 | [2023 年试卷](docs/papers-index.md#2023-数学) |
-| 2022 | 62 | [2022 年试卷](docs/papers-index.md#2022-数学) |
-| 2021 | 35 | [2021 年试卷](docs/papers-index.md#2021-数学) |
-| 2020 | 24 | [2020 年试卷](docs/papers-index.md#2020-数学) |
-| 2019 | 13 | [2019 年试卷](docs/papers-index.md#2019-数学) |
-| 2018 | 13 | [2018 年试卷](docs/papers-index.md#2018-数学) |
-| 2017 | 15 | [2017 年试卷](docs/papers-index.md#2017-数学) |
+| 2026 | 31 | [2026 年试卷](docs/year-index.md#2026-年) |
+| 2025 | 70 | [2025 年试卷](docs/year-index.md#2025-年) |
+| 2024 | 106 | [2024 年试卷](docs/year-index.md#2024-年) |
+| 2023 | 29 | [2023 年试卷](docs/year-index.md#2023-年) |
+| 2022 | 62 | [2022 年试卷](docs/year-index.md#2022-年) |
+| 2021 | 35 | [2021 年试卷](docs/year-index.md#2021-年) |
+| 2020 | 24 | [2020 年试卷](docs/year-index.md#2020-年) |
+| 2019 | 13 | [2019 年试卷](docs/year-index.md#2019-年) |
+| 2018 | 13 | [2018 年试卷](docs/year-index.md#2018-年) |
+| 2017 | 15 | [2017 年试卷](docs/year-index.md#2017-年) |
 
 ## 学科入口
 

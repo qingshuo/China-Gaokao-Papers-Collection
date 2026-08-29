@@ -8,9 +8,12 @@
 papers/              试卷文件
 data/exams.csv       正式试卷索引（唯一事实源）
 data/sources.csv     外部项目和候选来源
+data/official-portals.csv 教育考试机构入口登记
 config/regions.csv   省级行政区清单
 scripts/stats.py     数据校验、统计和索引生成
 docs/papers-index.md 自动生成的试卷索引
+docs/year-index.md   自动生成的按年份索引
+docs/region-index.md 自动生成的按地区索引
 docs/coverage.md     自动生成的覆盖统计
 ```
 
@@ -31,12 +34,14 @@ docs/coverage.md     自动生成的覆盖统计
 python3 scripts/stats.py --check
 python3 scripts/stats.py --write docs/coverage.md
 python3 scripts/stats.py --write-index docs/papers-index.md
+python3 scripts/stats.py --write-year-index docs/year-index.md
+python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 -m unittest discover -s tests -v
 ```
 
 ## 收录原则
 
-- 每条记录必须包含稳定的来源 URL、授权状态和 SHA-256。
+- 每条记录必须包含稳定的来源 URL 和授权状态；本地文件还必须包含 SHA-256。
 - 扫描件、答案、解析和不同卷别分别建记录，避免混合版本。
 - 对来源不清、文件损坏或真实性存疑的资料，只登记候选来源，不标记为已核验。
 - 收到权利人通知后，将及时核查并撤回或替换相关文件。

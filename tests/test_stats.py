@@ -20,11 +20,28 @@ class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
         self.assertEqual(stats.validate_catalog([], {"BJ"}), [])
 
+    def test_official_portals_require_each_region_once(self):
+        rows = [
+            {"region": "全国", "agency": "考试机构", "portal_url": "https://example.test", "portal_status": "checked"},
+            {"region": "BJ", "agency": "北京考试机构", "portal_url": "https://example.test/bj", "portal_status": "announcement_only"},
+        ]
+        self.assertEqual(stats.validate_official_portals(rows, {"BJ"}), [])
+        self.assertTrue(stats.validate_official_portals(rows[:-1], {"BJ"}))
+
     def test_local_record_requires_path(self):
         row = {field: "value" for field in stats.REQUIRED_FIELDS}
         row.update({"year": "2024", "region": "BJ", "status": "indexed", "availability": "local", "local_path": ""})
         errors = stats.validate_catalog([row], {"BJ"})
         self.assertTrue(any("requires local_path" in error for error in errors))
+
+    def test_only_local_records_require_sha256(self):
+        row = {field: "value" for field in stats.REQUIRED_FIELDS}
+        row.update({"year": "2024", "region": "BJ", "status": "discovered", "availability": "external", "sha256": ""})
+        self.assertEqual(stats.validate_catalog([row], {"BJ"}), [])
+        row["availability"] = "local"
+        row["local_path"] = "papers/example.pdf"
+        errors = stats.validate_catalog([row], {"BJ"})
+        self.assertTrue(any("requires sha256" in error for error in errors))
 
     def test_summary_excludes_withdrawn(self):
         rows = [
@@ -55,6 +72,17 @@ class StatsTests(unittest.TestCase):
         self.assertIn("完整试卷", index)
         self.assertNotIn("](<../papers/example.pdf>)", index)
         self.assertNotIn("| [答案]", index)
+
+    def test_year_and_region_indexes_exclude_supporting_materials(self):
+        base = {
+            "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed",
+            "availability": "local", "local_path": "papers/example.pdf", "paper_type": "原卷",
+            "license_status": "permitted",
+        }
+        complete = {**base, "title": "完整试卷", "material_type": "完整试卷"}
+        answer = {**base, "title": "答案", "material_type": "附属资料"}
+        self.assertIn("完整试卷", stats.render_year_index([complete, answer], {"BJ": "北京"}))
+        self.assertIn("完整试卷", stats.render_region_index([complete, answer], {"BJ": "北京"}))
 
     def test_index_labels_multi_region_national_paper(self):
         row = {

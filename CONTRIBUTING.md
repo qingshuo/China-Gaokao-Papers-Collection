@@ -4,7 +4,7 @@
 
 ## 数据格式
 
-编辑 `data/exams.csv` 时保留现有列顺序。`record_id` 必须唯一，格式建议为 `年份-范围-科目-类型` 的短横线组合。`status` 使用 `planned`、`discovered`、`indexed`、`verified` 或 `withdrawn`；`availability` 使用 `none`、`external` 或 `local`。
+编辑 `data/exams.csv` 时保留现有列顺序。`record_id` 必须唯一，格式建议为 `年份-范围-科目-类型` 的短横线组合。`status` 使用 `planned`、`discovered`、`indexed`、`verified` 或 `withdrawn`；`availability` 使用 `none`、`external` 或 `local`。只有本地文件需要填写 `sha256`；不可托管的资料应提交具体外部链接和来源说明。
 
 ## 提交前检查
 
@@ -12,6 +12,8 @@
 python3 scripts/stats.py --check
 python3 scripts/stats.py --write docs/coverage.md
 python3 scripts/stats.py --write-index docs/papers-index.md
+python3 scripts/stats.py --write-year-index docs/year-index.md
+python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 -m unittest discover -s tests -v
 ```
 
