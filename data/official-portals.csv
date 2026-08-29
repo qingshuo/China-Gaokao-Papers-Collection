@@ -1,5 +1,5 @@
 region,agency,portal_url,scope,portal_status,notes
-全国,教育部教育考试院,https://www.neea.edu.cn/,全国考试政策与公告,pending_manual_check,不是历年完整试卷下载库；用于核对全国考试公告和公开发布信息
+全国,教育部教育考试院,https://gaokao.neea.edu.cn/,全国普通高考政策、考试大纲与试题评析,checked,已于2026-08-29核对普通高考栏目：公开政策、考试大纲和试题评析；未发现历年原卷统一下载库，具体文件来源与授权须另行登记
 BJ,北京教育考试院,https://www.bjeea.cn/,北京高考,pending_manual_check,从高考栏目和站内公告检索试题或答案的公开发布记录
 TJ,天津市教育招生考试院,https://www.zhaokao.net/,天津高考,pending_manual_check,从普通高考栏目和站内公告检索
 HE,河北省教育考试院,https://www.hebeea.edu.cn/,河北高考,pending_manual_check,从普通高考栏目和站内公告检索

@@ -54,6 +54,15 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(stats.validate_official_portals(rows, {"BJ"}), [])
         self.assertTrue(stats.validate_official_portals(rows[:-1], {"BJ"}))
 
+    def test_official_evidence_requires_known_record_and_https_url(self):
+        row = {
+            "evidence_id": "neea-2021", "record_id": "paper-1", "evidence_type": "official_analysis",
+            "evidence_url": "https://example.test/evidence", "issuer": "考试机构",
+        }
+        self.assertEqual(stats.validate_official_evidence([row], {"paper-1"}), [])
+        self.assertTrue(stats.validate_official_evidence([{**row, "record_id": "missing"}], {"paper-1"}))
+        self.assertTrue(stats.validate_official_evidence([{**row, "evidence_url": "http://example.test"}], {"paper-1"}))
+
     def test_local_record_requires_path(self):
         row = {field: "value" for field in stats.REQUIRED_FIELDS}
         row.update({"year": "2024", "region": "BJ", "status": "indexed", "availability": "local", "local_path": ""})
@@ -89,6 +98,20 @@ class StatsTests(unittest.TestCase):
         self.assertIn("**2 份完整试卷**", readme)
         self.assertIn("附属资料 **1 份**", readme)
         self.assertIn("| 2024 | 1 |", readme)
+
+    def test_official_evidence_index_keeps_origin_and_identity_evidence_separate(self):
+        paper = {
+            "record_id": "paper-1", "year": "2024", "region": "BJ", "subject": "数学", "title": "北京数学",
+            "availability": "local", "local_path": "papers/2024/BJ/数学/北京数学.pdf", "source_url": "https://mirror.test/paper",
+        }
+        evidence = {
+            "evidence_id": "neea-2024", "record_id": "paper-1", "evidence_type": "official_analysis",
+            "evidence_url": "https://official.test/analysis", "issuer": "教育考试院",
+        }
+        index = stats.render_official_evidence_index([evidence], {"paper-1": paper}, {"BJ": "北京"})
+        self.assertIn("官方试题评析", index)
+        self.assertIn("https://official.test/analysis", index)
+        self.assertIn("../papers/2024/BJ/", index)
 
     def test_material_classification_preserves_complete_papers_with_answers(self):
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")

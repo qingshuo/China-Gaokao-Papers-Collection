@@ -9,6 +9,7 @@ papers/              试卷文件
 data/exams.csv       正式试卷索引（唯一事实源）
 data/sources.csv     外部项目和候选来源
 data/official-portals.csv 教育考试机构入口登记
+data/official-evidence.csv 官方考试身份佐证
 config/regions.csv   省级行政区清单
 scripts/stats.py     数据校验、统计和索引生成
 scripts/audit_duplicates.py 生成候选重复的人工核验队列
@@ -21,6 +22,7 @@ docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
 docs/candidate-duplicates.md 自动生成的候选重复核验队列
 docs/traceability.md 来源可追溯性审计
+docs/official-evidence.md 官方身份佐证索引
 docs/content-review.md 已执行内容审查的依据与结论
 docs/coverage.md     自动生成的覆盖统计
 ```
@@ -45,6 +47,7 @@ python3 scripts/stats.py --write-readme README.md
 python3 scripts/stats.py --write-index docs/papers-index.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
+python3 scripts/stats.py --write-official-evidence-index docs/official-evidence.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_traceability.py --write docs/traceability.md
 python3 scripts/normalize_paper_layout.py --apply

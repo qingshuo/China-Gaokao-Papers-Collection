@@ -1,4 +1,5 @@
 name,url,scope,source_type,license_status,notes
+教育部教育考试院普通高考,https://gaokao.neea.edu.cn/,普通高考政策、考试大纲与试题评析,official,unknown,已核对为教育部教育考试院普通高考官方栏目；未作为历年原卷统一下载库，官方页面仅作为身份佐证或具体公告来源使用
 shaodongtang/gaokao_exam,https://github.com/shaodongtang/gaokao_exam,高考试卷 LaTeX 模板,github,unknown,模板项目，不代表试卷资料已获再发布授权
 ajsadhotmail/2024-China-Gaokao-Math,https://github.com/ajsadhotmail/2024-China-Gaokao-Math,2024 新高考 I 卷数学,github,unknown,单年份单科目项目，待核验文件授权和完整性
 fihyer/NCEE,https://github.com/fihyer/NCEE,历年高考数学试卷,github,unknown,范围和文件状态待人工核验

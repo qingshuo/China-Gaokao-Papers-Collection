@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "data" / "exams.csv"
 SOURCES = ROOT / "data" / "sources.csv"
 OFFICIAL_PORTALS = ROOT / "data" / "official-portals.csv"
+OFFICIAL_EVIDENCE = ROOT / "data" / "official-evidence.csv"
 REGIONS = ROOT / "config" / "regions.csv"
 
 REQUIRED_FIELDS = (
@@ -26,6 +27,7 @@ STATUSES = {"planned", "discovered", "indexed", "verified", "withdrawn"}
 AVAILABILITIES = {"none", "external", "local"}
 MATERIAL_TYPES = {"完整试卷", "附属资料", "片段资料"}
 PORTAL_STATUSES = {"pending_manual_check", "checked", "download_available", "announcement_only", "unavailable"}
+EVIDENCE_TYPES = {"official_analysis", "official_announcement", "official_catalog", "official_download"}
 
 
 def classify_material(row: dict[str, str]) -> str:
@@ -122,7 +124,35 @@ def validate_official_portals(rows: list[dict[str, str]], region_codes: set[str]
     return errors
 
 
-def summarize(rows: list[dict[str, str]], source_rows: list[dict[str, str]], portal_rows: list[dict[str, str]] | None = None) -> dict[str, object]:
+def validate_official_evidence(rows: list[dict[str, str]], catalog_ids: set[str]) -> list[str]:
+    """Validate official evidence without confusing it with a file's origin URL."""
+    errors: list[str] = []
+    seen: set[str] = set()
+    for number, row in enumerate(rows, start=2):
+        evidence_id = row.get("evidence_id", "").strip()
+        if not evidence_id:
+            errors.append(f"official evidence line {number}: missing evidence_id")
+        elif evidence_id in seen:
+            errors.append(f"official evidence line {number}: duplicate evidence_id {evidence_id}")
+        seen.add(evidence_id)
+        record_id = row.get("record_id", "").strip()
+        if record_id not in catalog_ids:
+            errors.append(f"official evidence line {number}: unknown record_id {record_id}")
+        if row.get("evidence_type", "").strip() not in EVIDENCE_TYPES:
+            errors.append(f"official evidence line {number}: unknown evidence_type")
+        if not row.get("evidence_url", "").startswith("https://"):
+            errors.append(f"official evidence line {number}: evidence_url must be an HTTPS URL")
+        if not row.get("issuer", "").strip():
+            errors.append(f"official evidence line {number}: missing issuer")
+    return errors
+
+
+def summarize(
+    rows: list[dict[str, str]],
+    source_rows: list[dict[str, str]],
+    portal_rows: list[dict[str, str]] | None = None,
+    evidence_rows: list[dict[str, str]] | None = None,
+) -> dict[str, object]:
     active = [row for row in rows if row.get("status") != "withdrawn"]
     complete = [row for row in active if material_type(row) == "完整试卷"]
     return {
@@ -142,6 +172,8 @@ def summarize(rows: list[dict[str, str]], source_rows: list[dict[str, str]], por
         "by_subject": Counter(row.get("subject", "") for row in complete),
         "external_sources": len(source_rows),
         "official_portals": len(portal_rows or []),
+        "official_evidence": len(evidence_rows or []),
+        "official_evidence_records": len({row.get("record_id") for row in evidence_rows or []}),
     }
 
 
@@ -163,6 +195,7 @@ def render_markdown(summary: dict[str, object]) -> str:
         f"- 完整试卷中已核验：**{summary['verified']}**",
         f"- 已发现外部来源：**{summary['external_sources']}**",
         f"- 优先核查官方入口：**{summary['official_portals']}**（入口不等同于试卷下载或再发布许可）",
+        f"- 已登记官方身份佐证：**{summary['official_evidence']}** 条，关联 **{summary['official_evidence_records']}** 份试卷（不等同于文件来源或许可）",
         f"- 覆盖年份：{', '.join(summary['years']) if summary['years'] else '暂无'}",
         f"- 覆盖省级区域：{', '.join(summary['regions']) if summary['regions'] else '暂无'}",
         "",
@@ -198,7 +231,7 @@ def render_readme(summary: dict[str, object]) -> str:
         "",
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
         "[按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
-        "[覆盖统计](docs/coverage.md) · [来源可追溯性](docs/traceability.md) · "
+        "[覆盖统计](docs/coverage.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
         "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · "
         "[收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)",
         "",
@@ -391,6 +424,48 @@ def render_supplements_index(rows: list[dict[str, str]], region_names: dict[str,
     return "\n".join(lines)
 
 
+def render_official_evidence_index(
+    evidence_rows: list[dict[str, str]], rows_by_id: dict[str, dict[str, str]], region_names: dict[str, str]
+) -> str:
+    """Render an audit trail for official identity evidence separate from source URLs."""
+    labels = {
+        "official_analysis": "官方试题评析",
+        "official_announcement": "官方公告",
+        "official_catalog": "官方目录",
+        "official_download": "官方下载",
+    }
+    lines = [
+        "# 官方身份佐证",
+        "",
+        "本页由 `python3 scripts/stats.py --write-official-evidence-index docs/official-evidence.md` 自动生成。",
+        "官方身份佐证用于确认考试、卷种或命题背景；它**不替代**文件原始来源、内容逐页核验或再发布许可。",
+        "",
+        "| 年份 | 地区 | 科目 | 试卷 | 佐证类型 | 官方页面 |",
+        "| ---: | --- | --- | --- | --- | --- |",
+    ]
+    ordered = sorted(
+        evidence_rows,
+        key=lambda item: (rows_by_id[item["record_id"]]["year"], item["record_id"], item["evidence_id"]),
+        reverse=True,
+    )
+    for evidence in ordered:
+        paper = rows_by_id[evidence["record_id"]]
+        region = region_names.get(paper["region"], paper["region"])
+        paper_title = paper["title"].replace("|", "\\|")
+        target = "../" + quote(paper["local_path"], safe="/") if paper.get("availability") == "local" else paper["source_url"]
+        evidence_label = labels[evidence["evidence_type"]]
+        lines.append(
+            f"| {paper['year']} | {region} | {paper['subject']} | [{paper_title}]({target}) | "
+            f"{evidence_label} | [{evidence['issuer']}]({evidence['evidence_url']}) |"
+        )
+    lines += [
+        "",
+        "> 仅当官方页面实际指向同一考试/卷种时才可登记。若页面不提供原卷文件，主卷的来源与许可状态仍以 `data/exams.csv` 为准。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate data and exit")
@@ -400,6 +475,7 @@ def main() -> int:
     parser.add_argument("--write-year-index", metavar="PATH", help="write the year-first paper index")
     parser.add_argument("--write-region-index", metavar="PATH", help="write the region-first paper index")
     parser.add_argument("--write-supplements-index", metavar="PATH", help="write the supporting-material index")
+    parser.add_argument("--write-official-evidence-index", metavar="PATH", help="write the official identity-evidence index")
     args = parser.parse_args()
     rows = read_csv(CATALOG)
     region_rows = read_csv(REGIONS)
@@ -407,12 +483,14 @@ def main() -> int:
     errors = validate_catalog(rows, region_codes)
     portal_rows = read_csv(OFFICIAL_PORTALS)
     errors += validate_official_portals(portal_rows, region_codes)
+    evidence_rows = read_csv(OFFICIAL_EVIDENCE)
+    errors += validate_official_evidence(evidence_rows, {row["record_id"] for row in rows})
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
     source_rows = read_csv(SOURCES)
-    summary = summarize(rows, source_rows, portal_rows)
+    summary = summarize(rows, source_rows, portal_rows, evidence_rows)
     if args.write:
         output = Path(args.write)
         if not output.is_absolute():
@@ -453,7 +531,15 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         region_names = {row["code"]: row["name"] for row in region_rows}
         output.write_text(render_supplements_index(rows, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index):
+    if args.write_official_evidence_index:
+        output = Path(args.write_official_evidence_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        region_names = {row["code"]: row["name"] for row in region_rows}
+        rows_by_id = {row["record_id"]: row for row in rows}
+        output.write_text(render_official_evidence_index(evidence_rows, rows_by_id, region_names), encoding="utf-8")
+    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 
