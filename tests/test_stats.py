@@ -20,6 +20,11 @@ AUDIT_SPEC = importlib.util.spec_from_file_location("audit_duplicates", AUDIT_SC
 audit_duplicates = importlib.util.module_from_spec(AUDIT_SPEC)
 AUDIT_SPEC.loader.exec_module(audit_duplicates)
 
+TRACEABILITY_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_traceability.py"
+TRACEABILITY_SPEC = importlib.util.spec_from_file_location("audit_traceability", TRACEABILITY_SCRIPT)
+audit_traceability = importlib.util.module_from_spec(TRACEABILITY_SPEC)
+TRACEABILITY_SPEC.loader.exec_module(audit_traceability)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -118,6 +123,13 @@ class StatsTests(unittest.TestCase):
         groups = audit_duplicates.candidate_groups([first, second, different_paper])
         self.assertEqual([group[0] for group in groups], [("2025", "BJ", "数学", "北京")])
         self.assertEqual(groups[0][1], [first, second])
+
+    def test_traceability_audit_distinguishes_local_provenance(self):
+        web = {"status": "indexed", "material_type": "完整试卷", "source_url": "https://example.test/paper", "year": "2024", "source_type": "official", "license_status": "permitted"}
+        local = {"status": "indexed", "material_type": "完整试卷", "source_url": "local://temp/paper.pdf", "year": "2024", "source_type": "local-upload", "license_status": "unknown"}
+        summary = audit_traceability.summarize([web, local])
+        self.assertEqual(summary["source_scope"]["公开 URL"], 1)
+        self.assertEqual(summary["source_scope"]["仅本地导入来源"], 1)
 
 
 if __name__ == "__main__":
