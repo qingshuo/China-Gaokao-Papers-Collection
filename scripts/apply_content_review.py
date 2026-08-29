@@ -22,6 +22,9 @@ REMOVE_IDS = {
     "temp-2025-物理-19f9ce751abe",  # Same 上海卷 with answers; GitHub version retained instead.
     "temp-2025-物理-ac4daff519b4",  # Same 云南卷 with answers; GitHub version retained instead.
 }
+# These actions were applied in the previous review commit. Keeping the IDs
+# documents the provenance but must not make later review runs fail.
+HISTORIC_REMOVED_IDS = set(REMOVE_IDS)
 SUPPLEMENT_IDS = {
     "temp-2022-语文-9fee8807a6cc",  # Same 全国乙卷 with an added model essay.
     "deekur-2025-physics-029",  # 安徽卷 with answers.
@@ -31,6 +34,11 @@ SUPPLEMENT_IDS = {
     "deekur-2025-physics-033",  # 江苏卷 with detailed answers.
     "deekur-2025-physics-023",  # 上海卷 with detailed answers.
     "deekur-2025-physics-024",  # 云南卷 with detailed answers.
+    "temp-2021-数学-cd8daafb088b",  # 2021 新高考 I 卷逐题答案解析，原卷另存。
+}
+TITLE_UPDATES = {
+    "temp-2021-数学-698c99e83f2e": "2021年新高考I卷数学（原卷）",
+    "temp-2021-数学-cd8daafb088b": "2021年新高考I卷数学（答案解析）",
 }
 PARTIAL_IDS = {
     "temp-2025-物理-d1cb17271a18",  # One-page 四川卷回忆版，仅含第 14、15 题。
@@ -65,7 +73,7 @@ def main() -> int:
         rows = list(reader)
 
     known_ids = {row["record_id"] for row in rows}
-    expected_ids = REMOVE_IDS | SUPPLEMENT_IDS | PARTIAL_IDS | set(CONFLICTS)
+    expected_ids = (REMOVE_IDS - HISTORIC_REMOVED_IDS) | SUPPLEMENT_IDS | PARTIAL_IDS | set(CONFLICTS) | set(TITLE_UPDATES)
     missing = expected_ids - known_ids
     if missing:
         raise ValueError(f"review record ids not found: {', '.join(sorted(missing))}")
@@ -84,8 +92,9 @@ def main() -> int:
             continue
         collection = "supplements" if action == "supplement" else "partials"
         destination = ROOT / "papers" / collection / row["year"] / row["region"] / row["subject"] / source.name
-        destination = unique_destination(destination.parent, destination.name, row["sha256"])
-        moves.append((row, source, destination, action))
+        if source != destination:
+            destination = unique_destination(destination.parent, destination.name, row["sha256"])
+            moves.append((row, source, destination, action))
 
     for row, source in removals:
         print(f"remove {row['record_id']}: {source.relative_to(ROOT)}")
@@ -105,6 +114,11 @@ def main() -> int:
         row["material_type"] = "附属资料" if action == "supplement" else "片段资料"
         row["paper_type"] = "试题答案解析" if action == "supplement" else "部分试题"
         row["notes"] = f"{row['notes']}；内容复核后归类为{row['material_type']}"
+    for row in rows:
+        if row["record_id"] in TITLE_UPDATES:
+            row["title"] = TITLE_UPDATES[row["record_id"]]
+            if "内容复核：已补全新高考I卷版本名称" not in row["notes"]:
+                row["notes"] = f"{row['notes']}；内容复核：已补全新高考I卷版本名称"
     for row in rows:
         if row["record_id"] in CONFLICTS and CONFLICTS[row["record_id"]] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{CONFLICTS[row['record_id']]}"

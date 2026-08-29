@@ -294,6 +294,9 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(apply_content_review.review_action("deekur-2025-53-math"), "remove")
         self.assertEqual(apply_content_review.review_action("deekur-2025-physics-023"), "supplement")
         self.assertEqual(apply_content_review.review_action("temp-2025-物理-d1cb17271a18"), "partial")
+        self.assertEqual(apply_content_review.review_action("temp-2021-数学-cd8daafb088b"), "supplement")
+        self.assertEqual(apply_content_review.TITLE_UPDATES["temp-2021-数学-698c99e83f2e"], "2021年新高考I卷数学（原卷）")
+        self.assertEqual(apply_content_review.REMOVE_IDS, apply_content_review.HISTORIC_REMOVED_IDS)
         self.assertEqual(apply_content_review.review_action("unrelated-record"), "keep")
 
 
