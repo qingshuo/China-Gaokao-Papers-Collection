@@ -268,6 +268,15 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(row["region"], "全国")
         self.assertEqual(Path(import_deekur_math.unquote(row["source_url"].removeprefix(import_deekur_math.RAW_ROOT))).name, Path(path).name)
 
+    def test_deekur_historical_import_keeps_unresolved_scope_files_out_of_main_batch(self):
+        paths = [
+            "普通高考/1994/1994全国新科目组文.pdf",
+            "普通高考/1994/1994旧科目组文.pdf",
+        ]
+        eligible, skipped = import_deekur_math.eligible_source_paths(paths)
+        self.assertEqual(eligible, ["普通高考/1994/1994全国新科目组文.pdf"])
+        self.assertEqual(skipped, ["普通高考/1994/1994旧科目组文.pdf"])
+
     def test_deekur_historical_import_requires_audited_title_year_correction(self):
         path = "普通高考/2007/2002大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf"
         row = import_deekur_math.build_rows("2007", [path], [{"code": "BJ", "name": "北京"}])[0]

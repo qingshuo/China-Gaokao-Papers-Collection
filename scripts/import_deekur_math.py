@@ -28,6 +28,15 @@ KNOWN_TITLE_YEAR_MISMATCHES = {
     "普通高考/2007/2002大纲2理(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf",
 }
 
+# These scans are described only as an "old-subject group".  The rendered
+# pages identify the subject but not the province(s) or national usage range,
+# so they must not be silently classified as nationwide papers.  Keep the
+# upstream paths as research leads until an authoritative scope is found.
+UNRESOLVED_SCOPE_PATHS = {
+    "普通高考/1994/1994旧科目组文.pdf",
+    "普通高考/1994/1994旧科目组理.pdf",
+}
+
 
 def fetch(url: str) -> bytes:
     request = Request(url, headers={"User-Agent": "China-Gaokao-Papers-Collection importer"})
@@ -41,6 +50,13 @@ def source_paths(year: str) -> list[str]:
         raise ValueError("GitHub tree response is truncated; refuse to import an incomplete batch")
     prefix = f"普通高考/{year}/"
     return sorted(item["path"] for item in tree["tree"] if item["type"] == "blob" and item["path"].startswith(prefix) and item["path"].endswith(".pdf"))
+
+
+def eligible_source_paths(paths: list[str]) -> tuple[list[str], list[str]]:
+    """Separate files with an evidenced geographic scope from research leads."""
+    eligible = [path for path in paths if path not in UNRESOLVED_SCOPE_PATHS]
+    skipped = [path for path in paths if path in UNRESOLVED_SCOPE_PATHS]
+    return eligible, skipped
 
 
 def region_for_filename(filename: str, region_rows: list[dict[str, str]]) -> str:
@@ -114,10 +130,12 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="download files and append catalog rows")
     args = parser.parse_args()
     year = args.year
-    paths = source_paths(year)
+    paths, skipped = eligible_source_paths(source_paths(year))
     regions = read_csv(REGIONS)
     rows = build_rows(year, paths, regions)
     print(f"year={year} candidates={len(rows)} mode={'apply' if args.apply else 'dry-run'}")
+    for path in skipped:
+        print(f"skipped-unresolved-scope {path}")
     for row in rows:
         print(f"{row['record_id']} {row['region']} {row['title']}")
     if not args.apply:
