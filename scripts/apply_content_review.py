@@ -23,6 +23,8 @@ REMOVE_IDS = {
     "temp-2025-物理-ac4daff519b4",  # Same 云南卷 with answers; GitHub version retained instead.
     "deekur-2021-21-math",  # Same 22-question paper as the retained A4 original-layout version.
     "temp-2022-数学-fd1782d2496d",  # Same 新高考 I paper as the retained licensed GitHub version.
+    "temp-2024-数学-3871d1b1134c",  # Same 2024 新高考 II paper as the retained licensed GitHub version.
+    "temp-2024-数学-c2d8884979db",  # Same 2024 北京 paper as the retained licensed GitHub version.
 }
 # These actions were applied in the previous review commit. Keeping the IDs
 # documents the provenance but must not make later review runs fail.
@@ -37,6 +39,8 @@ HISTORIC_REMOVED_IDS = {
     "temp-2025-物理-ac4daff519b4",
     "deekur-2021-21-math",
     "temp-2022-数学-fd1782d2496d",
+    "temp-2024-数学-3871d1b1134c",
+    "temp-2024-数学-c2d8884979db",
 }
 SUPPLEMENT_IDS = {
     "temp-2022-语文-9fee8807a6cc",  # Same 全国乙卷 with an added model essay.
@@ -72,6 +76,14 @@ RETAINED_NOTES = {
         "%2C%E6%B2%B3%E5%8C%97%2C%E6%B1%9F%E8%8B%8F%2C%E7%A6%8F%E5%BB%BA%29.pdf；"
         "该公开版本的 CC-BY-4.0 声明不等同于本地导入文件的许可。"
     ),
+    "deekur-2024-49-math": (
+        "内容复核：与 temp-2024-数学-3871d1b1134c 的 1–19 题、题型分区、配图和题干逐项一致，"
+        "两者均无答案；保留本文件，原因是来源可追溯且上游声明 CC-BY-4.0。"
+    ),
+    "deekur-2024-46-math": (
+        "内容复核：与 temp-2024-数学-c2d8884979db 的 1–21 题、题型分区、配图和题干逐项一致，"
+        "两者均无答案；保留本文件，原因是来源可追溯且上游声明 CC-BY-4.0。"
+    ),
 }
 PARTIAL_IDS = {
     "temp-2025-物理-d1cb17271a18",  # One-page 四川卷回忆版，仅含第 14、15 题。
@@ -85,6 +97,10 @@ CONFLICTS = {
     "temp-2026-数学-66df94475d50": "内容复核：与 deekur-2026-55-math 存在实质题干差异，暂不合并，待官方来源核验。",
     "deekur-2026-59-math": "内容复核：与 temp-2026-数学-9c9cb50bcd0c 存在实质题干差异，暂不合并，待官方来源核验。",
     "temp-2026-数学-9c9cb50bcd0c": "内容复核：与 deekur-2026-59-math 存在实质题干差异，暂不合并，待官方来源核验。",
+    "deekur-2024-47-math": "内容复核：与 temp-2024-数学-d7ffc6dab1af 存在实质题干差异，暂不合并，待官方原卷核验。",
+    "temp-2024-数学-d7ffc6dab1af": "内容复核：与 deekur-2024-47-math 存在实质题干差异，暂不合并，待官方原卷核验。",
+    "deekur-2024-43-math": "内容复核：与 temp-2024-数学-408b18cc7007 存在实质题干差异，暂不合并，待官方原卷核验。",
+    "temp-2024-数学-408b18cc7007": "内容复核：与 deekur-2024-43-math 存在实质题干差异，暂不合并，待官方原卷核验。",
 }
 
 

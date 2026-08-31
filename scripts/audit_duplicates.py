@@ -22,6 +22,13 @@ REGION_NAMES = frozenset((
     "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州",
     "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "香港", "澳门", "台湾",
 ))
+# These pairs were found through a declared paper-edition inventory rather
+# than a title match.  Keep them visible in the audited conflict section so
+# an opaque local filename such as ``*-试题-p`` cannot hide a known conflict.
+EXPLICIT_REVIEWED_CONFLICT_ID_SETS = (
+    frozenset(("deekur-2024-47-math", "temp-2024-数学-d7ffc6dab1af")),
+    frozenset(("deekur-2024-43-math", "temp-2024-数学-408b18cc7007")),
+)
 
 
 def without_region_list_annotations(title: str) -> str:
@@ -57,7 +64,20 @@ def candidate_groups(rows: list[dict[str, str]]) -> list[tuple[tuple[str, str, s
         key = (row["year"], row["region"], row["subject"], normalized_title(row["title"]))
         if key[-1]:
             groups[key].append(row)
-    return sorted((key, group) for key, group in groups.items() if len(group) > 1)
+    candidates = [(key, group) for key, group in groups.items() if len(group) > 1]
+    rows_by_id = {row.get("record_id"): row for row in rows}
+    existing_sets = {frozenset(row.get("record_id") for row in group) for _, group in candidates}
+    for record_ids in EXPLICIT_REVIEWED_CONFLICT_ID_SETS:
+        if record_ids in existing_sets or not record_ids <= rows_by_id.keys():
+            continue
+        group = [rows_by_id[record_id] for record_id in sorted(record_ids)]
+        if any(row.get("status") == "withdrawn" or material_type(row) != "完整试卷" for row in group):
+            continue
+        exemplar = group[0]
+        candidates.append(
+            ((exemplar["year"], exemplar["region"], exemplar["subject"], "显式内容冲突"), group)
+        )
+    return sorted(candidates)
 
 
 def is_reviewed_conflict(group: list[dict[str, str]]) -> bool:
@@ -102,7 +122,7 @@ def render_markdown(groups: list[tuple[tuple[str, str, str, str], list[dict[str,
     lines = [
         "# 候选重复核验队列", "",
         "本页由 `python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md` 生成。",
-        "分组依据是同年份、地区、学科且标题规范化后一致；它只表示**候选重复**，不代表文件内容已经相同，不能据此自动删除。", "",
+        "分组依据是同年份、地区、学科且标题规范化后一致，或来自已完成内容审查的显式关联；它只表示**候选重复**，不代表文件内容已经相同，不能据此自动删除。", "",
         f"待内容审查：**{len(pending)} 组**，涉及 **{sum(len(group) for _, group in pending)} 条**完整试卷记录。",
         f"已审查但存在实质冲突、暂不合并：**{len(reviewed)} 组**，涉及 **{sum(len(group) for _, group in reviewed)} 条完整试卷记录。", "",
     ]

@@ -291,6 +291,16 @@ class StatsTests(unittest.TestCase):
         groups = audit_duplicates.candidate_groups([first, second])
         self.assertEqual(len(groups), 1)
 
+    def test_duplicate_audit_keeps_explicit_reviewed_conflicts_visible_when_titles_differ(self):
+        base = {"year": "2024", "region": "TJ", "subject": "数学", "status": "indexed", "material_type": "完整试卷"}
+        first = {**base, "record_id": "deekur-2024-47-math", "title": "2024天津", "notes": "内容复核：存在实质题干差异，暂不合并。"}
+        second = {**base, "record_id": "temp-2024-数学-d7ffc6dab1af", "title": "天津数学-试题-p", "notes": "内容复核：存在实质题干差异，暂不合并。"}
+        groups = audit_duplicates.candidate_groups([first, second])
+        pending, reviewed = audit_duplicates.partition_groups(groups)
+        self.assertEqual(pending, [])
+        self.assertEqual(len(reviewed), 1)
+        self.assertEqual({row["record_id"] for row in reviewed[0][1]}, {first["record_id"], second["record_id"]})
+
     def test_duplicate_audit_separates_reviewed_conflicts_from_pending_candidates(self):
         base = {"year": "2026", "region": "BJ", "subject": "数学", "status": "indexed", "material_type": "完整试卷"}
         conflict_a = {**base, "title": "2026北京", "notes": "内容复核：存在实质题干差异，暂不合并，待官方来源核验。"}
