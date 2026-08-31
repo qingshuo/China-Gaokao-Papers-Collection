@@ -1,4 +1,10 @@
 target_id,year,region,subject,paper_type,title,scope,linked_record_ids,official_evidence_ids,notes
+2019-sh-level-physics,2019,SH,物理,上海等级考卷,2019年上海市普通高中学业水平等级性考试物理,上海市普通高中学业水平等级性考试物理,,shmeea-2019-sh-level-physics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2019-sh-level-chemistry,2019,SH,化学,上海等级考卷,2019年上海市普通高中学业水平等级性考试化学,上海市普通高中学业水平等级性考试化学,,shmeea-2019-sh-level-chemistry-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2019-sh-level-politics,2019,SH,政治,上海等级考卷,2019年上海市普通高中学业水平等级性考试思想政治,上海市普通高中学业水平等级性考试思想政治,,shmeea-2019-sh-level-politics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2019-sh-level-history,2019,SH,历史,上海等级考卷,2019年上海市普通高中学业水平等级性考试历史,上海市普通高中学业水平等级性考试历史,,shmeea-2019-sh-level-history-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2019-sh-level-geography,2019,SH,地理,上海等级考卷,2019年上海市普通高中学业水平等级性考试地理,上海市普通高中学业水平等级性考试地理,,shmeea-2019-sh-level-geography-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2019-sh-level-biology,2019,SH,生物,上海等级考卷,2019年上海市普通高中学业水平等级性考试生命科学,上海市普通高中学业水平等级性考试生命科学,,shmeea-2019-sh-level-biology-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
 2020-sh-level-physics,2020,SH,物理,上海等级考卷,2020年上海市普通高中学业水平等级性考试物理,上海市普通高中学业水平等级性考试物理,deekur-物理-2020-042,shmeea-2020-sh-level-physics-analysis,已取得上海市教育考试院命题专家说明作为卷制身份佐证；关联 PDF 首页明确考试名称，啤酒泡沫破裂等题材与官方说明对应；官方页面未提供该 PDF 的下载来源或再发布许可
 2020-sh-level-chemistry,2020,SH,化学,上海等级考卷,2020年上海市普通高中学业水平等级性考试化学,上海市普通高中学业水平等级性考试化学,,shmeea-2020-sh-level-chemistry-analysis,已取得上海市教育考试院命题专家说明作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
 2020-sh-level-politics,2020,SH,政治,上海等级考卷,2020年上海市普通高中学业水平等级性考试思想政治,上海市普通高中学业水平等级性考试思想政治,,shmeea-2020-sh-level-politics-analysis,已取得上海市教育考试院命题专家说明作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
