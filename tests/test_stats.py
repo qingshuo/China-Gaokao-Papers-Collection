@@ -240,6 +240,13 @@ class StatsTests(unittest.TestCase):
         self.assertEqual([group[0] for group in groups], [("2025", "BJ", "数学", "北京")])
         self.assertEqual(groups[0][1], [first, second])
 
+    def test_duplicate_audit_normalizes_ascii_new_gaokao_roman_numerals(self):
+        base = {"year": "2021", "region": "全国", "subject": "数学", "status": "indexed", "material_type": "完整试卷"}
+        first = {**base, "title": "2021新高考1(山东)"}
+        second = {**base, "title": "2021年新高考I卷数学（原卷）"}
+        groups = audit_duplicates.candidate_groups([first, second])
+        self.assertEqual(len(groups), 1)
+
     def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
         base = {
             "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local",
@@ -316,6 +323,7 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(apply_content_review.review_action("temp-2021-数学-cd8daafb088b"), "supplement")
         self.assertEqual(apply_content_review.TITLE_UPDATES["temp-2021-数学-698c99e83f2e"], "2021年新高考I卷数学（原卷）")
         self.assertEqual(apply_content_review.REMOVE_IDS, apply_content_review.HISTORIC_REMOVED_IDS)
+        self.assertEqual(apply_content_review.review_action("deekur-2021-21-math"), "remove")
         self.assertEqual(apply_content_review.review_action("unrelated-record"), "keep")
 
 

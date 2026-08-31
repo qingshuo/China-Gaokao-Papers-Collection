@@ -17,13 +17,32 @@ REMOVABLE_TITLE_TOKENS = (
     "原卷版", "原卷", "无答案", "含答案",
 )
 SUBJECT_TOKENS = ("数学", "物理", "化学", "生物", "地理", "历史", "政治", "语文", "英语", "日语")
+REGION_NAMES = frozenset((
+    "北京", "天津", "河北", "山西", "内蒙古", "辽宁", "吉林", "黑龙江", "上海", "江苏", "浙江", "安徽",
+    "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "重庆", "四川", "贵州",
+    "云南", "西藏", "陕西", "甘肃", "青海", "宁夏", "新疆", "香港", "澳门", "台湾",
+))
+
+
+def without_region_list_annotations(title: str) -> str:
+    """Remove parenthesized province lists, which duplicate the catalog's scope."""
+    def replace(match: re.Match[str]) -> str:
+        items = [item.strip().removesuffix("省").removesuffix("市") for item in re.split(r"[、,，]", match.group(1))]
+        return "" if items and all(item in REGION_NAMES for item in items) else match.group(0)
+
+    return re.sub(r"[（(]([^（）()]*)[）)]", replace, title)
 
 
 def normalized_title(title: str) -> str:
     """Keep the identifying part of a title while ignoring presentation wording."""
-    normalized = title.lower()
+    normalized = without_region_list_annotations(title).lower()
     for before, after in (("Ⅰ", "1"), ("ⅰ", "1"), ("Ⅱ", "2"), ("ⅱ", "2"), ("Ⅲ", "3"), ("ⅲ", "3"), ("理科", "理"), ("文科", "文")):
         normalized = normalized.replace(before, after)
+    # Some imports use ASCII I/II/III while others use Arabic or Unicode
+    # numerals for nationally named new-Gaokao paper sets.
+    normalized = normalized.replace("新高考iii", "新高考3")
+    normalized = normalized.replace("新高考ii", "新高考2")
+    normalized = normalized.replace("新高考i", "新高考1")
     normalized = re.sub(r"(?:19|20)\d{2}年?", "", normalized)
     for token in REMOVABLE_TITLE_TOKENS + SUBJECT_TOKENS:
         normalized = normalized.replace(token, "")

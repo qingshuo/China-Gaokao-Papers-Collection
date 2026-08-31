@@ -21,10 +21,21 @@ REMOVE_IDS = {
     "temp-2025-物理-7b831f1303b3",  # Same answered 江苏卷 as the retained GitHub version.
     "temp-2025-物理-19f9ce751abe",  # Same 上海卷 with answers; GitHub version retained instead.
     "temp-2025-物理-ac4daff519b4",  # Same 云南卷 with answers; GitHub version retained instead.
+    "deekur-2021-21-math",  # Same 22-question paper as the retained A4 original-layout version.
 }
 # These actions were applied in the previous review commit. Keeping the IDs
 # documents the provenance but must not make later review runs fail.
-HISTORIC_REMOVED_IDS = set(REMOVE_IDS)
+HISTORIC_REMOVED_IDS = {
+    "temp-2023-物理-0a21a26edf23",
+    "temp-2025-物理-1021d1a86165",
+    "deekur-2025-53-math",
+    "temp-2025-物理-69203d072e93",
+    "temp-2025-物理-4f75fa4ef7ba",
+    "temp-2025-物理-7b831f1303b3",
+    "temp-2025-物理-19f9ce751abe",
+    "temp-2025-物理-ac4daff519b4",
+    "deekur-2021-21-math",
+}
 SUPPLEMENT_IDS = {
     "temp-2022-语文-9fee8807a6cc",  # Same 全国乙卷 with an added model essay.
     "deekur-2025-physics-029",  # 安徽卷 with answers.
@@ -39,6 +50,16 @@ SUPPLEMENT_IDS = {
 TITLE_UPDATES = {
     "temp-2021-数学-698c99e83f2e": "2021年新高考I卷数学（原卷）",
     "temp-2021-数学-cd8daafb088b": "2021年新高考I卷数学（答案解析）",
+}
+RETAINED_NOTES = {
+    "temp-2021-数学-698c99e83f2e": (
+        "内容复核：与 deekur-2021-21-math 逐题一致，保留本文件作为更接近原卷的 A4 版；"
+        "对应 A3 重排公开版本：https://raw.githubusercontent.com/deekur/gaokaomath/main/"
+        "%E6%99%AE%E9%80%9A%E9%AB%98%E8%80%83/2021/2021%E6%96%B0%E9%AB%98%E8%80%831"
+        "%28%E5%B1%B1%E4%B8%9C%2C%E5%B9%BF%E4%B8%9C%2C%E6%B9%96%E5%8D%97%2C%E6%B9%96%E5%8C%97"
+        "%2C%E6%B2%B3%E5%8C%97%2C%E6%B1%9F%E8%8B%8F%2C%E7%A6%8F%E5%BB%BA%29.pdf；"
+        "该公开版本的 CC-BY-4.0 声明不等同于本地导入文件的许可。"
+    ),
 }
 PARTIAL_IDS = {
     "temp-2025-物理-d1cb17271a18",  # One-page 四川卷回忆版，仅含第 14、15 题。
@@ -73,7 +94,7 @@ def main() -> int:
         rows = list(reader)
 
     known_ids = {row["record_id"] for row in rows}
-    expected_ids = (REMOVE_IDS - HISTORIC_REMOVED_IDS) | SUPPLEMENT_IDS | PARTIAL_IDS | set(CONFLICTS) | set(TITLE_UPDATES)
+    expected_ids = (REMOVE_IDS - HISTORIC_REMOVED_IDS) | SUPPLEMENT_IDS | PARTIAL_IDS | set(CONFLICTS) | set(TITLE_UPDATES) | set(RETAINED_NOTES)
     missing = expected_ids - known_ids
     if missing:
         raise ValueError(f"review record ids not found: {', '.join(sorted(missing))}")
@@ -122,6 +143,8 @@ def main() -> int:
     for row in rows:
         if row["record_id"] in CONFLICTS and CONFLICTS[row["record_id"]] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{CONFLICTS[row['record_id']]}"
+        if row["record_id"] in RETAINED_NOTES and RETAINED_NOTES[row["record_id"]] not in row["notes"]:
+            row["notes"] = f"{row['notes']}；{RETAINED_NOTES[row['record_id']]}"
     rows = [row for row in rows if row["record_id"] not in remove_ids]
     with CATALOG.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
