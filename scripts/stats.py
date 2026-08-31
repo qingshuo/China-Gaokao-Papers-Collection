@@ -316,7 +316,7 @@ def render_readme(summary: dict[str, object]) -> str:
         "",
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
         "[按地区浏览](docs/region-index.md) · [年份 × 学科](docs/subject-year-matrix.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
-        "[覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
+        "[覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方卷制佐证](docs/target-evidence.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
         "[用卷范围线索](docs/usage-scope-leads.md) · "
         "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · "
         "[主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · "

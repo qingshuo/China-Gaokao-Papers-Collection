@@ -7,9 +7,10 @@ import argparse
 from collections import Counter
 from pathlib import Path
 
-from stats import ROOT, REGIONS, OFFICIAL_EVIDENCE, CATALOG, material_type, read_csv
+from stats import EVIDENCE_TYPES, ROOT, REGIONS, OFFICIAL_EVIDENCE, CATALOG, material_type, read_csv
 
 TARGETS = ROOT / "data" / "paper-targets.csv"
+TARGET_EVIDENCE = ROOT / "data" / "target-evidence.csv"
 REQUIRED_FIELDS = ("target_id", "year", "region", "subject", "paper_type", "title", "scope")
 
 
@@ -17,11 +18,35 @@ def split_ids(value: str) -> list[str]:
     return [item.strip() for item in value.split(";") if item.strip()]
 
 
+def validate_target_evidence(rows: list[dict[str, str]], target_ids: set[str]) -> list[str]:
+    """Validate target-level official evidence when no paper file is available yet."""
+    errors: list[str] = []
+    seen: set[str] = set()
+    for number, row in enumerate(rows, start=2):
+        evidence_id = row.get("evidence_id", "").strip()
+        if not evidence_id:
+            errors.append(f"target evidence line {number}: missing evidence_id")
+        elif evidence_id in seen:
+            errors.append(f"target evidence line {number}: duplicate evidence_id")
+        seen.add(evidence_id)
+        if row.get("target_id", "").strip() not in target_ids:
+            errors.append(f"target evidence line {number}: unknown target_id {row.get('target_id', '')}")
+        if row.get("evidence_type", "").strip() not in EVIDENCE_TYPES:
+            errors.append(f"target evidence line {number}: unknown evidence_type")
+        if not row.get("evidence_url", "").startswith("https://"):
+            errors.append(f"target evidence line {number}: evidence_url must be an HTTPS URL")
+        if not row.get("issuer", "").strip():
+            errors.append(f"target evidence line {number}: missing issuer")
+    return errors
+
+
 def validate_targets(
-    targets: list[dict[str, str]], records_by_id: dict[str, dict[str, str]], evidence_by_id: dict[str, dict[str, str]], region_codes: set[str]
+    targets: list[dict[str, str]], records_by_id: dict[str, dict[str, str]], evidence_by_id: dict[str, dict[str, str]],
+    region_codes: set[str], target_evidence_by_id: dict[str, dict[str, str]] | None = None
 ) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
+    target_evidence_by_id = target_evidence_by_id or {}
     for number, row in enumerate(targets, start=2):
         missing = [field for field in REQUIRED_FIELDS if not row.get(field, "").strip()]
         if missing:
@@ -49,10 +74,14 @@ def validate_targets(
                 if record.get(field) != row.get(field):
                     errors.append(f"targets line {number}: linked_record_id {record_id} has a different {field}")
         for evidence_id in split_ids(row.get("official_evidence_ids", "")):
-            if evidence_id not in evidence_by_id:
+            if evidence_id in evidence_by_id:
+                if evidence_by_id[evidence_id].get("record_id") not in linked:
+                    errors.append(f"targets line {number}: official_evidence_id {evidence_id} is not linked to this target's record")
+            elif evidence_id in target_evidence_by_id:
+                if target_evidence_by_id[evidence_id].get("target_id") != target_id:
+                    errors.append(f"targets line {number}: official_evidence_id {evidence_id} belongs to another target")
+            else:
                 errors.append(f"targets line {number}: unknown official_evidence_id {evidence_id}")
-            elif evidence_by_id[evidence_id].get("record_id") not in linked:
-                errors.append(f"targets line {number}: official_evidence_id {evidence_id} is not linked to this target's record")
     return errors
 
 
@@ -114,7 +143,39 @@ def render_markdown(
         )
     lines += [
         "",
-        "> 当前目标清单以 2017–2020 年全国一、二、三卷数学（并含 2020 年理综物理）及 2021 年全国甲乙卷数学/物理为经官方佐证的试点。后续应以官方公告、命题说明或可追溯使用范围逐年扩充，而不是从已有文件反推“应有卷数”。",
+        "> 当前目标清单以 2017–2020 年全国一、二、三卷数学（并含 2020 年理综物理）、2021 年全国甲乙卷数学/物理及 2024 年上海春考数学为经官方佐证的试点。后续应以官方公告、命题说明或可追溯使用范围逐年扩充，而不是从已有文件反推“应有卷数”。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_target_evidence_index(target_evidence: list[dict[str, str]], targets_by_id: dict[str, dict[str, str]], region_names: dict[str, str]) -> str:
+    """Render official evidence that establishes a target before its PDF is found."""
+    labels = {
+        "official_analysis": "官方试题评析",
+        "official_announcement": "官方公告",
+        "official_catalog": "官方目录",
+        "official_download": "官方下载",
+    }
+    lines = [
+        "# 官方卷制佐证",
+        "",
+        "本页由 `python3 scripts/target_coverage.py --write-evidence-index docs/target-evidence.md` 自动生成。",
+        "这些页面用于确认一个卷制目标真实存在，尤其适用于尚未找到原卷文件的项目；它们**不等同于**试卷文件来源、逐页内容核验或再发布许可。",
+        "",
+        "| 年份 | 地区 | 学科 | 卷制目标 | 佐证类型 | 官方页面 |",
+        "| ---: | --- | --- | --- | --- | --- |",
+    ]
+    for evidence in sorted(target_evidence, key=lambda row: (targets_by_id[row["target_id"]]["year"], row["target_id"]), reverse=True):
+        target = targets_by_id[evidence["target_id"]]
+        region = region_names.get(target["region"], target["region"])
+        lines.append(
+            f"| {target['year']} | {region} | {target['subject']} | {target['title']} | {labels[evidence['evidence_type']]} | "
+            f"[{evidence['issuer']}]({evidence['evidence_url']}) |"
+        )
+    lines += [
+        "",
+        "> 原卷下载、清晰许可或可验证镜像仍需单独记录到 `data/exams.csv`；在此之前，目标状态应保持“待收录”。",
         "",
     ]
     return "\n".join(lines)
@@ -124,14 +185,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="validate target data and exit")
     parser.add_argument("--write", metavar="PATH", help="write the target-coverage report")
+    parser.add_argument("--write-evidence-index", metavar="PATH", help="write the target-level official evidence index")
     args = parser.parse_args()
     targets = read_csv(TARGETS)
     records = read_csv(CATALOG)
     evidence = read_csv(OFFICIAL_EVIDENCE)
+    target_evidence = read_csv(TARGET_EVIDENCE)
     region_rows = read_csv(REGIONS)
     records_by_id = {row["record_id"]: row for row in records}
     evidence_by_id = {row["evidence_id"]: row for row in evidence}
-    errors = validate_targets(targets, records_by_id, evidence_by_id, {row["code"] for row in region_rows})
+    targets_by_id = {row["target_id"]: row for row in targets}
+    target_evidence_by_id = {row["evidence_id"]: row for row in target_evidence}
+    errors = validate_target_evidence(target_evidence, set(targets_by_id))
+    errors += validate_targets(targets, records_by_id, evidence_by_id, {row["code"] for row in region_rows}, target_evidence_by_id)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
@@ -145,7 +211,16 @@ def main() -> int:
             render_markdown(targets, records_by_id, {row["code"]: row["name"] for row in region_rows}),
             encoding="utf-8",
         )
-    if args.check or not args.write:
+    if args.write_evidence_index:
+        output = Path(args.write_evidence_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(
+            render_target_evidence_index(target_evidence, targets_by_id, {row["code"]: row["name"] for row in region_rows}),
+            encoding="utf-8",
+        )
+    if args.check or not (args.write or args.write_evidence_index):
         print(f"OK: {len(targets)} declared paper-edition targets")
     return 0
 

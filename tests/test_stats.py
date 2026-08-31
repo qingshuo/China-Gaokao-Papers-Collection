@@ -230,6 +230,23 @@ class StatsTests(unittest.TestCase):
         self.assertIn("不能**代表全国所有高考试卷", report)
         self.assertIn("已入库", report)
 
+    def test_target_level_official_evidence_can_confirm_an_uncollected_paper_target(self):
+        target = {
+            "target_id": "target-1", "year": "2024", "region": "BJ", "subject": "数学",
+            "paper_type": "春考卷", "title": "北京春考数学", "scope": "北京", "linked_record_ids": "",
+            "official_evidence_ids": "target-evidence-1", "notes": "",
+        }
+        evidence = {
+            "evidence_id": "target-evidence-1", "target_id": "target-1", "evidence_type": "official_analysis",
+            "evidence_url": "https://official.test/analysis", "issuer": "考试机构", "notes": "试题评析",
+        }
+        self.assertEqual(target_coverage.validate_target_evidence([evidence], {"target-1"}), [])
+        self.assertEqual(target_coverage.validate_targets([target], {}, {}, {"BJ"}, {"target-evidence-1": evidence}), [])
+        self.assertEqual(target_coverage.target_state(target, {}), "待收录")
+        index = target_coverage.render_target_evidence_index([evidence], {"target-1": target}, {"BJ": "北京"})
+        self.assertIn("原卷下载", index)
+        self.assertIn("北京春考数学", index)
+
     def test_material_classification_preserves_complete_papers_with_answers(self):
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学（含答案）"}), "完整试卷")
         self.assertEqual(stats.classify_material({"paper_type": "答案", "title": "2024 高考数学答案"}), "附属资料")

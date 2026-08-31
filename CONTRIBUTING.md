@@ -15,6 +15,8 @@ python3 scripts/stats.py --write-index docs/papers-index.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md
+python3 scripts/target_coverage.py --write docs/target-coverage.md
+python3 scripts/target_coverage.py --write-evidence-index docs/target-evidence.md
 python3 scripts/usage_scope_leads.py --check
 python3 scripts/usage_scope_leads.py --write docs/usage-scope-leads.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md

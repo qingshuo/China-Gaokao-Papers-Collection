@@ -1,4 +1,5 @@
 target_id,year,region,subject,paper_type,title,scope,linked_record_ids,official_evidence_ids,notes
+2024-sh-spring-math,2024,SH,数学,上海春考卷,2024年上海市普通高校春季招生统一文化考试数学,上海春季招生统一文化考试数学,,shmeea-2024-sh-spring-math-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认、可入库的完整原卷文件
 2021-national-math-yi-wen,2021,全国,数学,全国乙卷文科,2021年普通高等学校招生全国统一考试数学全国乙卷文科,全国乙卷使用范围；文科数学,deekur-2021-15-math,neea-2021-national-math-analysis-yi-wen,首批经教育部教育考试院全国卷数学试题评析佐证的卷制目标；文件来源和授权仍以关联记录为准
 2021-national-math-yi-li,2021,全国,数学,全国乙卷理科,2021年普通高等学校招生全国统一考试数学全国乙卷理科,全国乙卷使用范围；理科数学,deekur-2021-16-math,neea-2021-national-math-analysis-yi-li,首批经教育部教育考试院全国卷数学试题评析佐证的卷制目标；文件来源和授权仍以关联记录为准
 2021-national-math-jia-wen,2021,全国,数学,全国甲卷文科,2021年普通高等学校招生全国统一考试数学全国甲卷文科,全国甲卷使用范围；文科数学,deekur-2021-17-math,neea-2021-national-math-analysis-jia-wen,首批经教育部教育考试院全国卷数学试题评析佐证的卷制目标；文件来源和授权仍以关联记录为准
