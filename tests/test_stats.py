@@ -3,6 +3,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from collections import Counter
 from pathlib import Path
 
 
@@ -311,6 +312,12 @@ class StatsTests(unittest.TestCase):
     def test_pdf_integrity_extracts_page_count_from_pdfinfo_output(self):
         self.assertEqual(pdf_integrity.pages_from_pdfinfo("Title: test\nPages:          7\n"), 7)
         self.assertIsNone(pdf_integrity.pages_from_pdfinfo("Title: test\n"))
+
+    def test_pdf_integrity_reports_reviewed_single_page_papers_separately(self):
+        row = {"record_id": "paper-1", "year": "2024", "region": "BJ", "subject": "数学", "title": "北京数学", "local_path": "papers/paper.pdf"}
+        report = pdf_integrity.render_markdown([], [], [(row, 1, "已视觉复核")], Counter({"完整试卷": 1}))
+        self.assertIn("已复核的单页完整卷", report)
+        self.assertIn("已视觉复核", report)
 
     def test_docx_integrity_requires_office_manifest_and_word_document(self):
         with tempfile.TemporaryDirectory() as directory:

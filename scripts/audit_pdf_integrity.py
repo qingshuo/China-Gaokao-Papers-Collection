@@ -13,6 +13,14 @@ from urllib.parse import quote
 
 from stats import CATALOG, ROOT, material_type, read_csv
 
+# These files use a dense multi-column single-page layout.  They were rendered
+# and visually reviewed as complete 1999 national papers; keep the exception
+# explicit so a page-count heuristic cannot silently hide later defects.
+REVIEWED_SINGLE_PAGE_MAIN_PAPERS = {
+    "deekur-1999-math-4938ecaede26": "完整 1999 全国卷（文），单页密排版，已视觉复核",
+    "deekur-1999-math-b64634dd76f6": "完整 1999 全国卷（理），单页密排版，已视觉复核",
+}
+
 
 def pages_from_pdfinfo(output: str) -> int | None:
     match = re.search(r"^Pages:\s*(\d+)\s*$", output, flags=re.MULTILINE)
@@ -32,9 +40,10 @@ def inspect_pdf(path: Path, executable: str | None = None) -> tuple[int | None, 
     return (pages, None) if pages is not None else (None, "pdfinfo did not report a page count")
 
 
-def audit(rows: list[dict[str, str]]) -> tuple[list[tuple[dict[str, str], str]], list[tuple[dict[str, str], int]], Counter[str]]:
+def audit(rows: list[dict[str, str]]) -> tuple[list[tuple[dict[str, str], str]], list[tuple[dict[str, str], int]], list[tuple[dict[str, str], int, str]], Counter[str]]:
     failures: list[tuple[dict[str, str], str]] = []
     short_main_papers: list[tuple[dict[str, str], int]] = []
+    reviewed_single_page_papers: list[tuple[dict[str, str], int, str]] = []
     counts: Counter[str] = Counter()
     for row in rows:
         if row.get("status") == "withdrawn" or row.get("availability") != "local":
@@ -47,12 +56,17 @@ def audit(rows: list[dict[str, str]]) -> tuple[list[tuple[dict[str, str], str]],
             continue
         counts[material_type(row)] += 1
         if material_type(row) == "完整试卷" and pages is not None and pages <= 1:
-            short_main_papers.append((row, pages))
-    return failures, short_main_papers, counts
+            review_note = REVIEWED_SINGLE_PAGE_MAIN_PAPERS.get(row["record_id"])
+            if review_note:
+                reviewed_single_page_papers.append((row, pages, review_note))
+            else:
+                short_main_papers.append((row, pages))
+    return failures, short_main_papers, reviewed_single_page_papers, counts
 
 
 def render_markdown(
-    failures: list[tuple[dict[str, str], str]], short_main_papers: list[tuple[dict[str, str], int]], counts: Counter[str]
+    failures: list[tuple[dict[str, str], str]], short_main_papers: list[tuple[dict[str, str], int]],
+    reviewed_single_page_papers: list[tuple[dict[str, str], int, str]], counts: Counter[str]
 ) -> str:
     total = sum(counts.values()) + len(failures)
     lines = [
@@ -80,6 +94,12 @@ def render_markdown(
             title = row["title"].replace("|", "\\|")
             link = "../" + quote(row["local_path"], safe="/")
             lines.append(f"| `{row['record_id']}` | {row['year']} | {row['region']} | {row['subject']} | {pages} | [{title}]({link}) |")
+    if reviewed_single_page_papers:
+        lines += ["", "## 已复核的单页完整卷", "", "以下文件为密排单页版，已视觉确认包含完整题目；保留在此以便后续复核。", "", "| 记录 ID | 年份 | 页数 | 试卷 | 复核结论 |", "| --- | ---: | ---: | --- | --- |"]
+        for row, pages, note in reviewed_single_page_papers:
+            title = row["title"].replace("|", "\\|")
+            link = "../" + quote(row["local_path"], safe="/")
+            lines.append(f"| `{row['record_id']}` | {row['year']} | {pages} | [{title}]({link}) | {note} |")
     if not failures and not short_main_papers:
         lines += ["", "> 当前所有本地 PDF 均可解析，且完整试卷中没有页数不超过 1 页的候选。", ""]
     return "\n".join(lines)
@@ -89,13 +109,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", metavar="PATH", help="write the PDF-integrity report")
     args = parser.parse_args()
-    failures, short_main_papers, counts = audit(read_csv(CATALOG))
+    failures, short_main_papers, reviewed_single_page_papers, counts = audit(read_csv(CATALOG))
     if args.write:
         output = Path(args.write)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(render_markdown(failures, short_main_papers, counts), encoding="utf-8")
+        output.write_text(render_markdown(failures, short_main_papers, reviewed_single_page_papers, counts), encoding="utf-8")
     print(f"pdfs_parsed={sum(counts.values())} failures={len(failures)} short_main_papers={len(short_main_papers)}")
     return 0
 
