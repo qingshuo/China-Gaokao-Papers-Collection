@@ -60,23 +60,65 @@ def candidate_groups(rows: list[dict[str, str]]) -> list[tuple[tuple[str, str, s
     return sorted((key, group) for key, group in groups.items() if len(group) > 1)
 
 
+def is_reviewed_conflict(group: list[dict[str, str]]) -> bool:
+    """Return true only for a group whose every version was reviewed as a conflict.
+
+    A title-normalization match is intentionally broad.  Once every member has
+    an explicit content-review note saying it must not be merged, it is no
+    longer actionable as a duplicate candidate and should be presented apart
+    from the pending review queue.
+    """
+    return bool(group) and all(
+        "内容复核：" in row.get("notes", "") and "暂不合并" in row.get("notes", "")
+        for row in group
+    )
+
+
+def partition_groups(
+    groups: list[tuple[tuple[str, str, str, str], list[dict[str, str]]]],
+) -> tuple[list[tuple[tuple[str, str, str, str], list[dict[str, str]]]], list[tuple[tuple[str, str, str, str], list[dict[str, str]]]]]:
+    """Return `(pending_candidates, reviewed_conflicts)` without hiding either."""
+    pending = []
+    reviewed = []
+    for item in groups:
+        (reviewed if is_reviewed_conflict(item[1]) else pending).append(item)
+    return pending, reviewed
+
+
+def render_group(group_key: tuple[str, str, str, str], group: list[dict[str, str]]) -> list[str]:
+    year, region, subject, key = group_key
+    lines = [f"### {year} · {region} · {subject} · `{key}`", "", "| 标题 | 类型 | 来源 | 文件 | SHA-256 |", "| --- | --- | --- | --- | --- |"]
+    for row in sorted(group, key=lambda item: (item["title"], item["record_id"])):
+        file_link = "—"
+        if row.get("availability") == "local":
+            file_link = f"[{Path(row['local_path']).name}](../{quote(row['local_path'], safe='/')})"
+        title = row["title"].replace("|", "\\|")
+        lines.append(f"| {title} | {row['paper_type']} | [{row['source_type']}]({row['source_url']}) | {file_link} | `{row['sha256'][:12]}` |")
+    return lines + [""]
+
+
 def render_markdown(groups: list[tuple[tuple[str, str, str, str], list[dict[str, str]]]]) -> str:
+    pending, reviewed = partition_groups(groups)
     lines = [
         "# 候选重复核验队列", "",
         "本页由 `python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md` 生成。",
         "分组依据是同年份、地区、学科且标题规范化后一致；它只表示**候选重复**，不代表文件内容已经相同，不能据此自动删除。", "",
-        f"当前共有 **{len(groups)} 组**候选，涉及 **{sum(len(group) for _, group in groups)} 条**完整试卷记录。", "",
+        f"待内容审查：**{len(pending)} 组**，涉及 **{sum(len(group) for _, group in pending)} 条**完整试卷记录。",
+        f"已审查但存在实质冲突、暂不合并：**{len(reviewed)} 组**，涉及 **{sum(len(group) for _, group in reviewed)} 条完整试卷记录。", "",
     ]
-    for (year, region, subject, key), group in groups:
-        lines += [f"## {year} · {region} · {subject} · `{key}`", "", "| 标题 | 类型 | 来源 | 文件 | SHA-256 |", "| --- | --- | --- | --- | --- |"]
-        for row in sorted(group, key=lambda item: (item["title"], item["record_id"])):
-            file_link = "—"
-            if row.get("availability") == "local":
-                file_link = f"[{Path(row['local_path']).name}](../{quote(row['local_path'], safe='/')})"
-            title = row["title"].replace("|", "\\|")
-            lines.append(f"| {title} | {row['paper_type']} | [{row['source_type']}]({row['source_url']}) | {file_link} | `{row['sha256'][:12]}` |")
-        lines.append("")
-    lines += ["> 复核应比较页数、题目内容、卷种范围和来源授权；确认同一试卷后再保留 PDF 或授权更清晰的版本。", ""]
+    lines += ["## 待内容审查", ""]
+    if pending:
+        for group_key, group in pending:
+            lines += render_group(group_key, group)
+    else:
+        lines += ["当前没有未处理的候选重复。", ""]
+    lines += ["## 已审查的冲突版本", "", "这些版本已逐页比较并确认存在实质题干差异；保留全部版本，等待官方原卷或权威来源进一步核验。", ""]
+    if reviewed:
+        for group_key, group in reviewed:
+            lines += render_group(group_key, group)
+    else:
+        lines += ["当前没有已审查的冲突版本。", ""]
+    lines += ["> 对待内容审查的分组，应比较页数、题目内容、卷种范围和来源授权；确认同一试卷后再保留 PDF 或授权更清晰的版本。", ""]
     return "\n".join(lines)
 
 

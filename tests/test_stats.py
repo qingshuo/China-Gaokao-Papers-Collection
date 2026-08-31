@@ -262,6 +262,16 @@ class StatsTests(unittest.TestCase):
         groups = audit_duplicates.candidate_groups([first, second])
         self.assertEqual(len(groups), 1)
 
+    def test_duplicate_audit_separates_reviewed_conflicts_from_pending_candidates(self):
+        base = {"year": "2026", "region": "BJ", "subject": "数学", "status": "indexed", "material_type": "完整试卷"}
+        conflict_a = {**base, "title": "2026北京", "notes": "内容复核：存在实质题干差异，暂不合并，待官方来源核验。"}
+        conflict_b = {**base, "title": "数学北京卷", "notes": "内容复核：存在实质题干差异，暂不合并，待官方来源核验。"}
+        pending_a = {**base, "year": "2025", "title": "2025北京", "notes": ""}
+        pending_b = {**base, "year": "2025", "title": "2025年北京高考数学", "notes": ""}
+        pending, reviewed = audit_duplicates.partition_groups(audit_duplicates.candidate_groups([conflict_a, conflict_b, pending_a, pending_b]))
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(len(reviewed), 1)
+
     def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
         path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"
         row = import_deekur_math.build_rows("2016", [path], [{"code": "BJ", "name": "北京"}])[0]
