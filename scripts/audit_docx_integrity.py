@@ -67,7 +67,8 @@ def render_markdown(failures: list[tuple[dict[str, str], str]], counts: Counter[
         for row, error in failures:
             title = row["title"].replace("|", "\\|")
             link = "../" + quote(row["local_path"], safe="/")
-            lines.append(f"| `{row['record_id']}` | [{title}]({link}) | {error.replace('|', '\\|')} |")
+            escaped_error = error.replace("|", "\\|")
+            lines.append(f"| `{row['record_id']}` | [{title}]({link}) | {escaped_error} |")
     else:
         lines += ["", "> 当前所有本地 DOCX 均可作为完整 Office 文档容器读取，并包含 Word 主文档 XML。", ""]
     return "\n".join(lines)
