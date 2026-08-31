@@ -17,6 +17,8 @@ from stats import CATALOG, ROOT, material_type, read_csv
 # and visually reviewed as complete 1999 national papers; keep the exception
 # explicit so a page-count heuristic cannot silently hide later defects.
 REVIEWED_SINGLE_PAGE_MAIN_PAPERS = {
+    "deekur-1987-math-f2d4e1b07aaa": "完整 1987 全国卷（文），单页密排版，已视觉复核",
+    "deekur-1987-math-0b4d76e4d508": "完整 1987 全国卷（理），单页密排版，已视觉复核",
     "deekur-1988-math-65232ed91512": "完整 1988 全国卷（文），单页密排版，已视觉复核",
     "deekur-1988-math-0796587e94d6": "完整 1988 全国卷（理），单页密排版，已视觉复核",
     "deekur-1989-math-2fe91ea99a52": "完整 1989 全国卷（文），单页密排版，已视觉复核",
