@@ -1,4 +1,10 @@
 target_id,year,region,subject,paper_type,title,scope,linked_record_ids,official_evidence_ids,notes
+2017-sh-level-physics,2017,SH,物理,上海等级考卷,2017年上海市普通高中学业水平等级性考试物理,上海市普通高中学业水平等级性考试物理,,shmeea-2017-sh-level-physics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2017-sh-level-chemistry,2017,SH,化学,上海等级考卷,2017年上海市普通高中学业水平等级性考试化学,上海市普通高中学业水平等级性考试化学,,shmeea-2017-sh-level-chemistry-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2017-sh-level-politics,2017,SH,政治,上海等级考卷,2017年上海市普通高中学业水平等级性考试思想政治,上海市普通高中学业水平等级性考试思想政治,,shmeea-2017-sh-level-politics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2017-sh-level-history,2017,SH,历史,上海等级考卷,2017年上海市普通高中学业水平等级性考试历史,上海市普通高中学业水平等级性考试历史,,shmeea-2017-sh-level-history-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2017-sh-level-geography,2017,SH,地理,上海等级考卷,2017年上海市普通高中学业水平等级性考试地理,上海市普通高中学业水平等级性考试地理,,shmeea-2017-sh-level-geography-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
+2017-sh-level-biology,2017,SH,生物,上海等级考卷,2017年上海市普通高中学业水平等级性考试生命科学,上海市普通高中学业水平等级性考试生命科学,,shmeea-2017-sh-level-biology-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
 2018-sh-level-physics,2018,SH,物理,上海等级考卷,2018年上海市普通高中学业水平等级性考试物理,上海市普通高中学业水平等级性考试物理,,shmeea-2018-sh-level-physics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
 2018-sh-level-chemistry,2018,SH,化学,上海等级考卷,2018年上海市普通高中学业水平等级性考试化学,上海市普通高中学业水平等级性考试化学,,shmeea-2018-sh-level-chemistry-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
 2018-sh-level-politics,2018,SH,政治,上海等级考卷,2018年上海市普通高中学业水平等级性考试思想政治,上海市普通高中学业水平等级性考试思想政治,,shmeea-2018-sh-level-politics-analysis,已取得上海市教育考试院试题评析作为卷制身份佐证；尚未找到可确认且可入库的完整原卷文件
