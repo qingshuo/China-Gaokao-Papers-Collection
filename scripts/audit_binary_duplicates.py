@@ -28,7 +28,7 @@ def render_markdown(groups: list[tuple[str, list[dict[str, str]]]]) -> str:
         "# 完全相同文件审计", "",
         "本页由 `python3 scripts/audit_binary_duplicates.py --write docs/binary-duplicates.md` 自动生成。",
         "分组依据是 SHA-256 完全一致，说明文件字节相同；它仍**不自动删除**记录，因为不同地区、卷种或资料类别可能错误地共用了同一文件，需要人工确认目录身份。", "",
-        f"当前共有 **{len(groups)} 组**完全相同文件，涉及 **{sum(len(group) for _, group in groups)} 条目录记录。", "",
+        f"当前共有 **{len(groups)} 组**完全相同文件，涉及 **{sum(len(group) for _, group in groups)} 条**目录记录。", "",
     ]
     for digest, group in groups:
         lines += [f"## `{digest}`", "", "| 记录 ID | 年份 | 地区 | 科目 | 资料类别 | 试卷 | 文件 |", "| --- | ---: | --- | --- | --- | --- | --- |"]

@@ -416,6 +416,7 @@ class StatsTests(unittest.TestCase):
         withdrawn = {**base, "record_id": "four", "status": "withdrawn"}
         groups = binary_audit.exact_hash_groups([base, same, distinct, withdrawn])
         self.assertEqual(groups, [("a" * 64, [base, same])])
+        self.assertIn("涉及 **2 条**目录记录", binary_audit.render_markdown(groups))
 
     def test_authenticity_audit_flags_only_main_library_risk_terms(self):
         main = {"status": "indexed", "material_type": "完整试卷", "title": "2024 高考数学模拟卷", "notes": ""}
