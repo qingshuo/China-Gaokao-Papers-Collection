@@ -1,2 +1,4 @@
 evidence_id,target_id,evidence_type,evidence_url,issuer,notes,identity_scope
+shmeea-2026-sh-spring-math-analysis,2026-sh-spring-math,official_analysis,https://www.shmeea.edu.cn/page/02300/20260104/19983.html,上海市教育考试院,官方页面标题为“专家点评2026年上海春季高考数学科目试卷”；正文明确该考试为2026年上海市普通高校春季招生统一文化考试数学科目；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2025-sh-spring-math-analysis,2025-sh-spring-math,official_analysis,https://www.shmeea.edu.cn/page/02300/20250104/19016.html,上海市教育考试院,官方页面标题为“专家点评2025年上海春考数学试卷”；正文明确该考试为2025年上海市普通高校春季招生统一文化考试数学科目；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2024-sh-spring-math-analysis,2024-sh-spring-math,official_analysis,https://www.shmeea.edu.cn/page/02300/20240106/18125.html,上海市教育考试院,官方页面标题为“专家点评2024年上海春考数学试卷”，正文明确该考试为2024年上海市普通高校春季招生统一文化考试数学科目；页面未提供原卷文件下载或再发布许可,full_target
