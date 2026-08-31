@@ -8,7 +8,7 @@ xihong-m/gaokao-math,https://github.com/xihong-m/gaokao-math,新高考以来数�
 deekur/gaokaomath,https://github.com/deekur/gaokaomath,1952-2026 高考数学真题（本项目同步 2017-2026 普通高考 PDF）,github,permitted,上游仓库声明 CC-BY-4.0；同步文件保留原文件名并在索引中记录原始 URL
 deekur/gaokaophysics,https://github.com/deekur/gaokaophysics,1952-2026 高考物理真题（本项目同步 2020-2026 普通高考 PDF）,github,unknown,公开仓库提供 2020-2026 物理 PDF；上游许可证字段未明确，保留来源链接并待人工核验
 deekur/gaokao-system,https://github.com/deekur/gaokao-system,历年各省各科用卷范围元数据,github,permitted,上游仓库声明 CC0-1.0；仅将其用卷范围表作为社区线索登记，不是试卷文件来源，不构成官方身份佐证或试卷再发布许可
-admin05/gaokaomath-archive,https://github.com/admin05/gaokaomath-archive,高考数学 PDF 存档候选,github,permitted,上游仓库声明 CC-BY-4.0；已逐页复核其 2023 上海春季 PDF：虽首页标为试题但第 4 页起的解析与第 17 题答案自相矛盾（题号答案写 5/4、解析结论为 6/5），未达到正式原卷准确性标准，未复制或登记为主库试卷；2024 文件首页明确为“练习数学试题”，同样未入库；其他文件仍须逐份核验
+admin05/gaokaomath-archive,https://github.com/admin05/gaokaomath-archive,高考数学 PDF 存档候选,github,permitted,上游仓库声明 CC-BY-4.0；已逐页复核其 2023 上海春季 PDF：虽首页标为试题但第 4 页起的解析与第 17 题答案自相矛盾（题号答案写 5/4、解析结论为 6/5），未达到正式原卷准确性标准；2024、2025 文件首页明确为“练习数学试题”；2026 文件首页标注“回忆版”。上述文件均未复制或登记为主库试卷；其他文件仍须逐份核验
 Zaxaerith/GaokaoCHN,https://github.com/Zaxaerith/GaokaoCHN,2019-2025 高考语文文档候选,github,unknown,公开目录含 DOCX/PDF，但未声明许可证；暂不复制
 Zaxaerith/GaokaoENG,https://github.com/Zaxaerith/GaokaoENG,2017-2024 高考英语文档候选,github,unknown,公开目录含 DOC/DOCX，但未声明许可证；暂不复制
 Zaxaerith/GaokaoGEO,https://github.com/Zaxaerith/GaokaoGEO,2009-2024 高考地理文档候选,github,unknown,公开目录含 DOC/DOCX/PDF，但未声明许可证；暂不复制
