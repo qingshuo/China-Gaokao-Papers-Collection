@@ -114,7 +114,8 @@ def render_markdown(
         for row, error in failures:
             title = row["title"].replace("|", "\\|")
             link = "../" + quote(row["local_path"], safe="/")
-            lines.append(f"| `{row['record_id']}` | [{title}]({link}) | {error.replace('|', '\\|')} |")
+            escaped_error = error.replace("|", "\\|")
+            lines.append(f"| `{row['record_id']}` | [{title}]({link}) | {escaped_error} |")
     if short_main_papers:
         lines += ["", "## 页数异常候选", "", "单页完整卷未必错误，但应复核是否仅导入了封面、单页试题或下载失败版本。", "", "| 记录 ID | 年份 | 地区 | 科目 | 页数 | 试卷 |", "| --- | ---: | --- | --- | ---: | --- |"]
         for row, pages in short_main_papers:
