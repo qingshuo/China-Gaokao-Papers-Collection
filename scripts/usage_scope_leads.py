@@ -59,11 +59,16 @@ def lead_records(row: dict[str, str], records_by_id: dict[str, dict[str, str]]) 
     return [records_by_id[record_id] for record_id in split_ids(row.get("linked_record_ids", ""))]
 
 
-def lead_state(records: list[dict[str, str]]) -> str:
-    complete = [
+def complete_records(records: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Only main-library complete papers count as a linked paper edition."""
+    return [
         record for record in records
         if record.get("status") != "withdrawn" and material_type(record) == "完整试卷"
     ]
+
+
+def lead_state(records: list[dict[str, str]]) -> str:
+    complete = complete_records(records)
     local = [record for record in complete if record.get("availability") == "local"]
     if not local:
         return "待找可确认完整卷"
@@ -76,7 +81,7 @@ def lead_state(records: list[dict[str, str]]) -> str:
 
 def render_record_links(records: list[dict[str, str]]) -> str:
     links = []
-    for record in records:
+    for record in complete_records(records):
         if record.get("availability") == "local":
             target = "../" + quote(record["local_path"], safe="/")
             links.append(f"[{record['title']}]({target})")
