@@ -151,6 +151,15 @@ class StatsTests(unittest.TestCase):
         self.assertIn("PDF 完整性审计", readme)
         self.assertIn("DOCX 完整性审计", readme)
 
+    def test_readme_excludes_external_papers_from_local_index_counts(self):
+        rows = [
+            {"year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local"},
+            {"year": "2024", "region": "SH", "subject": "数学", "status": "discovered", "availability": "external"},
+        ]
+        readme = stats.render_readme(stats.summarize(rows, []))
+        self.assertIn("**1 份完整试卷**", readme)
+        self.assertIn("| 2024 | 1 |", readme)
+
     def test_subject_year_matrix_links_only_complete_local_papers(self):
         base = {"year": "2024", "status": "indexed", "availability": "local", "material_type": "完整试卷"}
         rows = [

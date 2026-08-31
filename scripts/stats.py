@@ -199,10 +199,12 @@ def summarize(
 ) -> dict[str, object]:
     active = [row for row in rows if row.get("status") != "withdrawn"]
     complete = [row for row in active if material_type(row) == "完整试卷"]
+    complete_local = [row for row in complete if row.get("availability") == "local"]
     return {
         "records": len(rows),
         "active_records": len(active),
         "complete_papers": len(complete),
+        "complete_local_papers": len(complete_local),
         "supplementary_files": sum(material_type(row) == "附属资料" for row in active),
         "partial_files": sum(material_type(row) == "片段资料" for row in active),
         "verified": sum(row.get("status") == "verified" for row in complete),
@@ -214,6 +216,8 @@ def summarize(
         "by_year": Counter(row.get("year", "") for row in complete),
         "by_region": Counter(row.get("region", "") for row in complete),
         "by_subject": Counter(row.get("subject", "") for row in complete),
+        "by_local_year": Counter(row.get("year", "") for row in complete_local),
+        "by_local_subject": Counter(row.get("subject", "") for row in complete_local),
         "external_sources": len(source_rows),
         "official_portals": len(portal_rows or []),
         "portal_by_status": Counter(row.get("portal_status", "") for row in portal_rows or []),
@@ -303,15 +307,15 @@ def render_subject_year_matrix(rows: list[dict[str, str]]) -> str:
 
 def render_readme(summary: dict[str, object]) -> str:
     """Render the repository landing page from the same catalog as the indexes."""
-    by_year = summary["by_year"]
-    by_subject = summary["by_subject"]
+    by_year = summary["by_local_year"]
+    by_subject = summary["by_local_subject"]
     years = sorted(by_year, reverse=True)
     subjects = sorted(by_subject)
     lines = [
         "# 中国高考试卷资料库",
         "",
         "按年份、学科和地区整理高考试卷。主库当前收录 "
-        f"**{summary['complete_papers']} 份完整试卷**，覆盖 **{min(years)}-{max(years)} 年**；"
+        f"**{summary['complete_local_papers']} 份完整试卷**，覆盖 **{min(years)}-{max(years)} 年**；"
         "答案、解析和片段资料均单独归档，不混入主卷索引。",
         "",
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
