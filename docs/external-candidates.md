@@ -3,7 +3,7 @@
 本页由 `python3 scripts/stats.py --write-external-candidates-index docs/external-candidates.md` 自动生成。
 这里的条目可帮助发现待补卷制，但文件**不在本仓库**；仍须核验卷制、内容完整性、来源稳定性和再发布许可，不能计入主库覆盖或作为自动去重依据。
 
-当前共有 **44** 条外部完整卷候选。
+当前共有 **99** 条外部完整卷候选。
 
 | 年份 | 地区 | 科目 | 卷种 | 候选文件/页面 | 来源 | 授权 | 状态 |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
@@ -17,11 +17,41 @@
 | 2023 | 全国 | 英语 | 新课标II卷 | [2023年新课标II卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2023/2023%E5%B9%B4%E6%96%B0%E8%AF%BE%E6%A0%87II%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2023 | 全国 | 英语 | 全国乙卷 | [2023年乙卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2023/2023%E5%B9%B4%E4%B9%99%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2023 | 浙江 | 英语 | 浙江1月卷 | [2023年浙江1月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2023/2023%E5%B9%B4%E6%B5%99%E6%B1%9F1%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
+| 2023 | 全国 | 地理 | 全国甲卷 | [2023年甲卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年甲卷地理.docx) | github | 待核验 | discovered |
+| 2023 | 全国 | 地理 | 新课标卷 | [2023年新课标地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年新课标地理.docx) | github | 待核验 | discovered |
+| 2023 | 全国 | 地理 | 全国乙卷 | [2023年乙卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年乙卷地理.docx) | github | 待核验 | discovered |
+| 2023 | 浙江 | 地理 | 浙江6月卷 | [2023年浙江6月地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年浙江6月地理.docx) | github | 待核验 | discovered |
+| 2023 | 浙江 | 地理 | 浙江1月卷 | [2023年浙江1月地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年浙江1月地理.docx) | github | 待核验 | discovered |
+| 2023 | 山东 | 地理 | 山东卷 | [2023年山东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年山东地理.docx) | github | 待核验 | discovered |
+| 2023 | 辽宁 | 地理 | 辽宁卷 | [2023年辽宁地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年辽宁地理.docx) | github | 待核验 | discovered |
+| 2023 | 江苏 | 地理 | 江苏卷 | [2023年江苏地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年江苏地理.docx) | github | 待核验 | discovered |
+| 2023 | 湖南 | 地理 | 湖南卷 | [2023年湖南地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年湖南地理.docx) | github | 待核验 | discovered |
+| 2023 | 海南 | 地理 | 海南卷 | [2023年海南地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年海南地理.docx) | github | 待核验 | discovered |
+| 2023 | 河北 | 地理 | 河北卷 | [2023年河北地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年河北地理.docx) | github | 待核验 | discovered |
+| 2023 | 湖北 | 地理 | 湖北卷 | [2023年湖北地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年湖北地理.docx) | github | 待核验 | discovered |
+| 2023 | 广东 | 地理 | 广东卷 | [2023年广东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年广东地理.docx) | github | 待核验 | discovered |
+| 2023 | 福建 | 地理 | 福建卷 | [2023年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年福建地理.docx) | github | 待核验 | discovered |
+| 2023 | 重庆 | 地理 | 重庆卷 | [2023年重庆地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年重庆地理.docx) | github | 待核验 | discovered |
+| 2023 | 北京 | 地理 | 北京卷 | [2023年北京地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年北京地理.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 语文 | 新高考II卷 | [2022年新高考II卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83II%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 英语 | 新高考I卷 | [2022年新高考I卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83I%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 英语 | 新高考II卷 | [2022年新高考II卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83II%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2022 | 浙江 | 英语 | 浙江6月卷 | [2022年浙江6月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%B5%99%E6%B1%9F6%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2022 | 浙江 | 英语 | 浙江1月卷 | [2022年浙江1月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%B5%99%E6%B1%9F1%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
+| 2022 | 全国 | 地理 | 全国甲卷 | [2022年甲卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年甲卷地理.docx) | github | 待核验 | discovered |
+| 2022 | 浙江 | 地理 | 浙江1月卷 | [2022年浙江1月地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年浙江1月地理.docx) | github | 待核验 | discovered |
+| 2022 | 天津 | 地理 | 天津卷 | [2022年天津地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年天津地理.docx) | github | 待核验 | discovered |
+| 2022 | 山东 | 地理 | 山东卷 | [2022年山东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年山东地理.docx) | github | 待核验 | discovered |
+| 2022 | 辽宁 | 地理 | 辽宁卷 | [2022年辽宁地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年辽宁地理.docx) | github | 待核验 | discovered |
+| 2022 | 江苏 | 地理 | 江苏卷 | [2022年江苏地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年江苏地理.docx) | github | 待核验 | discovered |
+| 2022 | 湖南 | 地理 | 湖南卷 | [2022年湖南地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年湖南地理.docx) | github | 待核验 | discovered |
+| 2022 | 海南 | 地理 | 海南卷 | [2022年海南地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年海南地理.docx) | github | 待核验 | discovered |
+| 2022 | 河北 | 地理 | 河北卷 | [2022年河北地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年河北地理.docx) | github | 待核验 | discovered |
+| 2022 | 湖北 | 地理 | 湖北卷 | [2022年湖北地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年湖北地理.docx) | github | 待核验 | discovered |
+| 2022 | 广东 | 地理 | 广东卷 | [2022年广东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年广东地理.docx) | github | 待核验 | discovered |
+| 2022 | 福建 | 地理 | 福建卷 | [2022年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年福建地理.docx) | github | 待核验 | discovered |
+| 2022 | 重庆 | 地理 | 重庆卷 | [2022年重庆地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年重庆地理.docx) | github | 待核验 | discovered |
+| 2022 | 北京 | 地理 | 北京卷 | [2022年北京地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2022/2022年北京地理.docx) | github | 待核验 | discovered |
 | 2021 | 全国 | 语文 | 全国甲卷 | [2021年甲卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2021/2021%E5%B9%B4%E7%94%B2%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2021 | 全国 | 语文 | 新高考II卷 | [2021年新高考II卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2021/2021年新高考II卷语文.docx) | github | 待核验 | discovered |
 | 2021 | 全国 | 语文 | 全国乙卷 | [2021年乙卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2021/2021%E5%B9%B4%E4%B9%99%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
@@ -31,6 +61,17 @@
 | 2021 | 全国 | 英语 | 全国乙卷 | [2021年乙卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2021/2021%E5%B9%B4%E4%B9%99%E5%8D%B7%E8%8B%B1%E8%AF%AD.doc) | github | 待核验 | discovered |
 | 2021 | 浙江 | 英语 | 浙江6月卷 | [2021年浙江6月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2021/2021%E5%B9%B4%E6%B5%99%E6%B1%9F6%E6%9C%88%E8%8B%B1%E8%AF%AD.doc) | github | 待核验 | discovered |
 | 2021 | 浙江 | 英语 | 浙江1月卷 | [2021年浙江1月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2021/2021%E5%B9%B4%E6%B5%99%E6%B1%9F1%E6%9C%88%E8%8B%B1%E8%AF%AD.doc) | github | 待核验 | discovered |
+| 2021 | 全国 | 地理 | 全国甲卷 | [2021年甲卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年甲卷地理.doc) | github | 待核验 | discovered |
+| 2021 | 全国 | 地理 | 全国乙卷 | [2021年乙卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年乙卷地理.doc) | github | 待核验 | discovered |
+| 2021 | 浙江 | 地理 | 浙江6月卷 | [2021年浙江6月地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年浙江6月地理.doc) | github | 待核验 | discovered |
+| 2021 | 浙江 | 地理 | 浙江1月卷 | [2021年浙江1月地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年浙江1月地理.docx) | github | 待核验 | discovered |
+| 2021 | 山东 | 地理 | 山东卷 | [2021年山东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年山东地理.docx) | github | 待核验 | discovered |
+| 2021 | 辽宁 | 地理 | 辽宁卷 | [2021年辽宁地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年辽宁地理.docx) | github | 待核验 | discovered |
+| 2021 | 江苏 | 地理 | 江苏卷 | [2021年江苏地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年江苏地理.docx) | github | 待核验 | discovered |
+| 2021 | 河北 | 地理 | 河北卷 | [2021年河北地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年河北地理.docx) | github | 待核验 | discovered |
+| 2021 | 广东 | 地理 | 广东卷 | [2021年广东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年广东地理.doc) | github | 待核验 | discovered |
+| 2021 | 福建 | 地理 | 福建卷 | [2021年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年福建地理.docx) | github | 待核验 | discovered |
+| 2021 | 北京 | 地理 | 北京卷 | [2021年北京地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2021/2021年北京地理.doc) | github | 待核验 | discovered |
 | 2020 | 全国 | 语文 | 新高考I卷 | [2020年新高考I卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2020/2020%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83I%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2020 | 全国 | 语文 | 新高考II卷 | [2020年新高考II卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2020/2020%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83II%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2020 | 全国 | 语文 | 全国I卷 | [2020年全国I卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2020/2020%E5%B9%B4%E5%85%A8%E5%9B%BDI%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
@@ -43,13 +84,27 @@
 | 2020 | 全国 | 英语 | 全国III卷 | [2020年全国III卷英语（候选）](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2020/2020%E5%B9%B4%E5%85%A8%E5%9B%BDIII%E5%8D%B7.doc) | github | 待核验 | discovered |
 | 2020 | 浙江 | 英语 | 浙江7月卷 | [2020年浙江7月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2020/2020年浙江7月英语.doc) | github | 待核验 | discovered |
 | 2020 | 浙江 | 英语 | 浙江1月卷 | [2020年浙江1月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2020/2020%E5%B9%B4%E6%B5%99%E6%B1%9F1%E6%9C%88%E8%8B%B1%E8%AF%AD.doc) | github | 待核验 | discovered |
+| 2020 | 全国 | 地理 | 全国I卷 | [2020年全国I卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2020/2020年I卷地理.doc) | github | 待核验 | discovered |
+| 2020 | 全国 | 地理 | 全国II卷 | [2020年全国II卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2020/2020年II卷地理.doc) | github | 待核验 | discovered |
+| 2020 | 全国 | 地理 | 全国III卷 | [2020年全国III卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2020/2020年III卷地理.doc) | github | 待核验 | discovered |
+| 2020 | 山东 | 地理 | 山东卷 | [2020年山东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2020/2020年山东地理.docx) | github | 待核验 | discovered |
 | 2019 | 全国 | 语文 | 全国I卷 | [2019年全国I卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2019/2019%E5%B9%B4%E5%85%A8%E5%9B%BDI%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2019 | 全国 | 语文 | 全国II卷 | [2019年全国II卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2019/2019%E5%B9%B4%E5%85%A8%E5%9B%BDII%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2019 | 全国 | 语文 | 全国III卷 | [2019年全国III卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2019/2019%E5%B9%B4%E5%85%A8%E5%9B%BDIII%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2019 | 浙江 | 英语 | 浙江6月卷 | [2019年浙江6月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2019/2019%E5%B9%B4%E6%B5%99%E6%B1%9F6%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
+| 2019 | 全国 | 地理 | 全国II卷 | [2019年全国II卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2019/2019年II卷地理.doc) | github | 待核验 | discovered |
+| 2019 | 全国 | 地理 | 全国III卷 | [2019年全国III卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2019/2019年III卷地理.doc) | github | 待核验 | discovered |
 | 2018 | 浙江 | 英语 | 浙江6月卷 | [2018年浙江6月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2018/2018%E5%B9%B4%E6%B5%99%E6%B1%9F6%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2018 | 浙江 | 英语 | 浙江11月卷 | [2018年浙江11月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2018/2018%E5%B9%B4%E6%B5%99%E6%B1%9F11%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
+| 2018 | 全国 | 地理 | 全国I卷 | [2018年全国I卷地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2018/2018I卷地理.docx) | github | 待核验 | discovered |
 | 2017 | 浙江 | 英语 | 浙江6月卷 | [2017年浙江6月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2017/2017%E5%B9%B4%E6%B5%99%E6%B1%9F6%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2017 | 浙江 | 英语 | 浙江11月卷 | [2017年浙江11月英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2017/2017%E5%B9%B4%E6%B5%99%E6%B1%9F11%E6%9C%88%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
+| 2015 | 福建 | 地理 | 福建卷 | [2015年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2015/2015年福建地理.docx) | github | 待核验 | discovered |
+| 2014 | 福建 | 地理 | 福建卷 | [2014年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2014/2014年福建地理.docx) | github | 待核验 | discovered |
+| 2013 | 福建 | 地理 | 福建卷 | [2013年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2013/2013年福建地理.docx) | github | 待核验 | discovered |
+| 2012 | 福建 | 地理 | 福建卷 | [2012年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2012/2012年福建地理.docx) | github | 待核验 | discovered |
+| 2011 | 福建 | 地理 | 福建卷 | [2011年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2011/2011年福建地理.docx) | github | 待核验 | discovered |
+| 2010 | 福建 | 地理 | 福建卷 | [2010年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2010/2010年福建地理.docx) | github | 待核验 | discovered |
+| 2009 | 福建 | 地理 | 福建卷 | [2009年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2009/2009年福建地理.docx) | github | 待核验 | discovered |
 
 > 发现同名本地文件时，必须逐页比较题干、页数、图形及是否含答案；仅标题或格式相似不能证明同卷。
