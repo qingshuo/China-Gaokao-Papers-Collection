@@ -42,6 +42,11 @@ REVIEWED_PAPERS = {
         "answer_start": 4,
         "source_title": "2019年上海春季高考数学真题",
     },
+    "2020": {
+        "filename": "2020春季上海.pdf",
+        "answer_start": 3,
+        "source_title": "2020年上海市春季高考数学试卷",
+    },
 }
 
 
