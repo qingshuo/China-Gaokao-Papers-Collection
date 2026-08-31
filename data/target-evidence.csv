@@ -1,4 +1,5 @@
 evidence_id,target_id,evidence_type,evidence_url,issuer,notes,identity_scope
+shmeea-2024-sh-level-biology-analysis,2024-sh-level-biology,official_analysis,https://www.shmeea.edu.cn/page/02100/20240507/18413.html,上海市教育考试院,官方页面标题为“专家点评2024年上海市普通高中学业水平等级性考试生物学科目试卷”；正文明确考试批次和生物学科目；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2025-sh-level-physics-analysis,2025-sh-level-physics,official_analysis,https://www.shmeea.edu.cn/page/02100/20250506/19305.html,上海市教育考试院,官方页面标题为“专家点评2025年上海市普通高中学业水平等级性考试物理科目试卷”；正文明确考试批次和物理科目，且与关联扫描 PDF 的光学实验等主题对应；页面不提供本地 PDF 的下载来源或再发布许可,full_target
 shmeea-2025-sh-level-chemistry-analysis,2025-sh-level-chemistry,official_analysis,https://www.shmeea.edu.cn/page/02100/20250506/19304.html,上海市教育考试院,官方页面标题为“专家点评2025年上海市普通高中学业水平等级性考试化学科目试卷”；正文明确考试批次和化学科目；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2026-sh-spring-math-analysis,2026-sh-spring-math,official_analysis,https://www.shmeea.edu.cn/page/02300/20260104/19983.html,上海市教育考试院,官方页面标题为“专家点评2026年上海春季高考数学科目试卷”；正文明确该考试为2026年上海市普通高校春季招生统一文化考试数学科目；页面未提供原卷文件下载或再发布许可,full_target
