@@ -1,4 +1,5 @@
 evidence_id,record_id,evidence_type,evidence_url,issuer,notes,identity_scope
+shmeea-2021-sh-level-physics-analysis,deekur-物理-2021-053,official_analysis,https://www.shmeea.edu.cn/page/02100/20210610/15338.html,上海市教育考试院,官方页面标题为“命题专家谈2021年等级考出题思路”；正文明确2021年上海市普通高中学业水平等级性考试物理科目，且与关联 PDF 的天问一号题材对应；页面不提供本地 PDF 的下载来源或再发布许可,full_target
 shmeea-2022-sh-level-physics-analysis,deekur-物理-2022-070,official_analysis,https://www.shmeea.edu.cn/page/02100/20220618/16399.html,上海市教育考试院,官方页面标题为“专家点评2022年上海市普通高中学业水平等级性考试物理科目试卷”；正文明确考试批次和物理科目，且与关联 PDF 的北京冬奥会滑行路径等题材对应；页面不提供本地 PDF 的下载来源或再发布许可,full_target
 shmeea-2024-sh-level-physics-analysis,deekur-2024-physics-001,official_analysis,https://www.shmeea.edu.cn/page/02100/20240505/18404.html,上海市教育考试院,官方页面标题为“专家点评2024年上海市普通高中学业水平等级性考试物理科目试卷”；正文明确考试批次和物理科目，且与关联 PDF 的物质性质、汽车智能化和光学题材对应；页面不提供本地 PDF 的下载来源或再发布许可,full_target
 shmeea-2024-sh-level-chemistry-analysis,temp-2024-化学-2105e60f8c2e,official_analysis,https://www.shmeea.edu.cn/page/02100/20240505/18402.html,上海市教育考试院,官方页面标题为“专家点评2024年上海市普通高中学业水平等级性考试化学科目试卷”；正文明确考试批次和化学科目，且与关联 PDF 的稀有气体化合物和粗盐水精制题材对应；页面不提供本地 PDF 的下载来源或再发布许可,full_target
