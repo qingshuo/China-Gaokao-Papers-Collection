@@ -277,9 +277,19 @@ class StatsTests(unittest.TestCase):
         path = "普通高考/2003/2003广东,广西.pdf"
         row = import_deekur_math.build_rows("2003", [path], [{"code": "GD", "name": "广东"}, {"code": "GX", "name": "广西"}])[0]
         self.assertEqual(row["region"], "GD-GX")
-        self.assertIn("广东、广西共用卷", row["notes"])
+        self.assertIn("文件名覆盖 广东、广西", row["notes"])
         row.update({"availability": "external", "local_path": "", "sha256": ""})
         self.assertEqual(stats.validate_catalog([row], {"GD", "GX"}), [])
+
+    def test_deekur_historical_import_supports_other_shared_province_combinations(self):
+        path = "普通高考/2002/2002广东,河南,江苏,广西.pdf"
+        regions = [
+            {"code": "GD", "name": "广东"}, {"code": "GX", "name": "广西"},
+            {"code": "HA", "name": "河南"}, {"code": "JS", "name": "江苏"},
+        ]
+        row = import_deekur_math.build_rows("2002", [path], regions)[0]
+        self.assertEqual(row["region"], "GD-GX-HA-JS")
+        self.assertEqual(stats.region_label(row["region"], {item["code"]: item["name"] for item in regions}), "广东、广西、河南、江苏（共用卷）")
 
     def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
         base = {

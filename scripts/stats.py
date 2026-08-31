@@ -28,18 +28,24 @@ AVAILABILITIES = {"none", "external", "local"}
 MATERIAL_TYPES = {"完整试卷", "附属资料", "片段资料"}
 PORTAL_STATUSES = {"pending_manual_check", "checked", "download_available", "announcement_only", "unavailable"}
 EVIDENCE_TYPES = {"official_analysis", "official_announcement", "official_catalog", "official_download"}
-# A shared provincial paper is neither a nationwide paper nor two separately
-# stored provincial files.  Keep one source file and give it a displayable
-# catalog region so the indexes do not imply a false nationwide scope.
-SHARED_REGION_NAMES = {"GD-GX": "广东、广西（共用卷）"}
+def is_shared_region_code(region: str, region_codes: set[str]) -> bool:
+    """Recognize a canonical multi-province code such as ``GD-GX-HA-JS``."""
+    parts = region.split("-")
+    return len(parts) > 1 and all(part in region_codes for part in parts)
 
 
-def catalog_region_codes(region_codes: set[str]) -> set[str]:
-    return region_codes | set(SHARED_REGION_NAMES)
+def region_label(region: str, region_names: dict[str, str]) -> str:
+    """Display province-sharing scope without pretending it is nationwide."""
+    if region in region_names:
+        return region_names[region]
+    parts = region.split("-")
+    if is_shared_region_code(region, set(region_names)):
+        return f"{'、'.join(region_names[part] for part in parts)}（共用卷）"
+    return region
 
 
 def build_region_names(region_rows: list[dict[str, str]]) -> dict[str, str]:
-    return {row["code"]: row["name"] for row in region_rows} | SHARED_REGION_NAMES
+    return {row["code"]: row["name"] for row in region_rows}
 
 
 def classify_material(row: dict[str, str]) -> str:
@@ -105,7 +111,7 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
         except ValueError:
             errors.append(f"line {number}: year must be an integer")
         region = row.get("region", "").strip()
-        if region and region != "全国" and region not in catalog_region_codes(region_codes):
+        if region and region != "全国" and region not in region_codes and not is_shared_region_code(region, region_codes):
             errors.append(f"line {number}: unknown region code: {region}")
         status = row.get("status", "").strip()
         if status and status not in STATUSES:
@@ -216,7 +222,7 @@ def summarize(
     }
 
 
-def render_markdown(summary: dict[str, object]) -> str:
+def render_markdown(summary: dict[str, object], region_names: dict[str, str] | None = None) -> str:
     by_status = summary["by_status"]
     by_year = summary["by_year"]
     by_region = summary["by_region"]
@@ -237,7 +243,7 @@ def render_markdown(summary: dict[str, object]) -> str:
         f"- 优先核查官方入口：**{summary['official_portals']}**（入口不等同于试卷下载或再发布许可）",
         f"- 已登记官方身份佐证：**{summary['official_evidence']}** 条，关联 **{summary['official_evidence_records']}** 份试卷（不等同于文件来源或许可）",
         f"- 覆盖年份：{', '.join(summary['years']) if summary['years'] else '暂无'}",
-        f"- 覆盖省级区域：{', '.join(summary['regions']) if summary['regions'] else '暂无'}",
+        f"- 覆盖省级区域：{', '.join(region_label(region, region_names or {}) for region in summary['regions']) if summary['regions'] else '暂无'}",
         "",
         "## 完整试卷按状态",
         "",
@@ -255,7 +261,7 @@ def render_markdown(summary: dict[str, object]) -> str:
     lines += ["", "## 完整试卷按年份", "", "| 年份 | 数量 |", "| ---: | ---: |"]
     lines += [f"| {year} | {by_year[year]} |" for year in sorted(by_year)] or ["| 暂无 | 0 |"]
     lines += ["", "## 完整试卷按区域", "", "| 区域 | 数量 |", "| --- | ---: |"]
-    lines += [f"| {region} | {by_region[region]} |" for region in sorted(by_region)] or ["| 暂无 | 0 |"]
+    lines += [f"| {region_label(region, region_names or {})} | {by_region[region]} |" for region in sorted(by_region)] or ["| 暂无 | 0 |"]
     lines += ["", "## 完整试卷按科目", "", "| 科目 | 数量 |", "| --- | ---: |"]
     lines += [f"| {subject} | {by_subject[subject]} |" for subject in sorted(by_subject)] or ["| 暂无 | 0 |"]
     lines += ["", "> 统计只反映本仓库 CSV 中的记录，不等同于全国试卷全集。", ""]
@@ -355,7 +361,7 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
             for row in matches:
                 target = "../" + quote(row["local_path"], safe="/")
                 title = row["title"].replace("|", "\\|")
-                region = region_names.get(row["region"], row["region"])
+                region = region_label(row["region"], region_names)
                 if row["region"] == "全国" and "(" in row["title"]:
                     region = "全国/多省"
                 extension = Path(row["local_path"]).suffix.lstrip(".").upper()
@@ -398,7 +404,7 @@ def render_year_index(rows: list[dict[str, str]], region_names: dict[str, str]) 
             for row in matches:
                 target = "../" + quote(row["local_path"], safe="/")
                 title = row["title"].replace("|", "\\|")
-                region = region_names.get(row["region"], row["region"])
+                region = region_label(row["region"], region_names)
                 extension = Path(row["local_path"]).suffix.lstrip(".").upper()
                 license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
                 lines.append(f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} | {review_hint(row)} |")
@@ -414,7 +420,7 @@ def render_region_index(rows: list[dict[str, str]], region_names: dict[str, str]
         if row.get("status") != "withdrawn" and row.get("availability") == "local"
         and material_type(row) == "完整试卷"
     ]
-    regions = sorted({row["region"] for row in active}, key=lambda code: region_names.get(code, code))
+    regions = sorted({row["region"] for row in active}, key=lambda code: region_label(code, region_names))
     lines = [
         "# 按地区浏览", "",
         "本页由 `python3 scripts/stats.py --write-region-index docs/region-index.md` 自动生成。",
@@ -424,10 +430,10 @@ def render_region_index(rows: list[dict[str, str]], region_names: dict[str, str]
     ]
     for region in regions:
         count = sum(row["region"] == region for row in active)
-        name = region_names.get(region, region)
+        name = region_label(region, region_names)
         lines.append(f"- [{name}（{count} 份）](#{name})")
     for region in regions:
-        name = region_names.get(region, region)
+        name = region_label(region, region_names)
         lines += ["", f"## {name}", ""]
         years = sorted({row["year"] for row in active if row["region"] == region}, reverse=True)
         for year in years:
@@ -466,7 +472,7 @@ def render_supplements_index(rows: list[dict[str, str]], region_names: dict[str,
         lines += ["", f"## {category}（{len(matches)} 份）", "", "| 年份 | 科目 | 地区 | 资料 | 格式 |", "| ---: | --- | --- | --- | --- |"]
         for row in matches:
             target = "../" + quote(row["local_path"], safe="/")
-            region = region_names.get(row["region"], row["region"])
+            region = region_label(row["region"], region_names)
             extension = Path(row["local_path"]).suffix.lstrip(".").upper()
             title = row["title"].replace("|", "\\|")
             lines.append(f"| {row['year']} | {row['subject']} | {region} | [{title}]({target}) | {extension} |")
@@ -500,7 +506,7 @@ def render_official_evidence_index(
     )
     for evidence in ordered:
         paper = rows_by_id[evidence["record_id"]]
-        region = region_names.get(paper["region"], paper["region"])
+        region = region_label(paper["region"], region_names)
         paper_title = paper["title"].replace("|", "\\|")
         target = "../" + quote(paper["local_path"], safe="/") if paper.get("availability") == "local" else paper["source_url"]
         evidence_label = labels[evidence["evidence_type"]]
@@ -527,7 +533,7 @@ def render_official_portals_index(portal_rows: list[dict[str, str]], region_name
     }
     ordered = sorted(
         portal_rows,
-        key=lambda row: (row["region"] != "全国", region_names.get(row["region"], row["region"])),
+        key=lambda row: (row["region"] != "全国", region_label(row["region"], region_names)),
     )
     lines = [
         "# 官方渠道核查",
@@ -539,7 +545,7 @@ def render_official_portals_index(portal_rows: list[dict[str, str]], region_name
         "| --- | --- | --- | --- | --- | --- |",
     ]
     for row in ordered:
-        region = region_names.get(row["region"], row["region"])
+        region = region_label(row["region"], region_names)
         status = status_labels[row["portal_status"]]
         notes = row["notes"].replace("|", "\\|")
         lines.append(
@@ -579,12 +585,13 @@ def main() -> int:
         return 1
     source_rows = read_csv(SOURCES)
     summary = summarize(rows, source_rows, portal_rows, evidence_rows)
+    region_names = build_region_names(region_rows)
     if args.write:
         output = Path(args.write)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(render_markdown(summary), encoding="utf-8")
+        output.write_text(render_markdown(summary, region_names), encoding="utf-8")
     if args.write_readme:
         output = Path(args.write_readme)
         if not output.is_absolute():
@@ -596,35 +603,30 @@ def main() -> int:
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         output.write_text(render_papers_index(rows, region_names), encoding="utf-8")
     if args.write_year_index:
         output = Path(args.write_year_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         output.write_text(render_year_index(rows, region_names), encoding="utf-8")
     if args.write_region_index:
         output = Path(args.write_region_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         output.write_text(render_region_index(rows, region_names), encoding="utf-8")
     if args.write_supplements_index:
         output = Path(args.write_supplements_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         output.write_text(render_supplements_index(rows, region_names), encoding="utf-8")
     if args.write_official_evidence_index:
         output = Path(args.write_official_evidence_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         rows_by_id = {row["record_id"]: row for row in rows}
         output.write_text(render_official_evidence_index(evidence_rows, rows_by_id, region_names), encoding="utf-8")
     if args.write_official_portals_index:
@@ -632,7 +634,6 @@ def main() -> int:
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = build_region_names(region_rows)
         output.write_text(render_official_portals_index(portal_rows, region_names), encoding="utf-8")
     if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
