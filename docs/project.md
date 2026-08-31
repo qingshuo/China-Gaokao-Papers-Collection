@@ -11,6 +11,7 @@ data/sources.csv     外部项目和候选来源
 data/official-portals.csv 教育考试机构入口登记
 data/official-evidence.csv 官方考试身份佐证
 data/paper-targets.csv 已声明的实际卷制目标
+data/usage-scope-leads.csv 社区用卷范围待核查线索
 config/regions.csv   省级行政区清单
 scripts/stats.py     数据校验、统计和索引生成
 scripts/audit_duplicates.py 生成候选重复的人工核验队列
@@ -36,6 +37,8 @@ docs/local-only-sources.md 本地导入来源的补充队列
 docs/official-evidence.md 官方身份佐证索引
 docs/official-portals.md 省级教育考试机构官方渠道核查索引
 docs/target-coverage.md 已声明卷制目标的覆盖与缺口
+docs/subject-year-matrix.md 年份 × 学科导航矩阵
+docs/usage-scope-leads.md 社区用卷范围线索索引
 docs/content-review.md 已执行内容审查的依据与结论
 docs/coverage.md     自动生成的覆盖统计
 ```
@@ -60,10 +63,12 @@ python3 scripts/stats.py --write-readme README.md
 python3 scripts/stats.py --write-index docs/papers-index.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
+python3 scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md
 python3 scripts/stats.py --write-official-evidence-index docs/official-evidence.md
 python3 scripts/stats.py --write-official-portals-index docs/official-portals.md
 python3 scripts/target_coverage.py --check
 python3 scripts/target_coverage.py --write docs/target-coverage.md
+python3 scripts/usage_scope_leads.py --write docs/usage-scope-leads.md
 python3 scripts/audit_duplicates.py --write docs/candidate-duplicates.md
 python3 scripts/audit_binary_duplicates.py --write docs/binary-duplicates.md
 python3 scripts/audit_authenticity.py --write docs/authenticity-watch.md

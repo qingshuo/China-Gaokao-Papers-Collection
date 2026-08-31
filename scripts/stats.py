@@ -268,6 +268,39 @@ def render_markdown(summary: dict[str, object], region_names: dict[str, str] | N
     return "\n".join(lines)
 
 
+def render_subject_year_matrix(rows: list[dict[str, str]]) -> str:
+    """Render the compact year × subject navigation matrix for complete local papers."""
+    active = [
+        row for row in rows
+        if row.get("status") != "withdrawn" and row.get("availability") == "local"
+        and material_type(row) == "完整试卷"
+    ]
+    years = sorted({row["year"] for row in active}, reverse=True)
+    subjects = sorted({row["subject"] for row in active})
+    counts = Counter((row["year"], row["subject"]) for row in active)
+    lines = [
+        "# 年份 × 学科索引",
+        "",
+        "本页由 `python3 scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md` 自动生成。",
+        "每个数字表示已入库的完整试卷数量，点击数字可跳转到对应的学科—年份清单；“—”表示当前没有已入库完整卷，**不等于该考试不存在**。",
+        "",
+        "| 年份 | " + " | ".join(subjects) + " | 合计 |",
+        "| ---: | " + " | ".join("---:" for _ in subjects) + " | ---: |",
+    ]
+    for year in years:
+        cells = []
+        for subject in subjects:
+            count = counts[(year, subject)]
+            cells.append(f"[{count}](papers-index.md#{year}-{subject})" if count else "—")
+        lines.append(f"| {year} | " + " | ".join(cells) + f" | {sum(counts[(year, subject)] for subject in subjects)} |")
+    lines += [
+        "",
+        "> 本矩阵是文件导航和缺口发现工具；卷制层面的完成率请查看[卷制目标与缺口](target-coverage.md)，社区维护的用卷范围线索见[用卷范围线索](usage-scope-leads.md)。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def render_readme(summary: dict[str, object]) -> str:
     """Render the repository landing page from the same catalog as the indexes."""
     by_year = summary["by_year"]
@@ -282,8 +315,9 @@ def render_readme(summary: dict[str, object]) -> str:
         "答案、解析和片段资料均单独归档，不混入主卷索引。",
         "",
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
-        "[按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
+        "[按地区浏览](docs/region-index.md) · [年份 × 学科](docs/subject-year-matrix.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
         "[覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
+        "[用卷范围线索](docs/usage-scope-leads.md) · "
         "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · "
         "[主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · "
         "[收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)",
@@ -567,6 +601,7 @@ def main() -> int:
     parser.add_argument("--write-index", metavar="PATH", help="write the paper index")
     parser.add_argument("--write-year-index", metavar="PATH", help="write the year-first paper index")
     parser.add_argument("--write-region-index", metavar="PATH", help="write the region-first paper index")
+    parser.add_argument("--write-subject-year-matrix", metavar="PATH", help="write the year-by-subject navigation matrix")
     parser.add_argument("--write-supplements-index", metavar="PATH", help="write the supporting-material index")
     parser.add_argument("--write-official-evidence-index", metavar="PATH", help="write the official identity-evidence index")
     parser.add_argument("--write-official-portals-index", metavar="PATH", help="write the official source-research index")
@@ -616,6 +651,12 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_region_index(rows, region_names), encoding="utf-8")
+    if args.write_subject_year_matrix:
+        output = Path(args.write_subject_year_matrix)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(render_subject_year_matrix(rows), encoding="utf-8")
     if args.write_supplements_index:
         output = Path(args.write_supplements_index)
         if not output.is_absolute():
@@ -635,7 +676,7 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_official_portals_index(portal_rows, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
+    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_subject_year_matrix or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 

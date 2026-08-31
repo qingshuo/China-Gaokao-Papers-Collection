@@ -68,6 +68,11 @@ DOCX_INTEGRITY_SPEC = importlib.util.spec_from_file_location("audit_docx_integri
 docx_integrity = importlib.util.module_from_spec(DOCX_INTEGRITY_SPEC)
 DOCX_INTEGRITY_SPEC.loader.exec_module(docx_integrity)
 
+USAGE_SCOPE_LEADS_SCRIPT = Path(__file__).parents[1] / "scripts" / "usage_scope_leads.py"
+USAGE_SCOPE_LEADS_SPEC = importlib.util.spec_from_file_location("usage_scope_leads", USAGE_SCOPE_LEADS_SCRIPT)
+usage_scope_leads = importlib.util.module_from_spec(USAGE_SCOPE_LEADS_SPEC)
+USAGE_SCOPE_LEADS_SPEC.loader.exec_module(usage_scope_leads)
+
 IMPORT_DEEKUR_SCRIPT = Path(__file__).parents[1] / "scripts" / "import_deekur_math.py"
 IMPORT_DEEKUR_SPEC = importlib.util.spec_from_file_location("import_deekur_math", IMPORT_DEEKUR_SCRIPT)
 import_deekur_math = importlib.util.module_from_spec(IMPORT_DEEKUR_SPEC)
@@ -145,6 +150,30 @@ class StatsTests(unittest.TestCase):
         self.assertIn("| 2024 | 1 |", readme)
         self.assertIn("PDF 完整性审计", readme)
         self.assertIn("DOCX 完整性审计", readme)
+
+    def test_subject_year_matrix_links_only_complete_local_papers(self):
+        base = {"year": "2024", "status": "indexed", "availability": "local", "material_type": "完整试卷"}
+        rows = [
+            {**base, "subject": "数学"},
+            {**base, "subject": "数学"},
+            {**base, "subject": "物理"},
+            {**base, "subject": "语文", "material_type": "附属资料"},
+        ]
+        matrix = stats.render_subject_year_matrix(rows)
+        self.assertIn("[2](papers-index.md#2024-数学)", matrix)
+        self.assertIn("[1](papers-index.md#2024-物理)", matrix)
+        self.assertNotIn("2024-语文)", matrix)
+
+    def test_usage_scope_leads_remain_community_not_official_evidence(self):
+        row = {
+            "lead_id": "community-2024-math", "year": "2024", "subject": "数学", "paper_type": "新高考I卷",
+            "scope": "北京", "source_name": "community", "source_url": "https://example.test/usage.xlsx",
+            "confidence": "community_unverified", "notes": "仅线索",
+        }
+        self.assertEqual(usage_scope_leads.validate_leads([row]), [])
+        self.assertTrue(usage_scope_leads.validate_leads([{**row, "confidence": "official"}]))
+        report = usage_scope_leads.render_markdown([row])
+        self.assertIn("不是官方身份佐证", report)
 
     def test_official_evidence_index_keeps_origin_and_identity_evidence_separate(self):
         paper = {
