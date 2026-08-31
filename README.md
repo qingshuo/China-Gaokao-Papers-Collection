@@ -1,6 +1,6 @@
 # 中国高考试卷资料库
 
-按年份、学科和地区整理高考试卷。主库当前收录 **720 份完整试卷**，覆盖 **2007-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
+按年份、学科和地区整理高考试卷。主库当前收录 **754 份完整试卷**，覆盖 **2006-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
 
 **快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · [内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · [主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
@@ -32,6 +32,7 @@
 | 2009 | 37 | [2009 年试卷](docs/year-index.md#2009-年) |
 | 2008 | 39 | [2008 年试卷](docs/year-index.md#2008-年) |
 | 2007 | 37 | [2007 年试卷](docs/year-index.md#2007-年) |
+| 2006 | 34 | [2006 年试卷](docs/year-index.md#2006-年) |
 
 ## 学科入口
 
@@ -41,7 +42,7 @@
 | 历史 | 14 | [查看](docs/papers-index.md#历史) |
 | 地理 | 20 | [查看](docs/papers-index.md#地理) |
 | 政治 | 10 | [查看](docs/papers-index.md#政治) |
-| 数学 | 462 | [查看](docs/papers-index.md#数学) |
+| 数学 | 496 | [查看](docs/papers-index.md#数学) |
 | 日语 | 1 | [查看](docs/papers-index.md#日语) |
 | 物理 | 149 | [查看](docs/papers-index.md#物理) |
 | 生物 | 15 | [查看](docs/papers-index.md#生物) |
