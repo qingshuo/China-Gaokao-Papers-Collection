@@ -22,6 +22,7 @@ REMOVE_IDS = {
     "temp-2025-物理-19f9ce751abe",  # Same 上海卷 with answers; GitHub version retained instead.
     "temp-2025-物理-ac4daff519b4",  # Same 云南卷 with answers; GitHub version retained instead.
     "deekur-2021-21-math",  # Same 22-question paper as the retained A4 original-layout version.
+    "temp-2022-数学-fd1782d2496d",  # Same 新高考 I paper as the retained licensed GitHub version.
 }
 # These actions were applied in the previous review commit. Keeping the IDs
 # documents the provenance but must not make later review runs fail.
@@ -35,6 +36,7 @@ HISTORIC_REMOVED_IDS = {
     "temp-2025-物理-19f9ce751abe",
     "temp-2025-物理-ac4daff519b4",
     "deekur-2021-21-math",
+    "temp-2022-数学-fd1782d2496d",
 }
 SUPPLEMENT_IDS = {
     "temp-2022-语文-9fee8807a6cc",  # Same 全国乙卷 with an added model essay.
@@ -46,10 +48,20 @@ SUPPLEMENT_IDS = {
     "deekur-2025-physics-023",  # 上海卷 with detailed answers.
     "deekur-2025-physics-024",  # 云南卷 with detailed answers.
     "temp-2021-数学-cd8daafb088b",  # 2021 新高考 I 卷逐题答案解析，原卷另存。
+    "temp-2022-数学-9bba412f6270",  # 全国甲卷文科：原卷重复，后附答案解析。
+    "temp-2022-数学-29d6ee0acd18",  # 全国甲卷理科：原卷重复，后附答案解析。
 }
 TITLE_UPDATES = {
     "temp-2021-数学-698c99e83f2e": "2021年新高考I卷数学（原卷）",
     "temp-2021-数学-cd8daafb088b": "2021年新高考I卷数学（答案解析）",
+    "temp-2022-数学-9bba412f6270": "2022年全国甲卷数学（文科）（答案解析）",
+    "temp-2022-数学-29d6ee0acd18": "2022年全国甲卷数学（理科）（答案解析）",
+}
+TITLE_UPDATE_NOTES = {
+    "temp-2021-数学-698c99e83f2e": "内容复核：已补全新高考I卷版本名称",
+    "temp-2021-数学-cd8daafb088b": "内容复核：已补全新高考I卷版本名称",
+    "temp-2022-数学-9bba412f6270": "内容复核：已更新标题为答案解析",
+    "temp-2022-数学-29d6ee0acd18": "内容复核：已更新标题为答案解析",
 }
 RETAINED_NOTES = {
     "temp-2021-数学-698c99e83f2e": (
@@ -138,8 +150,12 @@ def main() -> int:
     for row in rows:
         if row["record_id"] in TITLE_UPDATES:
             row["title"] = TITLE_UPDATES[row["record_id"]]
-            if "内容复核：已补全新高考I卷版本名称" not in row["notes"]:
-                row["notes"] = f"{row['notes']}；内容复核：已补全新高考I卷版本名称"
+            title_note = TITLE_UPDATE_NOTES[row["record_id"]]
+            legacy_note = "内容复核：已补全新高考I卷版本名称"
+            if row["record_id"].startswith("temp-2022-") and legacy_note in row["notes"]:
+                row["notes"] = row["notes"].replace(legacy_note, title_note)
+            elif title_note not in row["notes"]:
+                row["notes"] = f"{row['notes']}；{title_note}"
     for row in rows:
         if row["record_id"] in CONFLICTS and CONFLICTS[row["record_id"]] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{CONFLICTS[row['record_id']]}"
