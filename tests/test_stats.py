@@ -267,6 +267,12 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(row["region"], "全国")
         self.assertEqual(Path(import_deekur_math.unquote(row["source_url"].removeprefix(import_deekur_math.RAW_ROOT))).name, Path(path).name)
 
+    def test_deekur_historical_import_requires_audited_title_year_correction(self):
+        path = "普通高考/2007/2002大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf"
+        row = import_deekur_math.build_rows("2007", [path], [{"code": "BJ", "name": "北京"}])[0]
+        self.assertEqual(row["title"], "2007大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃)")
+        self.assertIn("首页标题已人工核验为 2007 年", row["notes"])
+
     def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
         base = {
             "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local",

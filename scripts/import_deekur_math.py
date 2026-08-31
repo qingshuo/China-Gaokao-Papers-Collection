@@ -8,6 +8,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+import re
 from urllib.parse import quote, unquote
 from urllib.request import Request, urlopen
 
@@ -17,6 +18,15 @@ REPOSITORY = "deekur/gaokaomath"
 BRANCH = "main"
 TREE_URL = f"https://api.github.com/repos/{REPOSITORY}/git/trees/{BRANCH}?recursive=1"
 RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{BRANCH}/"
+
+# These two files are stored under the upstream 2007 directory, but their
+# filenames mistakenly begin with "2002".  Their rendered first pages say
+# "2007 普通高等学校招生考试（大纲卷 II）".  Keep the raw URL untouched while
+# correcting only the catalog title and making the discrepancy explicit.
+KNOWN_TITLE_YEAR_MISMATCHES = {
+    "普通高考/2007/2002大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf",
+    "普通高考/2007/2002大纲2理(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf",
+}
 
 
 def fetch(url: str) -> bytes:
@@ -47,17 +57,37 @@ def record_id(year: str, filename: str) -> str:
     return f"deekur-{year}-math-{digest}"
 
 
+def title_for_path(year: str, path: str) -> tuple[str, str]:
+    """Return an audited display title without silently accepting a wrong year."""
+    title = Path(path).stem
+    match = re.match(r"(\d{4})", title)
+    if not match or match.group(1) == year:
+        return title, ""
+    if path not in KNOWN_TITLE_YEAR_MISMATCHES:
+        raise ValueError(
+            f"source filename year {match.group(1)} disagrees with requested directory year {year}: {path}"
+        )
+    return (
+        f"{year}{title[4:]}",
+        f"上游路径文件名以 {match.group(1)} 开头，但首页标题已人工核验为 {year} 年；目录标题已按首页更正，原始 URL 保留不变",
+    )
+
+
 def build_rows(year: str, paths: list[str], region_rows: list[dict[str, str]]) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for path in paths:
         filename = Path(path).name
+        title, title_note = title_for_path(year, path)
+        notes = "来自 deekur/gaokaomath；仓库声明 CC-BY-4.0；历史回溯批次，保留原文件名和原始 URL；具体卷种范围仍待逐页及官方来源核验"
+        if title_note:
+            notes = f"{notes}；{title_note}"
         rows.append({
             "record_id": record_id(year, filename),
             "year": year,
             "region": region_for_filename(filename, region_rows),
             "paper_type": "普通高考",
             "subject": "数学",
-            "title": Path(filename).stem,
+            "title": title,
             "source_url": RAW_ROOT + quote(path),
             "source_type": "github",
             "license_status": "permitted",
@@ -65,7 +95,7 @@ def build_rows(year: str, paths: list[str], region_rows: list[dict[str, str]]) -
             "status": "indexed",
             "local_path": "",
             "sha256": "",
-            "notes": "来自 deekur/gaokaomath；仓库声明 CC-BY-4.0；历史回溯批次，保留原文件名和原始 URL；具体卷种范围仍待逐页及官方来源核验",
+            "notes": notes,
             "material_type": "完整试卷",
         })
     return rows
