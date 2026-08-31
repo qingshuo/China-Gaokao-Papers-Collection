@@ -273,6 +273,14 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(row["title"], "2007大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃)")
         self.assertIn("首页标题已人工核验为 2007 年", row["notes"])
 
+    def test_deekur_historical_import_keeps_shared_guangdong_guangxi_paper_distinct_from_national(self):
+        path = "普通高考/2003/2003广东,广西.pdf"
+        row = import_deekur_math.build_rows("2003", [path], [{"code": "GD", "name": "广东"}, {"code": "GX", "name": "广西"}])[0]
+        self.assertEqual(row["region"], "GD-GX")
+        self.assertIn("广东、广西共用卷", row["notes"])
+        row.update({"availability": "external", "local_path": "", "sha256": ""})
+        self.assertEqual(stats.validate_catalog([row], {"GD", "GX"}), [])
+
     def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
         base = {
             "year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local",

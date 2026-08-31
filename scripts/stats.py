@@ -28,6 +28,18 @@ AVAILABILITIES = {"none", "external", "local"}
 MATERIAL_TYPES = {"完整试卷", "附属资料", "片段资料"}
 PORTAL_STATUSES = {"pending_manual_check", "checked", "download_available", "announcement_only", "unavailable"}
 EVIDENCE_TYPES = {"official_analysis", "official_announcement", "official_catalog", "official_download"}
+# A shared provincial paper is neither a nationwide paper nor two separately
+# stored provincial files.  Keep one source file and give it a displayable
+# catalog region so the indexes do not imply a false nationwide scope.
+SHARED_REGION_NAMES = {"GD-GX": "广东、广西（共用卷）"}
+
+
+def catalog_region_codes(region_codes: set[str]) -> set[str]:
+    return region_codes | set(SHARED_REGION_NAMES)
+
+
+def build_region_names(region_rows: list[dict[str, str]]) -> dict[str, str]:
+    return {row["code"]: row["name"] for row in region_rows} | SHARED_REGION_NAMES
 
 
 def classify_material(row: dict[str, str]) -> str:
@@ -93,7 +105,7 @@ def validate_catalog(rows: list[dict[str, str]], region_codes: set[str]) -> list
         except ValueError:
             errors.append(f"line {number}: year must be an integer")
         region = row.get("region", "").strip()
-        if region and region != "全国" and region not in region_codes:
+        if region and region != "全国" and region not in catalog_region_codes(region_codes):
             errors.append(f"line {number}: unknown region code: {region}")
         status = row.get("status", "").strip()
         if status and status not in STATUSES:
@@ -406,7 +418,7 @@ def render_region_index(rows: list[dict[str, str]], region_names: dict[str, str]
     lines = [
         "# 按地区浏览", "",
         "本页由 `python3 scripts/stats.py --write-region-index docs/region-index.md` 自动生成。",
-        "全国统一卷与跨省共用卷标为“全国”；主索引只列完整试卷。"
+        "全国统一卷标为“全国”；跨省共用卷单独标注其适用地区，且同一文件只存一份。主索引只列完整试卷。"
         "“核验提示”的“—”不代表已完成内容核验。", "",
         "## 地区", "",
     ]
@@ -584,35 +596,35 @@ def main() -> int:
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         output.write_text(render_papers_index(rows, region_names), encoding="utf-8")
     if args.write_year_index:
         output = Path(args.write_year_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         output.write_text(render_year_index(rows, region_names), encoding="utf-8")
     if args.write_region_index:
         output = Path(args.write_region_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         output.write_text(render_region_index(rows, region_names), encoding="utf-8")
     if args.write_supplements_index:
         output = Path(args.write_supplements_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         output.write_text(render_supplements_index(rows, region_names), encoding="utf-8")
     if args.write_official_evidence_index:
         output = Path(args.write_official_evidence_index)
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         rows_by_id = {row["record_id"]: row for row in rows}
         output.write_text(render_official_evidence_index(evidence_rows, rows_by_id, region_names), encoding="utf-8")
     if args.write_official_portals_index:
@@ -620,7 +632,7 @@ def main() -> int:
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        region_names = {row["code"]: row["name"] for row in region_rows}
+        region_names = build_region_names(region_rows)
         output.write_text(render_official_portals_index(portal_rows, region_names), encoding="utf-8")
     if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")

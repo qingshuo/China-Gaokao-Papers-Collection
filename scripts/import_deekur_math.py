@@ -27,6 +27,9 @@ KNOWN_TITLE_YEAR_MISMATCHES = {
     "普通高考/2007/2002大纲2文(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf",
     "普通高考/2007/2002大纲2理(黑龙江,吉林,贵州,新疆,内蒙古,青海,云南,西藏,甘肃).pdf",
 }
+SHARED_REGION_BY_FILENAME = {
+    "2003广东,广西.pdf": "GD-GX",
+}
 
 
 def fetch(url: str) -> bytes:
@@ -46,6 +49,8 @@ def source_paths(year: str) -> list[str]:
 def region_for_filename(filename: str, region_rows: list[dict[str, str]]) -> str:
     if any(token in filename for token in ("全国", "新课标", "大纲", "延考")):
         return "全国"
+    if filename in SHARED_REGION_BY_FILENAME:
+        return SHARED_REGION_BY_FILENAME[filename]
     matches = [row for row in region_rows if row["name"] in filename]
     if len(matches) != 1:
         raise ValueError(f"cannot determine one region from filename: {filename}")
@@ -81,6 +86,8 @@ def build_rows(year: str, paths: list[str], region_rows: list[dict[str, str]]) -
         notes = "来自 deekur/gaokaomath；仓库声明 CC-BY-4.0；历史回溯批次，保留原文件名和原始 URL；具体卷种范围仍待逐页及官方来源核验"
         if title_note:
             notes = f"{notes}；{title_note}"
+        if region_for_filename(filename, region_rows) == "GD-GX":
+            notes = f"{notes}；首页标题明确为“粤、桂卷”，作为广东、广西共用卷单独归类并只存一份文件"
         rows.append({
             "record_id": record_id(year, filename),
             "year": year,
