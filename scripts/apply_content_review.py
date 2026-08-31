@@ -87,6 +87,13 @@ RETAINED_NOTES = {
 }
 PARTIAL_IDS = {
     "temp-2025-物理-d1cb17271a18",  # One-page 四川卷回忆版，仅含第 14、15 题。
+    "temp-2025-化学-32b48f865ec7",  # 上海化学回忆整合版，含缺失信息和答案。
+}
+PARTIAL_REASONS = {
+    "temp-2025-化学-32b48f865ec7": (
+        "内容复核：文件首页标注“回忆版”，多处题注说明根据回忆和文献资料整合，"
+        "且后附参考答案、存在题目信息缺失；不能作为正式完整原卷。"
+    ),
 }
 CONFLICTS = {
     "2024-全国-数学-新高考I卷": "内容复核：与 deekur-2024-48-math 的题号、分区及绝大多数题干一致，但第 9 题缺少一条背景句，暂不合并，待官方原卷核验。",
@@ -164,7 +171,10 @@ def main() -> int:
         row["local_path"] = str(destination.relative_to(ROOT))
         row["material_type"] = "附属资料" if action == "supplement" else "片段资料"
         row["paper_type"] = "试题答案解析" if action == "supplement" else "部分试题"
+        reason = PARTIAL_REASONS.get(row["record_id"], "")
         row["notes"] = f"{row['notes']}；内容复核后归类为{row['material_type']}"
+        if reason and reason not in row["notes"]:
+            row["notes"] = f"{row['notes']}；{reason}"
     for row in rows:
         if row["record_id"] in TITLE_UPDATES:
             row["title"] = TITLE_UPDATES[row["record_id"]]
