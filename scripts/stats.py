@@ -199,23 +199,27 @@ def summarize(
 ) -> dict[str, object]:
     active = [row for row in rows if row.get("status") != "withdrawn"]
     complete = [row for row in active if material_type(row) == "完整试卷"]
+    # Main coverage must never treat an unverified external listing as an
+    # in-repository paper. Keep such leads visible, but count them separately.
     complete_local = [row for row in complete if row.get("availability") == "local"]
+    external_complete_candidates = [row for row in complete if row.get("availability") == "external"]
     return {
         "records": len(rows),
         "active_records": len(active),
-        "complete_papers": len(complete),
+        "complete_papers": len(complete_local),
         "complete_local_papers": len(complete_local),
+        "external_complete_candidates": len(external_complete_candidates),
         "supplementary_files": sum(material_type(row) == "附属资料" for row in active),
         "partial_files": sum(material_type(row) == "片段资料" for row in active),
-        "verified": sum(row.get("status") == "verified" for row in complete),
+        "verified": sum(row.get("status") == "verified" for row in complete_local),
         "local_files": sum(row.get("availability") == "local" for row in active),
-        "years": sorted({row["year"] for row in complete if row.get("year")}),
-        "regions": sorted({row["region"] for row in complete if row.get("region")}),
-        "subjects": sorted({row["subject"] for row in complete if row.get("subject")}),
-        "by_status": Counter(row.get("status", "") for row in complete),
-        "by_year": Counter(row.get("year", "") for row in complete),
-        "by_region": Counter(row.get("region", "") for row in complete),
-        "by_subject": Counter(row.get("subject", "") for row in complete),
+        "years": sorted({row["year"] for row in complete_local if row.get("year")}),
+        "regions": sorted({row["region"] for row in complete_local if row.get("region")}),
+        "subjects": sorted({row["subject"] for row in complete_local if row.get("subject")}),
+        "by_status": Counter(row.get("status", "") for row in complete_local),
+        "by_year": Counter(row.get("year", "") for row in complete_local),
+        "by_region": Counter(row.get("region", "") for row in complete_local),
+        "by_subject": Counter(row.get("subject", "") for row in complete_local),
         "by_local_year": Counter(row.get("year", "") for row in complete_local),
         "by_local_subject": Counter(row.get("subject", "") for row in complete_local),
         "external_sources": len(source_rows),
@@ -235,11 +239,12 @@ def render_markdown(summary: dict[str, object], region_names: dict[str, str] | N
     lines = [
         "# 覆盖统计",
         "",
-        "本报告由 `python3 scripts/stats.py --write docs/coverage.md` 生成。主统计只计完整试卷；答案、解析和片段资料另列。",
+        "本报告由 `python3 scripts/stats.py --write docs/coverage.md` 生成。主统计只计已入库完整试卷；答案、解析、片段资料和仅外部定位候选均另列。",
         "",
         "## 总览",
         "",
         f"- 完整试卷：**{summary['complete_papers']}**",
+        f"- 仅外部定位完整卷候选：**{summary['external_complete_candidates']}**（不计入主库覆盖）",
         f"- 附属资料：**{summary['supplementary_files']}**；片段资料：**{summary['partial_files']}**",
         f"- 索引记录：**{summary['records']}**（有效记录 {summary['active_records']}，本地文件 {summary['local_files']}）",
         f"- 完整试卷中已核验：**{summary['verified']}**",

@@ -160,6 +160,18 @@ class StatsTests(unittest.TestCase):
         self.assertIn("**1 份完整试卷**", readme)
         self.assertIn("| 2024 | 1 |", readme)
 
+    def test_coverage_excludes_external_candidates_from_main_paper_counts(self):
+        rows = [
+            {"year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local"},
+            {"year": "2024", "region": "SH", "subject": "数学", "status": "discovered", "availability": "external"},
+        ]
+        summary = stats.summarize(rows, [])
+        report = stats.render_markdown(summary)
+        self.assertEqual(summary["complete_papers"], 1)
+        self.assertEqual(summary["external_complete_candidates"], 1)
+        self.assertIn("仅外部定位完整卷候选：**1**", report)
+        self.assertIn("| discovered | 0 |", report)
+
     def test_subject_year_matrix_links_only_complete_local_papers(self):
         base = {"year": "2024", "status": "indexed", "availability": "local", "material_type": "完整试卷"}
         rows = [
