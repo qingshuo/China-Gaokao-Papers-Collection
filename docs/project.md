@@ -26,6 +26,7 @@ scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
 scripts/apply_content_review.py 应用经过内容核验的去重与分类结论
 scripts/target_coverage.py 校验卷制目标并生成缺口报告
 docs/papers-index.md 自动生成的试卷索引
+docs/external-candidates.md 不在仓库内、待核验的外部完整卷候选索引
 docs/year-index.md   自动生成的按年份索引
 docs/region-index.md 自动生成的按地区索引
 docs/candidate-duplicates.md 自动生成的候选重复核验队列
@@ -63,6 +64,7 @@ python3 scripts/stats.py --check
 python3 scripts/stats.py --write docs/coverage.md
 python3 scripts/stats.py --write-readme README.md
 python3 scripts/stats.py --write-index docs/papers-index.md
+python3 scripts/stats.py --write-external-candidates-index docs/external-candidates.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md

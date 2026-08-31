@@ -331,6 +331,7 @@ def render_readme(summary: dict[str, object]) -> str:
         "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
         "[按地区浏览](docs/region-index.md) · [年份 × 学科](docs/subject-year-matrix.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
         "[覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方卷制佐证](docs/target-evidence.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
+        "[外部候选](docs/external-candidates.md) · "
         "[用卷范围线索](docs/usage-scope-leads.md) · "
         "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · "
         "[主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · "
@@ -419,6 +420,44 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
                 )
             lines.append("")
     lines += ["> 返回 [README](../README.md) 查看年份总览。", ""]
+    return "\n".join(lines)
+
+
+def render_external_candidates_index(rows: list[dict[str, str]], region_names: dict[str, str]) -> str:
+    """Render discoverable but non-local complete-paper leads separately."""
+    candidates = sorted(
+        (
+            row for row in rows
+            if row.get("status") != "withdrawn" and row.get("availability") == "external"
+            and material_type(row) == "完整试卷"
+        ),
+        key=lambda row: (row["year"], row["subject"], row["region"], row["title"]),
+        reverse=True,
+    )
+    lines = [
+        "# 外部试卷候选",
+        "",
+        "本页由 `python3 scripts/stats.py --write-external-candidates-index docs/external-candidates.md` 自动生成。",
+        "这里的条目可帮助发现待补卷制，但文件**不在本仓库**；仍须核验卷制、内容完整性、来源稳定性和再发布许可，不能计入主库覆盖或作为自动去重依据。",
+        "",
+        f"当前共有 **{len(candidates)}** 条外部完整卷候选。",
+        "",
+        "| 年份 | 地区 | 科目 | 卷种 | 候选文件/页面 | 来源 | 授权 | 状态 |",
+        "| ---: | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in candidates:
+        region = region_label(row["region"], region_names)
+        title = row["title"].replace("|", "\\|")
+        license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
+        lines.append(
+            f"| {row['year']} | {region} | {row['subject']} | {row['paper_type']} | "
+            f"[{title}]({row['source_url']}) | {row['source_type']} | {license_label} | {row['status']} |"
+        )
+    lines += [
+        "",
+        "> 发现同名本地文件时，必须逐页比较题干、页数、图形及是否含答案；仅标题或格式相似不能证明同卷。",
+        "",
+    ]
     return "\n".join(lines)
 
 
@@ -614,6 +653,7 @@ def main() -> int:
     parser.add_argument("--write", metavar="PATH", help="write the markdown report")
     parser.add_argument("--write-readme", metavar="PATH", help="write the repository landing-page index")
     parser.add_argument("--write-index", metavar="PATH", help="write the paper index")
+    parser.add_argument("--write-external-candidates-index", metavar="PATH", help="write the external paper-candidates index")
     parser.add_argument("--write-year-index", metavar="PATH", help="write the year-first paper index")
     parser.add_argument("--write-region-index", metavar="PATH", help="write the region-first paper index")
     parser.add_argument("--write-subject-year-matrix", metavar="PATH", help="write the year-by-subject navigation matrix")
@@ -654,6 +694,12 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_papers_index(rows, region_names), encoding="utf-8")
+    if args.write_external_candidates_index:
+        output = Path(args.write_external_candidates_index)
+        if not output.is_absolute():
+            output = ROOT / output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(render_external_candidates_index(rows, region_names), encoding="utf-8")
     if args.write_year_index:
         output = Path(args.write_year_index)
         if not output.is_absolute():
@@ -691,7 +737,7 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(render_official_portals_index(portal_rows, region_names), encoding="utf-8")
-    if args.check or not (args.write or args.write_readme or args.write_index or args.write_year_index or args.write_region_index or args.write_subject_year_matrix or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
+    if args.check or not (args.write or args.write_readme or args.write_index or args.write_external_candidates_index or args.write_year_index or args.write_region_index or args.write_subject_year_matrix or args.write_supplements_index or args.write_official_evidence_index or args.write_official_portals_index):
         print(f"OK: {summary['records']} catalog records, {summary['external_sources']} external sources")
     return 0
 

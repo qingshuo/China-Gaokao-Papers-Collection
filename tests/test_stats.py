@@ -160,6 +160,16 @@ class StatsTests(unittest.TestCase):
         self.assertIn("**1 份完整试卷**", readme)
         self.assertIn("| 2024 | 1 |", readme)
 
+    def test_external_candidates_index_excludes_local_papers(self):
+        rows = [
+            {"year": "2024", "region": "BJ", "subject": "数学", "paper_type": "北京卷", "title": "本地卷", "status": "indexed", "availability": "local", "source_url": "https://local.test", "source_type": "github", "license_status": "unknown"},
+            {"year": "2024", "region": "全国", "subject": "语文", "paper_type": "新高考I卷", "title": "外部候选", "status": "discovered", "availability": "external", "source_url": "https://external.test", "source_type": "github", "license_status": "unknown"},
+        ]
+        index = stats.render_external_candidates_index(rows, {"BJ": "北京"})
+        self.assertIn("当前共有 **1** 条外部完整卷候选", index)
+        self.assertIn("外部候选", index)
+        self.assertNotIn("本地卷", index)
+
     def test_coverage_excludes_external_candidates_from_main_paper_counts(self):
         rows = [
             {"year": "2024", "region": "BJ", "subject": "数学", "status": "indexed", "availability": "local"},

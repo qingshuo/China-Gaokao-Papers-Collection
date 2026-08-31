@@ -12,6 +12,7 @@
 python3 scripts/stats.py --check
 python3 scripts/stats.py --write docs/coverage.md
 python3 scripts/stats.py --write-index docs/papers-index.md
+python3 scripts/stats.py --write-external-candidates-index docs/external-candidates.md
 python3 scripts/stats.py --write-year-index docs/year-index.md
 python3 scripts/stats.py --write-region-index docs/region-index.md
 python3 scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md
