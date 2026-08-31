@@ -33,6 +33,8 @@ KNOWN_TITLE_YEAR_MISMATCHES = {
 # so they must not be silently classified as nationwide papers.  Keep the
 # upstream paths as research leads until an authoritative scope is found.
 UNRESOLVED_SCOPE_PATHS = {
+    "普通高考/1993/1993旧科目组文.pdf",
+    "普通高考/1993/1993旧科目组理.pdf",
     "普通高考/1994/1994旧科目组文.pdf",
     "普通高考/1994/1994旧科目组理.pdf",
 }
