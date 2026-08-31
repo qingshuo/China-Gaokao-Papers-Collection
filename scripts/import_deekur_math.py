@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""Import an explicitly selected historical mathematics batch from deekur/gaokaomath."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+from pathlib import Path
+from urllib.parse import quote, unquote
+from urllib.request import Request, urlopen
+
+from stats import CATALOG, REGIONS, ROOT, read_csv
+
+REPOSITORY = "deekur/gaokaomath"
+BRANCH = "main"
+TREE_URL = f"https://api.github.com/repos/{REPOSITORY}/git/trees/{BRANCH}?recursive=1"
+RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{BRANCH}/"
+
+
+def fetch(url: str) -> bytes:
+    request = Request(url, headers={"User-Agent": "China-Gaokao-Papers-Collection importer"})
+    with urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def source_paths(year: str) -> list[str]:
+    tree = json.loads(fetch(TREE_URL))
+    if tree.get("truncated"):
+        raise ValueError("GitHub tree response is truncated; refuse to import an incomplete batch")
+    prefix = f"普通高考/{year}/"
+    return sorted(item["path"] for item in tree["tree"] if item["type"] == "blob" and item["path"].startswith(prefix) and item["path"].endswith(".pdf"))
+
+
+def region_for_filename(filename: str, region_rows: list[dict[str, str]]) -> str:
+    if any(token in filename for token in ("全国", "新课标", "大纲", "延考")):
+        return "全国"
+    matches = [row for row in region_rows if row["name"] in filename]
+    if len(matches) != 1:
+        raise ValueError(f"cannot determine one region from filename: {filename}")
+    return matches[0]["code"]
+
+
+def record_id(year: str, filename: str) -> str:
+    digest = hashlib.sha256(filename.encode("utf-8")).hexdigest()[:12]
+    return f"deekur-{year}-math-{digest}"
+
+
+def build_rows(year: str, paths: list[str], region_rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for path in paths:
+        filename = Path(path).name
+        rows.append({
+            "record_id": record_id(year, filename),
+            "year": year,
+            "region": region_for_filename(filename, region_rows),
+            "paper_type": "普通高考",
+            "subject": "数学",
+            "title": Path(filename).stem,
+            "source_url": RAW_ROOT + quote(path),
+            "source_type": "github",
+            "license_status": "permitted",
+            "availability": "local",
+            "status": "indexed",
+            "local_path": "",
+            "sha256": "",
+            "notes": "来自 deekur/gaokaomath；仓库声明 CC-BY-4.0；历史回溯批次，保留原文件名和原始 URL；具体卷种范围仍待逐页及官方来源核验",
+            "material_type": "完整试卷",
+        })
+    return rows
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--year", required=True, help="year directory to import, e.g. 2016")
+    parser.add_argument("--apply", action="store_true", help="download files and append catalog rows")
+    args = parser.parse_args()
+    year = args.year
+    paths = source_paths(year)
+    regions = read_csv(REGIONS)
+    rows = build_rows(year, paths, regions)
+    print(f"year={year} candidates={len(rows)} mode={'apply' if args.apply else 'dry-run'}")
+    for row in rows:
+        print(f"{row['record_id']} {row['region']} {row['title']}")
+    if not args.apply:
+        return 0
+
+    catalog_rows = read_csv(CATALOG)
+    existing_ids = {row["record_id"] for row in catalog_rows}
+    duplicates = existing_ids & {row["record_id"] for row in rows}
+    if duplicates:
+        raise ValueError(f"catalog already contains import IDs: {', '.join(sorted(duplicates))}")
+    downloads: list[tuple[dict[str, str], Path, bytes]] = []
+    for row in rows:
+        source_path = unquote(row["source_url"].removeprefix(RAW_ROOT))
+        destination = ROOT / "papers" / year / row["region"] / "数学" / Path(source_path).name
+        if destination.exists():
+            raise FileExistsError(f"refusing to overwrite existing file: {destination.relative_to(ROOT)}")
+        content = fetch(row["source_url"])
+        if not content.startswith(b"%PDF-"):
+            raise ValueError(f"download is not a PDF: {row['source_url']}")
+        downloads.append((row, destination, content))
+    written: list[Path] = []
+    try:
+        for row, destination, content in downloads:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(content)
+            written.append(destination)
+            row["local_path"] = str(destination.relative_to(ROOT))
+            row["sha256"] = hashlib.sha256(content).hexdigest()
+    except Exception:
+        for destination in written:
+            destination.unlink(missing_ok=True)
+        raise
+    fieldnames = list(catalog_rows[0])
+    with CATALOG.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(catalog_rows + rows)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

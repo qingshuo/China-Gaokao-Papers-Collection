@@ -67,6 +67,11 @@ DOCX_INTEGRITY_SPEC = importlib.util.spec_from_file_location("audit_docx_integri
 docx_integrity = importlib.util.module_from_spec(DOCX_INTEGRITY_SPEC)
 DOCX_INTEGRITY_SPEC.loader.exec_module(docx_integrity)
 
+IMPORT_DEEKUR_SCRIPT = Path(__file__).parents[1] / "scripts" / "import_deekur_math.py"
+IMPORT_DEEKUR_SPEC = importlib.util.spec_from_file_location("import_deekur_math", IMPORT_DEEKUR_SCRIPT)
+import_deekur_math = importlib.util.module_from_spec(IMPORT_DEEKUR_SPEC)
+IMPORT_DEEKUR_SPEC.loader.exec_module(import_deekur_math)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -255,6 +260,12 @@ class StatsTests(unittest.TestCase):
         second = {**base, "title": "2021年新高考I卷数学（原卷）"}
         groups = audit_duplicates.candidate_groups([first, second])
         self.assertEqual(len(groups), 1)
+
+    def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
+        path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"
+        row = import_deekur_math.build_rows("2016", [path], [{"code": "BJ", "name": "北京"}])[0]
+        self.assertEqual(row["region"], "全国")
+        self.assertEqual(Path(import_deekur_math.unquote(row["source_url"].removeprefix(import_deekur_math.RAW_ROOT))).name, Path(path).name)
 
     def test_binary_audit_groups_only_identical_hashes_without_deletion(self):
         base = {
