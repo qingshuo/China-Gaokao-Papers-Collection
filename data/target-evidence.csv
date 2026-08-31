@@ -1,4 +1,10 @@
 evidence_id,target_id,evidence_type,evidence_url,issuer,notes,identity_scope
+shmeea-2023-sh-level-physics-analysis,2023-sh-level-physics,official_analysis,https://www.shmeea.edu.cn/page/02100/20230506/17431.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考物理试卷”；正文明确为2023年上海市普通高中学业水平物理等级性考试；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2023-sh-level-chemistry-analysis,2023-sh-level-chemistry,official_analysis,https://www.shmeea.edu.cn/page/02100/20230506/17427.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考化学试卷”；正文明确为2023年上海市普通高中学业水平化学等级性考试；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2023-sh-level-politics-analysis,2023-sh-level-politics,official_analysis,https://www.shmeea.edu.cn/page/02100/20230506/17428.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考思想政治试卷”；正文明确为2023年上海市普通高中学业水平思想政治等级性考试；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2023-sh-level-history-analysis,2023-sh-level-history,official_analysis,https://www.shmeea.edu.cn/page/02100/20230507/17433.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考历史试卷”；正文明确为2023年上海市普通高中学业水平历史等级性考试；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2023-sh-level-geography-analysis,2023-sh-level-geography,official_analysis,https://www.shmeea.edu.cn/page/02100/20230507/17434.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考地理试卷”；正文明确为2023年上海市普通高中学业水平地理等级性考试；页面未提供原卷文件下载或再发布许可,full_target
+shmeea-2023-sh-level-biology-analysis,2023-sh-level-biology,official_analysis,https://www.shmeea.edu.cn/page/02100/20230507/17435.html,上海市教育考试院,官方页面标题为“专家点评2023年等级考生物学试卷”；正文明确为2023年上海市普通高中学业水平生物等级性考试；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2025-sh-level-history-analysis,2025-sh-level-history,official_analysis,https://www.shmeea.edu.cn/page/02100/20250506/19307.html,上海市教育考试院,官方页面标题为“专家点评2025年上海市普通高中学业水平等级性考试历史科目试卷”；正文明确考试批次和历史科目；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2025-sh-level-politics-analysis,2025-sh-level-politics,official_analysis,https://www.shmeea.edu.cn/page/02100/20250506/19306.html,上海市教育考试院,官方页面标题为“专家点评2025年上海市普通高中思想政治学业水平等级性考试试卷”；正文明确考试批次和思想政治科目；页面未提供原卷文件下载或再发布许可,full_target
 shmeea-2024-sh-level-biology-analysis,2024-sh-level-biology,official_analysis,https://www.shmeea.edu.cn/page/02100/20240507/18413.html,上海市教育考试院,官方页面标题为“专家点评2024年上海市普通高中学业水平等级性考试生物学科目试卷”；正文明确考试批次和生物学科目；页面未提供原卷文件下载或再发布许可,full_target
