@@ -47,6 +47,18 @@ def material_type(row: dict[str, str]) -> str:
     return row.get("material_type") or classify_material(row)
 
 
+def review_hint(row: dict[str, str]) -> str:
+    """Expose evidence-backed variant cautions in every main-paper index."""
+    notes = row.get("notes", "")
+    if "第 9 题多出一条背景句" in notes:
+        return "优先版本；待官方核验"
+    if "第 9 题缺少一条背景句" in notes:
+        return "缺句变体；待官方核验"
+    if "存在实质题干差异" in notes:
+        return "题干冲突；待官方核验"
+    return "—"
+
+
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle))
@@ -303,6 +315,7 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
         "# 历年试卷索引",
         "",
         "本页由 `python3 scripts/stats.py --write-index docs/papers-index.md` 自动生成。",
+        "“核验提示”只标记已经逐页复核到的内容变体或冲突；“—”不代表已完成内容核验。",
         "",
         "## 按学科",
         "",
@@ -324,8 +337,8 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
             )
             lines += [
                 f"### {year} {subject}", "",
-                "| 试卷 | 地区 | 类型 | 格式 | 授权 |",
-                "| --- | --- | --- | --- | --- |",
+                "| 试卷 | 地区 | 类型 | 格式 | 授权 | 核验提示 |",
+                "| --- | --- | --- | --- | --- | --- |",
             ]
             for row in matches:
                 target = "../" + quote(row["local_path"], safe="/")
@@ -336,7 +349,7 @@ def render_papers_index(rows: list[dict[str, str]], region_names: dict[str, str]
                 extension = Path(row["local_path"]).suffix.lstrip(".").upper()
                 license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
                 lines.append(
-                    f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} |"
+                    f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} | {review_hint(row)} |"
                 )
             lines.append("")
     lines += ["> 返回 [README](../README.md) 查看年份总览。", ""]
@@ -354,7 +367,8 @@ def render_year_index(rows: list[dict[str, str]], region_names: dict[str, str]) 
     lines = [
         "# 按年份浏览", "",
         "本页由 `python3 scripts/stats.py --write-year-index docs/year-index.md` 自动生成。",
-        "主索引只列完整试卷；答案、解析和片段资料见 [附属资料索引](supplements-index.md)。", "",
+        "主索引只列完整试卷；答案、解析和片段资料见 [附属资料索引](supplements-index.md)。"
+        "“核验提示”的“—”不代表已完成内容核验。", "",
         "## 年份", "",
     ]
     for year in years:
@@ -368,14 +382,14 @@ def render_year_index(rows: list[dict[str, str]], region_names: dict[str, str]) 
                 (row for row in active if row["year"] == year and row["subject"] == subject),
                 key=lambda row: (row["region"], row["title"]),
             )
-            lines += [f"### {subject}（{len(matches)} 份）", "", "| 试卷 | 地区 | 类型 | 格式 | 授权 |", "| --- | --- | --- | --- | --- |"]
+            lines += [f"### {subject}（{len(matches)} 份）", "", "| 试卷 | 地区 | 类型 | 格式 | 授权 | 核验提示 |", "| --- | --- | --- | --- | --- | --- |"]
             for row in matches:
                 target = "../" + quote(row["local_path"], safe="/")
                 title = row["title"].replace("|", "\\|")
                 region = region_names.get(row["region"], row["region"])
                 extension = Path(row["local_path"]).suffix.lstrip(".").upper()
                 license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
-                lines.append(f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} |")
+                lines.append(f"| [{title}]({target}) | {region} | {row['paper_type']} | {extension} | {license_label} | {review_hint(row)} |")
             lines.append("")
     lines += ["> 返回 [README](../README.md) 或按 [地区浏览](region-index.md)。", ""]
     return "\n".join(lines)
@@ -392,7 +406,8 @@ def render_region_index(rows: list[dict[str, str]], region_names: dict[str, str]
     lines = [
         "# 按地区浏览", "",
         "本页由 `python3 scripts/stats.py --write-region-index docs/region-index.md` 自动生成。",
-        "全国统一卷与跨省共用卷标为“全国”；主索引只列完整试卷。", "",
+        "全国统一卷与跨省共用卷标为“全国”；主索引只列完整试卷。"
+        "“核验提示”的“—”不代表已完成内容核验。", "",
         "## 地区", "",
     ]
     for region in regions:
@@ -408,13 +423,13 @@ def render_region_index(rows: list[dict[str, str]], region_names: dict[str, str]
                 (row for row in active if row["region"] == region and row["year"] == year),
                 key=lambda row: (row["subject"], row["title"]),
             )
-            lines += [f"### {year}（{len(matches)} 份）", "", "| 科目 | 试卷 | 类型 | 格式 | 授权 |", "| --- | --- | --- | --- | --- |"]
+            lines += [f"### {year}（{len(matches)} 份）", "", "| 科目 | 试卷 | 类型 | 格式 | 授权 | 核验提示 |", "| --- | --- | --- | --- | --- | --- |"]
             for row in matches:
                 target = "../" + quote(row["local_path"], safe="/")
                 title = row["title"].replace("|", "\\|")
                 extension = Path(row["local_path"]).suffix.lstrip(".").upper()
                 license_label = "已声明" if row["license_status"] == "permitted" else "待核验"
-                lines.append(f"| {row['subject']} | [{title}]({target}) | {row['paper_type']} | {extension} | {license_label} |")
+                lines.append(f"| {row['subject']} | [{title}]({target}) | {row['paper_type']} | {extension} | {license_label} | {review_hint(row)} |")
             lines.append("")
     lines += ["> 返回 [README](../README.md) 或按 [年份浏览](year-index.md)。", ""]
     return "\n".join(lines)

@@ -220,6 +220,15 @@ class StatsTests(unittest.TestCase):
         index = stats.render_papers_index([row], {})
         self.assertIn("全国/多省", index)
 
+    def test_index_exposes_reviewed_content_variants_without_claiming_other_rows_are_verified(self):
+        base = {"status": "indexed", "availability": "local", "material_type": "完整试卷"}
+        complete = {**base, "notes": "内容复核：与另一版本第 9 题多出一条背景句，暂不合并。"}
+        conflict = {**base, "notes": "内容复核：与另一版本存在实质题干差异，暂不合并。"}
+        ordinary = {**base, "notes": "用户导入"}
+        self.assertEqual(stats.review_hint(complete), "优先版本；待官方核验")
+        self.assertEqual(stats.review_hint(conflict), "题干冲突；待官方核验")
+        self.assertEqual(stats.review_hint(ordinary), "—")
+
     def test_pdf_format_deduplication_requires_exact_catalog_identity(self):
         base = {
             "year": "2024", "region": "BJ", "subject": "数学", "paper_type": "原卷",
