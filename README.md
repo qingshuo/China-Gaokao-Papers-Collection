@@ -2,7 +2,7 @@
 
 按年份、学科和地区整理高考试卷。主库当前收录 **380 份完整试卷**，覆盖 **2017-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
 
-**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · [内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · [主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
+**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · [内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · [主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
 附属资料 **146 份**、片段资料 **7 份**已单独整理，不计入下方完整试卷统计。
 

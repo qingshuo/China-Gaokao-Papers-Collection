@@ -2,6 +2,7 @@ import importlib.util
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -60,6 +61,11 @@ PDF_INTEGRITY_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_pdf_integr
 PDF_INTEGRITY_SPEC = importlib.util.spec_from_file_location("audit_pdf_integrity", PDF_INTEGRITY_SCRIPT)
 pdf_integrity = importlib.util.module_from_spec(PDF_INTEGRITY_SPEC)
 PDF_INTEGRITY_SPEC.loader.exec_module(pdf_integrity)
+
+DOCX_INTEGRITY_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_docx_integrity.py"
+DOCX_INTEGRITY_SPEC = importlib.util.spec_from_file_location("audit_docx_integrity", DOCX_INTEGRITY_SCRIPT)
+docx_integrity = importlib.util.module_from_spec(DOCX_INTEGRITY_SPEC)
+DOCX_INTEGRITY_SPEC.loader.exec_module(docx_integrity)
 
 
 class StatsTests(unittest.TestCase):
@@ -132,6 +138,7 @@ class StatsTests(unittest.TestCase):
         self.assertIn("附属资料 **1 份**", readme)
         self.assertIn("| 2024 | 1 |", readme)
         self.assertIn("PDF 完整性审计", readme)
+        self.assertIn("DOCX 完整性审计", readme)
 
     def test_official_evidence_index_keeps_origin_and_identity_evidence_separate(self):
         paper = {
@@ -253,6 +260,17 @@ class StatsTests(unittest.TestCase):
     def test_pdf_integrity_extracts_page_count_from_pdfinfo_output(self):
         self.assertEqual(pdf_integrity.pages_from_pdfinfo("Title: test\nPages:          7\n"), 7)
         self.assertIsNone(pdf_integrity.pages_from_pdfinfo("Title: test\n"))
+
+    def test_docx_integrity_requires_office_manifest_and_word_document(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "paper.docx"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("[Content_Types].xml", "<Types />")
+                archive.writestr("word/document.xml", "<w:document />")
+            self.assertIsNone(docx_integrity.inspect_docx(path))
+            broken = Path(directory) / "broken.docx"
+            broken.write_bytes(b"not a zip")
+            self.assertIn("Office ZIP", docx_integrity.inspect_docx(broken) or "")
 
     def test_traceability_audit_distinguishes_local_provenance(self):
         web = {"status": "indexed", "material_type": "完整试卷", "source_url": "https://example.test/paper", "year": "2024", "source_type": "official", "license_status": "permitted"}
