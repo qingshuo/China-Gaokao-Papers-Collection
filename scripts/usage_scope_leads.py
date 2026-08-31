@@ -6,15 +6,20 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from pathlib import Path
+from urllib.parse import quote
 
-from stats import ROOT, read_csv
+from stats import CATALOG, ROOT, material_type, read_csv
 
 LEADS = ROOT / "data" / "usage-scope-leads.csv"
 REQUIRED_FIELDS = ("lead_id", "year", "subject", "paper_type", "scope", "source_name", "source_url", "confidence", "notes")
 CONFIDENCE = {"community_unverified"}
 
 
-def validate_leads(rows: list[dict[str, str]]) -> list[str]:
+def split_ids(value: str) -> list[str]:
+    return [item.strip() for item in value.split(";") if item.strip()]
+
+
+def validate_leads(rows: list[dict[str, str]], records_by_id: dict[str, dict[str, str]] | None = None) -> list[str]:
     """Keep community usage data explicitly separate from official evidence."""
     errors: list[str] = []
     seen: set[str] = set()
@@ -35,10 +40,52 @@ def validate_leads(rows: list[dict[str, str]]) -> list[str]:
             errors.append(f"usage leads line {number}: unknown confidence")
         if not row.get("source_url", "").startswith("https://"):
             errors.append(f"usage leads line {number}: source_url must be an HTTPS URL")
+        linked = split_ids(row.get("linked_record_ids", ""))
+        if len(linked) != len(set(linked)):
+            errors.append(f"usage leads line {number}: duplicate linked_record_id")
+        if records_by_id is not None:
+            for record_id in linked:
+                record = records_by_id.get(record_id)
+                if record is None:
+                    errors.append(f"usage leads line {number}: unknown linked_record_id {record_id}")
+                    continue
+                for field in ("year", "subject"):
+                    if record.get(field) != row.get(field):
+                        errors.append(f"usage leads line {number}: linked_record_id {record_id} has a different {field}")
     return errors
 
 
-def render_markdown(rows: list[dict[str, str]]) -> str:
+def lead_records(row: dict[str, str], records_by_id: dict[str, dict[str, str]]) -> list[dict[str, str]]:
+    return [records_by_id[record_id] for record_id in split_ids(row.get("linked_record_ids", ""))]
+
+
+def lead_state(records: list[dict[str, str]]) -> str:
+    complete = [
+        record for record in records
+        if record.get("status") != "withdrawn" and material_type(record) == "完整试卷"
+    ]
+    local = [record for record in complete if record.get("availability") == "local"]
+    if not local:
+        return "待找可确认完整卷"
+    if len(local) == 1:
+        return "已收录 1 个版本"
+    if all("暂不合并" in record.get("notes", "") for record in local):
+        return f"已收录 {len(local)} 个冲突版本"
+    return f"已收录 {len(local)} 个版本（待复核）"
+
+
+def render_record_links(records: list[dict[str, str]]) -> str:
+    links = []
+    for record in records:
+        if record.get("availability") == "local":
+            target = "../" + quote(record["local_path"], safe="/")
+            links.append(f"[{record['title']}]({target})")
+        else:
+            links.append(f"[{record['title']}]({record['source_url']})")
+    return "<br>".join(links) or "—"
+
+
+def render_markdown(rows: list[dict[str, str]], records_by_id: dict[str, dict[str, str]] | None = None) -> str:
     """Render a target-discovery queue, deliberately not a coverage claim."""
     by_year = Counter(row["year"] for row in rows)
     lines = [
@@ -55,14 +102,15 @@ def render_markdown(rows: list[dict[str, str]]) -> str:
         "",
         "## 卷制线索",
         "",
-        "| 年份 | 学科 | 卷种 | 声称使用范围 | 社区来源 | 状态 | 说明 |",
-        "| ---: | --- | --- | --- | --- | --- | --- |",
+        "| 年份 | 学科 | 卷种 | 声称使用范围 | 本库关联版本 | 收录状态 | 社区来源 | 说明 |",
+        "| ---: | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for row in sorted(rows, key=lambda item: (item["year"], item["subject"], item["paper_type"]), reverse=True):
         notes = row["notes"].replace("|", "\\|")
+        records = lead_records(row, records_by_id or {})
         lines.append(
-            f"| {row['year']} | {row['subject']} | {row['paper_type']} | {row['scope']} | "
-            f"[{row['source_name']}]({row['source_url']}) | 社区待核验 | {notes} |"
+            f"| {row['year']} | {row['subject']} | {row['paper_type']} | {row['scope']} | {render_record_links(records)} | "
+            f"{lead_state(records)} | [{row['source_name']}]({row['source_url']}) | {notes} |"
         )
     lines += [
         "",
@@ -78,7 +126,8 @@ def main() -> int:
     parser.add_argument("--write", metavar="PATH", help="write the usage-scope lead index")
     args = parser.parse_args()
     rows = read_csv(LEADS)
-    errors = validate_leads(rows)
+    records_by_id = {row["record_id"]: row for row in read_csv(CATALOG)}
+    errors = validate_leads(rows, records_by_id)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
@@ -88,7 +137,7 @@ def main() -> int:
         if not output.is_absolute():
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(render_markdown(rows), encoding="utf-8")
+        output.write_text(render_markdown(rows, records_by_id), encoding="utf-8")
     if args.check or not args.write:
         print(f"OK: {len(rows)} community usage-scope leads")
     return 0

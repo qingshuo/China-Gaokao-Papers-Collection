@@ -175,6 +175,22 @@ class StatsTests(unittest.TestCase):
         report = usage_scope_leads.render_markdown([row])
         self.assertIn("不是官方身份佐证", report)
 
+    def test_usage_scope_lead_links_validate_catalog_identity_and_report_conflicts(self):
+        lead = {
+            "lead_id": "community-2024-math", "year": "2024", "subject": "数学", "paper_type": "新高考I卷",
+            "scope": "北京", "source_name": "community", "source_url": "https://example.test/usage.xlsx",
+            "confidence": "community_unverified", "linked_record_ids": "paper-1;paper-2", "notes": "仅线索",
+        }
+        records = {
+            "paper-1": {"record_id": "paper-1", "year": "2024", "subject": "数学", "status": "indexed", "availability": "local", "material_type": "完整试卷", "local_path": "papers/first.pdf", "title": "版本一", "notes": "内容复核：差异，暂不合并"},
+            "paper-2": {"record_id": "paper-2", "year": "2024", "subject": "数学", "status": "indexed", "availability": "local", "material_type": "完整试卷", "local_path": "papers/second.pdf", "title": "版本二", "notes": "内容复核：差异，暂不合并"},
+        }
+        self.assertEqual(usage_scope_leads.validate_leads([lead], records), [])
+        report = usage_scope_leads.render_markdown([lead], records)
+        self.assertIn("已收录 2 个冲突版本", report)
+        self.assertIn("../papers/first.pdf", report)
+        self.assertTrue(usage_scope_leads.validate_leads([{**lead, "linked_record_ids": "missing"}], records))
+
     def test_official_evidence_index_keeps_origin_and_identity_evidence_separate(self):
         paper = {
             "record_id": "paper-1", "year": "2024", "region": "BJ", "subject": "数学", "title": "北京数学",
