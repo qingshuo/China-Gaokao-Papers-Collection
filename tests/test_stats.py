@@ -94,7 +94,7 @@ class StatsTests(unittest.TestCase):
     def test_official_evidence_requires_known_record_and_https_url(self):
         row = {
             "evidence_id": "neea-2021", "record_id": "paper-1", "evidence_type": "official_analysis",
-            "evidence_url": "https://example.test/evidence", "issuer": "考试机构",
+            "identity_scope": "full_target", "evidence_url": "https://example.test/evidence", "issuer": "考试机构",
         }
         self.assertEqual(stats.validate_official_evidence([row], {"paper-1"}), [])
         self.assertTrue(stats.validate_official_evidence([{**row, "record_id": "missing"}], {"paper-1"}))
@@ -219,7 +219,7 @@ class StatsTests(unittest.TestCase):
         }
         evidence = {
             "evidence_id": "neea-2024", "record_id": "paper-1", "evidence_type": "official_analysis",
-            "evidence_url": "https://official.test/analysis", "issuer": "教育考试院",
+            "identity_scope": "full_target", "evidence_url": "https://official.test/analysis", "issuer": "教育考试院",
         }
         index = stats.render_official_evidence_index([evidence], {"paper-1": paper}, {"BJ": "北京"})
         self.assertIn("官方试题评析", index)
@@ -242,10 +242,12 @@ class StatsTests(unittest.TestCase):
             "official_evidence_ids": "evidence-1", "notes": "",
         }
         records = {"paper-1": {"status": "indexed", "availability": "local", "material_type": "完整试卷"}}
-        evidence = {"evidence-1": {"record_id": "paper-1"}}
+        evidence = {"evidence-1": {"record_id": "paper-1", "identity_scope": "full_target"}}
         self.assertEqual(target_coverage.validate_targets([target], {"paper-1": {**records["paper-1"], "year": "2024", "region": "BJ", "subject": "数学"}}, evidence, {"BJ"}), [])
-        wrong_evidence = {"evidence-1": {"record_id": "another-paper"}}
+        wrong_evidence = {"evidence-1": {"record_id": "another-paper", "identity_scope": "full_target"}}
         self.assertTrue(target_coverage.validate_targets([target], {"paper-1": {**records["paper-1"], "year": "2024", "region": "BJ", "subject": "数学"}}, wrong_evidence, {"BJ"}))
+        context_only = {"evidence-1": {"record_id": "paper-1", "identity_scope": "context_only"}}
+        self.assertTrue(target_coverage.validate_targets([target], {"paper-1": {**records["paper-1"], "year": "2024", "region": "BJ", "subject": "数学"}}, context_only, {"BJ"}))
         self.assertEqual(target_coverage.target_state(target, records), "已入库")
         report = target_coverage.render_markdown([target], records, {"BJ": "北京"})
         self.assertIn("不能**代表全国所有高考试卷", report)
@@ -259,7 +261,7 @@ class StatsTests(unittest.TestCase):
         }
         evidence = {
             "evidence_id": "target-evidence-1", "target_id": "target-1", "evidence_type": "official_analysis",
-            "evidence_url": "https://official.test/analysis", "issuer": "考试机构", "notes": "试题评析",
+            "identity_scope": "full_target", "evidence_url": "https://official.test/analysis", "issuer": "考试机构", "notes": "试题评析",
         }
         self.assertEqual(target_coverage.validate_target_evidence([evidence], {"target-1"}), [])
         self.assertEqual(target_coverage.validate_targets([target], {}, {}, {"BJ"}, {"target-evidence-1": evidence}), [])

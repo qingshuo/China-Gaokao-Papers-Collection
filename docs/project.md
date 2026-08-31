@@ -9,7 +9,7 @@ papers/              试卷文件
 data/exams.csv       正式试卷索引（唯一事实源）
 data/sources.csv     外部项目和候选来源
 data/official-portals.csv 教育考试机构入口登记
-data/official-evidence.csv 官方考试身份佐证
+data/official-evidence.csv 官方考试身份佐证（区分完整卷制身份与仅考试上下文）
 data/paper-targets.csv 已声明的实际卷制目标
 data/target-evidence.csv 尚未找到文件时的官方卷制身份佐证
 data/usage-scope-leads.csv 社区用卷范围待核查线索

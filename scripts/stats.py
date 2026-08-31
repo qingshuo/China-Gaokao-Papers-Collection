@@ -28,6 +28,7 @@ AVAILABILITIES = {"none", "external", "local"}
 MATERIAL_TYPES = {"完整试卷", "附属资料", "片段资料"}
 PORTAL_STATUSES = {"pending_manual_check", "checked", "download_available", "announcement_only", "unavailable"}
 EVIDENCE_TYPES = {"official_analysis", "official_announcement", "official_catalog", "official_download"}
+IDENTITY_SCOPES = {"full_target", "context_only"}
 def is_shared_region_code(region: str, region_codes: set[str]) -> bool:
     """Recognize a canonical multi-province code such as ``GD-GX-HA-JS``."""
     parts = region.split("-")
@@ -184,6 +185,8 @@ def validate_official_evidence(rows: list[dict[str, str]], catalog_ids: set[str]
             errors.append(f"official evidence line {number}: unknown record_id {record_id}")
         if row.get("evidence_type", "").strip() not in EVIDENCE_TYPES:
             errors.append(f"official evidence line {number}: unknown evidence_type")
+        if row.get("identity_scope", "").strip() not in IDENTITY_SCOPES:
+            errors.append(f"official evidence line {number}: unknown identity_scope")
         if not row.get("evidence_url", "").startswith("https://"):
             errors.append(f"official evidence line {number}: evidence_url must be an HTTPS URL")
         if not row.get("issuer", "").strip():
@@ -225,8 +228,9 @@ def summarize(
         "external_sources": len(source_rows),
         "official_portals": len(portal_rows or []),
         "portal_by_status": Counter(row.get("portal_status", "") for row in portal_rows or []),
-        "official_evidence": len(evidence_rows or []),
-        "official_evidence_records": len({row.get("record_id") for row in evidence_rows or []}),
+        "official_evidence": sum(row.get("identity_scope") == "full_target" for row in evidence_rows or []),
+        "official_evidence_records": len({row.get("record_id") for row in evidence_rows or [] if row.get("identity_scope") == "full_target"}),
+        "official_context_evidence": sum(row.get("identity_scope") == "context_only" for row in evidence_rows or []),
     }
 
 
@@ -251,6 +255,7 @@ def render_markdown(summary: dict[str, object], region_names: dict[str, str] | N
         f"- 已发现外部来源：**{summary['external_sources']}**",
         f"- 优先核查官方入口：**{summary['official_portals']}**（入口不等同于试卷下载或再发布许可）",
         f"- 已登记官方身份佐证：**{summary['official_evidence']}** 条，关联 **{summary['official_evidence_records']}** 份试卷（不等同于文件来源或许可）",
+        f"- 已登记官方考试上下文：**{summary['official_context_evidence']}** 条（不计作完整卷制身份佐证）",
         f"- 覆盖年份：{', '.join(summary['years']) if summary['years'] else '暂无'}",
         f"- 覆盖省级区域：{', '.join(region_label(region, region_names or {}) for region in summary['regions']) if summary['regions'] else '暂无'}",
         "",
@@ -537,10 +542,10 @@ def render_official_evidence_index(
         "# 官方身份佐证",
         "",
         "本页由 `python3 scripts/stats.py --write-official-evidence-index docs/official-evidence.md` 自动生成。",
-        "官方身份佐证用于确认考试、卷种或命题背景；它**不替代**文件原始来源、内容逐页核验或再发布许可。",
+        "“完整卷制身份”页面明确对应同一考试、卷种和学科；“仅考试上下文”只说明同年同批次考试背景，**不能**用于确认文件身份。两者均不替代文件原始来源、内容逐页核验或再发布许可。",
         "",
-        "| 年份 | 地区 | 科目 | 试卷 | 佐证类型 | 官方页面 |",
-        "| ---: | --- | --- | --- | --- | --- |",
+        "| 年份 | 地区 | 科目 | 试卷 | 佐证范围 | 佐证类型 | 官方页面 |",
+        "| ---: | --- | --- | --- | --- | --- | --- |",
     ]
     ordered = sorted(
         evidence_rows,
@@ -553,13 +558,14 @@ def render_official_evidence_index(
         paper_title = paper["title"].replace("|", "\\|")
         target = "../" + quote(paper["local_path"], safe="/") if paper.get("availability") == "local" else paper["source_url"]
         evidence_label = labels[evidence["evidence_type"]]
+        scope_label = "完整卷制身份" if evidence["identity_scope"] == "full_target" else "仅考试上下文"
         lines.append(
             f"| {paper['year']} | {region} | {paper['subject']} | [{paper_title}]({target}) | "
-            f"{evidence_label} | [{evidence['issuer']}]({evidence['evidence_url']}) |"
+            f"{scope_label} | {evidence_label} | [{evidence['issuer']}]({evidence['evidence_url']}) |"
         )
     lines += [
         "",
-        "> 仅当官方页面实际指向同一考试/卷种时才可登记。若页面不提供原卷文件，主卷的来源与许可状态仍以 `data/exams.csv` 为准。",
+        "> 只有“完整卷制身份”可关联 `data/paper-targets.csv` 中的目标；“仅考试上下文”不能替代它。若页面不提供原卷文件，主卷的来源与许可状态仍以 `data/exams.csv` 为准。",
         "",
     ]
     return "\n".join(lines)

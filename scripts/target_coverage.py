@@ -7,7 +7,7 @@ import argparse
 from collections import Counter
 from pathlib import Path
 
-from stats import EVIDENCE_TYPES, ROOT, REGIONS, OFFICIAL_EVIDENCE, CATALOG, material_type, read_csv
+from stats import EVIDENCE_TYPES, IDENTITY_SCOPES, ROOT, REGIONS, OFFICIAL_EVIDENCE, CATALOG, material_type, read_csv
 
 TARGETS = ROOT / "data" / "paper-targets.csv"
 TARGET_EVIDENCE = ROOT / "data" / "target-evidence.csv"
@@ -33,6 +33,8 @@ def validate_target_evidence(rows: list[dict[str, str]], target_ids: set[str]) -
             errors.append(f"target evidence line {number}: unknown target_id {row.get('target_id', '')}")
         if row.get("evidence_type", "").strip() not in EVIDENCE_TYPES:
             errors.append(f"target evidence line {number}: unknown evidence_type")
+        if row.get("identity_scope", "").strip() != "full_target":
+            errors.append(f"target evidence line {number}: identity_scope must be full_target")
         if not row.get("evidence_url", "").startswith("https://"):
             errors.append(f"target evidence line {number}: evidence_url must be an HTTPS URL")
         if not row.get("issuer", "").strip():
@@ -77,6 +79,8 @@ def validate_targets(
             if evidence_id in evidence_by_id:
                 if evidence_by_id[evidence_id].get("record_id") not in linked:
                     errors.append(f"targets line {number}: official_evidence_id {evidence_id} is not linked to this target's record")
+                if evidence_by_id[evidence_id].get("identity_scope") != "full_target":
+                    errors.append(f"targets line {number}: official_evidence_id {evidence_id} is not full-target identity evidence")
             elif evidence_id in target_evidence_by_id:
                 if target_evidence_by_id[evidence_id].get("target_id") != target_id:
                     errors.append(f"targets line {number}: official_evidence_id {evidence_id} belongs to another target")
@@ -161,7 +165,7 @@ def render_target_evidence_index(target_evidence: list[dict[str, str]], targets_
         "# 官方卷制佐证",
         "",
         "本页由 `python3 scripts/target_coverage.py --write-evidence-index docs/target-evidence.md` 自动生成。",
-        "这些页面用于确认一个卷制目标真实存在，尤其适用于尚未找到原卷文件的项目；它们**不等同于**试卷文件来源、逐页内容核验或再发布许可。",
+        "这些页面均已标记为“完整卷制身份”，用于确认一个卷制目标真实存在，尤其适用于尚未找到原卷文件的项目；它们**不等同于**试卷文件来源、逐页内容核验或再发布许可。",
         "",
         "| 年份 | 地区 | 学科 | 卷制目标 | 佐证类型 | 官方页面 |",
         "| ---: | --- | --- | --- | --- | --- |",
