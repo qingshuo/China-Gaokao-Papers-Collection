@@ -18,6 +18,17 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-历史-abec439eb632": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（湖北）历史高考真题/2024年高考历史试卷（湖北）（空白卷）.pdf",
+        "old_sha256": "abec439eb632166ef421d9a0ee27a2c191b91b4da99d29ba1b35decfa81f35c9",
+        "new_sha256": "0699d5bee13cbd63b17cf9be9a01dbfd875b32d0bd58d970de0d708eff8fb5ca",
+        "title": "湖北省2024年普通高中学业水平等级考试历史",
+        "paper_type": "湖北卷",
+        "note": (
+            "内容复核：全文题干相似度 0.930；逐页视觉抽样确认“蛋壳陶杯”选择题及末页“物质与文明”表格材料题一致。"
+            "新版本保留“第 1 页/共 6 页”页码及完整正式标题，旧版为 4 页重排版，故替换为新版本。"
+        ),
+    },
     "temp-2024-政治-d225361190fe": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2010-2024·（辽宁）政治高考真题/2024年高考政治试卷（辽宁）（空白卷）.pdf",
         "old_sha256": "d225361190fe41a5734f8c767ec13cd1fb445913490d729c8de85081e04f4847",
