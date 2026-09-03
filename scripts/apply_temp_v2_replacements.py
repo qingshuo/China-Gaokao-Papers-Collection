@@ -1038,6 +1038,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2023-政治-255e3a72e722": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2023年高考政治试卷（北京）（空白卷）.pdf",
+        "sha256": "255e3a72e7224a9a71606f5328ce8075221af544ef977144a4fcfa94dd836706",
+        "year": "2023",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "政治",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）思想政治",
+        "local_path": "papers/2023/BJ/政治/北京政治-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2023年高考政治试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认正式卷首的‘进京赶考之路（北京段）’示意图、京津冀协同发展材料，"
+            "以及第 10 页中国式现代化建设战略材料题完整。"
+            "PDF 页码共 11 页，正文至第 10 页完整结束，第 11 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2023-历史-8b8ee64fd780": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2023年高考历史试卷（北京）（空白卷）.pdf",
         "sha256": "8b8ee64fd7806602abd8e39d37fb1010c0d48122983f37ca11a93c1a606357d5",
