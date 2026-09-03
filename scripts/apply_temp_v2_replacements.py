@@ -1038,6 +1038,21 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2023-历史-8b8ee64fd780": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2023年高考历史试卷（北京）（空白卷）.pdf",
+        "sha256": "8b8ee64fd7806602abd8e39d37fb1010c0d48122983f37ca11a93c1a606357d5",
+        "year": "2023",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "历史",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）历史",
+        "local_path": "papers/2023/BJ/历史/北京历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2023年高考历史试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认正式卷首、汉代简牍图、明代贸易示意图、南北朝儒学材料与致远舰史料题，以及末页《橘录》材料题完整。"
+            "PDF 页码共 8 页，正文至第 7 页完整结束，第 8 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2023-生物-3c668bfdb874": {
         "source": "temp/版本2：生物（按省份分类）2008-2024/2008-2024·（北京）生物高考真题/2023年高考生物试卷（北京）（空白卷）.pdf",
         "sha256": "3c668bfdb874659e07cd8232ca08b66f7cac0a60deb41391b6ec384c569668a0",
