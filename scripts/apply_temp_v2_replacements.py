@@ -555,6 +555,21 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2010-math-c883b4d624f1": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2010年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "6b5819672aaf59aecfce92e08c2d045a80575803527d61813497dd669a8d5529",
+        "new_sha256": "fcd46d7e686b6d3259af9e7da15cd03d58fb8eae8e5f7841a295d51a3e0ef63d",
+        "title": "2010年普通高等学校招生全国统一考试数学（理）（北京卷）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、等比数列和几何体三视图等首页题目，以及末页第 20 题集合距离证明与旧版一致。"
+            "新版本保留完整卷首和“第 1 页/共 8 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "另一个标为“文”的候选卷首实际为理卷，未用于本次替换。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
