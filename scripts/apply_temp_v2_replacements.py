@@ -18,6 +18,20 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-生物-4cc5169272d9": {
+        "source": "temp/版本2：生物（按省份分类）2008-2024/2010-2024·（辽宁）生物高考真题/2024年高考生物试卷（辽宁）（空白卷）.pdf",
+        "old_sha256": "4cc5169272d91080fdfc66da8561592fbd2a8f1d13020c1ed184aab989cab46f",
+        "new_sha256": "82d119e44c930e901c9090b0f7c3b082c33a1ac68b4581e2dacabdbd556f354f",
+        "title": "2024年普通高等学校招生选择性考试（辽宁卷）生物学",
+        "paper_type": "辽宁卷",
+        "region": "LN",
+        "local_path": "papers/2024/LN/生物/辽宁生物-试题-p.pdf",
+        "note": (
+            "内容复核：全文题干相似度 0.901；逐页视觉抽样确认钙调蛋白、森林群落选择题及末页 Bt 基因重组棉花图题一致。"
+            "新版本保留“第 1 页/共 11 页”页码及完整正式卷首，旧版为 8 页重排版，故替换为新版本。"
+            "文件标题与内容均明确为辽宁卷，修正原先误置于全国目录的记录。"
+        ),
+    },
     "temp-2024-物理-26a9eb5f2e83": {
         "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（广西）物理高考真题/2024年高考物理试卷（广西）（空白卷）.pdf",
         "old_sha256": "26a9eb5f2e83dbffbbf2cfa14a73125006f0ba3d6ec313f81349ebc16afceb3a",
