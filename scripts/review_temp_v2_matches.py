@@ -95,16 +95,33 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--audit", default="docs/temp-v2-audit.csv")
     parser.add_argument("--report", default="docs/temp-v2-content-review.csv")
+    parser.add_argument(
+        "--remove-record-id",
+        action="append",
+        default=[],
+        help=(
+            "remove reviewed rows that have become exact-hash matches in the audit, "
+            "without re-reading every candidate PDF"
+        ),
+    )
     args = parser.parse_args()
-    with (ROOT / args.audit).open(newline="", encoding="utf-8") as handle:
-        audit_rows = list(csv.DictReader(handle))
-    rows = compare(audit_rows, read_csv(CATALOG))
     output = ROOT / args.report
     output.parent.mkdir(parents=True, exist_ok=True)
+    if args.remove_record_id:
+        with output.open(newline="", encoding="utf-8") as handle:
+            reader = csv.DictReader(handle)
+            fieldnames = list(reader.fieldnames or ["candidate_source"])
+            removed = set(args.remove_record_id)
+            rows = [row for row in reader if row.get("existing_record_id") not in removed]
+    else:
+        with (ROOT / args.audit).open(newline="", encoding="utf-8") as handle:
+            audit_rows = list(csv.DictReader(handle))
+        rows = compare(audit_rows, read_csv(CATALOG))
+        fieldnames = list(rows[0]) if rows else ["candidate_source"]
     with output.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=list(rows[0]) if rows else ["candidate_source"],
+            fieldnames=fieldnames,
             lineterminator="\n",
         )
         writer.writeheader()
