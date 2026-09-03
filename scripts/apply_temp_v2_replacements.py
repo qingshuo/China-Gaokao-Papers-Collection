@@ -1038,6 +1038,21 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2023-化学-e3c58da5936": {
+        "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2024·（北京）化学高考真题/2023年高考化学试卷（北京）（空白卷）.pdf",
+        "sha256": "e3c58da5936d302f4a4e3d177a985aad7b6c9fe88e7e738b0dfd099a335b3ac3",
+        "year": "2023",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "化学",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）化学",
+        "local_path": "papers/2023/BJ/化学/北京化学-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：化学（按省份分类）2008-2024/2008-2024·（北京）化学高考真题/2023年高考化学试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认正式卷首、金刚石/石墨/石墨炔结构图、Mg²⁺—碳酸盐平衡图，以及末页 Cu/I⁻ 实验题完整。"
+            "PDF 页码共 12 页，正文至第 11 页完整结束，第 12 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2008-化学-570d56405e42": {
         "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2023·（天津）化学高考真题/2008年高考化学试卷（天津）（空白卷）.pdf",
         "sha256": "570d56405e42350cd086b864bdd957d69f26b41483a7be7b2c4d4c396bfbc4ac",
