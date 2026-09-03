@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-政治-579560302b13": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2012-2024·（安徽）政治高考真题/2024年高考政治试卷（安徽）（空白卷）.pdf",
+        "sha256": "579560302b135fc44bd4855b36a3089b57b929d716a8c1fc8804beed780c3d22",
+        "year": "2024",
+        "region": "AH",
+        "paper_type": "安徽卷",
+        "subject": "政治",
+        "title": "2024年普通高中学业水平选择性考试思想政治（安徽卷）",
+        "local_path": "papers/2024/AH/政治/安徽政治-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：政治（按省份分类）2008-2024/2012-2024·（安徽）政治高考真题/2024年高考政治试卷（安徽）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认新质生产力、设备更新、停止/上坡漫画与乡村著名行动选择题，"
+            "旅游市场和免签朋友圈材料，以及末页传统戏曲重塑的逆向思维题完整。"
+            "PDF 页码共 7 页，题号连续覆盖第 1 至 20 题，正文在第 7 页完整结束，作为新增安徽卷归档。"
+        ),
+    },
     "temp-v2-2024-历史-d6cebc3653d3": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2012-2024·（安徽）历史高考真题/2024年高考历史试卷（安徽）（空白卷）.pdf",
         "sha256": "d6cebc3653d39b6ff6aec2f511b953e5ad9219d2b1849f7b8c6bb32ffa8cbadd",
