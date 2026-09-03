@@ -406,6 +406,9 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(len(decision["old_sha256"]), 64)
         self.assertEqual(len(decision["new_sha256"]), 64)
         self.assertNotEqual(decision["old_sha256"], decision["new_sha256"])
+        addition = apply_temp_v2_replacements.ADDITIONS["temp-v2-2008-化学-570d56405e42"]
+        self.assertEqual(len(addition["sha256"]), 64)
+        self.assertTrue(addition["local_path"].endswith(".pdf"))
 
     def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
         path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"

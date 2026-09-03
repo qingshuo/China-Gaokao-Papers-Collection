@@ -501,6 +501,25 @@ REPLACEMENTS = {
     },
 }
 
+# New candidates use the same hash-locked, explicit-review workflow as
+# replacements.  Nothing in temp/ is bulk-imported by this script.
+ADDITIONS = {
+    "temp-v2-2008-化学-570d56405e42": {
+        "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2023·（天津）化学高考真题/2008年高考化学试卷（天津）（空白卷）.pdf",
+        "sha256": "570d56405e42350cd086b864bdd957d69f26b41483a7be7b2c4d4c396bfbc4ac",
+        "year": "2008",
+        "region": "TJ",
+        "paper_type": "天津卷",
+        "subject": "化学",
+        "title": "2008年天津市普通高等学校招生全国统一考试化学",
+        "local_path": "papers/2008/TJ/化学/天津化学-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：化学（按省份分类）2008-2024/2008-2023·（天津）化学高考真题/2008年高考化学试卷（天津）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认卷首“2008年天津市高考化学试卷”、共 4 页页码及末页第 11 题配平氧化还原反应与滴定计算完整，作为新增天津卷归档。"
+        ),
+    },
+}
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -537,6 +556,33 @@ def planned_replacements(
     return plans
 
 
+def planned_additions(rows: list[dict[str, str]]) -> list[tuple[str, dict[str, str], Path, Path]]:
+    """Return only hash-locked new records that do not yet exist locally."""
+    by_id = {row["record_id"]: row for row in rows}
+    existing_hashes = {row.get("sha256") for row in rows if row.get("sha256")}
+    plans = []
+    for record_id, decision in ADDITIONS.items():
+        source = ROOT / decision["source"]
+        destination = ROOT / decision["local_path"]
+        if record_id in by_id:
+            row = by_id[record_id]
+            if (
+                row.get("sha256") == decision["sha256"]
+                and destination.is_file()
+                and sha256(destination) == decision["sha256"]
+            ):
+                continue
+            raise ValueError(f"unexpected existing record for {record_id}")
+        if decision["sha256"] in existing_hashes:
+            raise ValueError(f"addition hash already catalogued for {record_id}")
+        if not source.is_file() or sha256(source) != decision["sha256"]:
+            raise ValueError(f"unexpected candidate hash for {record_id}")
+        if destination.exists():
+            raise FileExistsError(f"addition destination already exists for {record_id}: {destination}")
+        plans.append((record_id, decision, source, destination))
+    return plans
+
+
 def mark_reviewed_replacements_verified(rows: list[dict[str, str]]) -> int:
     """Mark only already-applied, hash-locked review decisions as verified.
 
@@ -569,9 +615,12 @@ def main() -> int:
         fieldnames = list(reader.fieldnames or [])
         rows = list(reader)
     plans = planned_replacements(rows)
+    additions = planned_additions(rows)
     for row, _, source, _, destination in plans:
         print(f"{row['record_id']}: {source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
-    print(f"replacements={len(plans)} mode={'apply' if args.apply else 'dry-run'}")
+    for _, decision, source, destination in additions:
+        print(f"{source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
+    print(f"replacements={len(plans)} additions={len(additions)} mode={'apply' if args.apply else 'dry-run'}")
     if not args.apply:
         return 0
     for row, decision, source, current_destination, destination in plans:
@@ -590,6 +639,20 @@ def main() -> int:
         row["source_url"] = f"local://{quote(decision['source'], safe='/')}"
         if decision["note"] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{decision['note']}"
+    for record_id, decision, source, destination in additions:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        staged = destination.with_name(f".{destination.name}.temp-v2")
+        shutil.copy2(source, staged)
+        staged.replace(destination)
+        rows.append({
+            "record_id": record_id,
+            "year": decision["year"], "region": decision["region"], "paper_type": decision["paper_type"],
+            "subject": decision["subject"], "title": decision["title"],
+            "source_url": f"local://{quote(decision['source'], safe='/')}",
+            "source_type": "local-upload", "license_status": "unknown", "availability": "local",
+            "status": "verified", "local_path": decision["local_path"], "sha256": decision["sha256"],
+            "notes": decision["note"], "material_type": "完整试卷",
+        })
     verified_updates = mark_reviewed_replacements_verified(rows)
     if verified_updates:
         print(f"marked_verified={verified_updates}")
