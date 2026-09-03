@@ -18,6 +18,21 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "deekur-物理-2021-056": {
+        "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（北京）物理高考真题/2021年高考物理试卷（北京）（空白卷）.pdf",
+        "old_sha256": "b9f9e96ec8ad0b7b49276fd3d776f3cdb9d1e2570190a93bf931b8277f112daf",
+        "new_sha256": "f8e942852b708cda0229d0209baccd8eca11810f48527f98096ae9fe169c9906",
+        "title": "北京市2021年普通高中学业水平等级性考试物理",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认硼中子俘获治疗、半圆玻璃砖、简谐横波等卷首题目，"
+            "匀强磁场、竖直加速度测量仪、类比电路题及末页第 20 题秋千摆动题完整。"
+            "候选无答案；旧版为 19 页且含红色答案解析，故替换为本地上传的无答案版本。"
+            "候选将原题面标注的 8 页内容重排为 10 页，正文至第 9 页结束，第 10 页为空白尾页。"
+        ),
+    },
     "deekur-物理-2022-073": {
         "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（北京）物理高考真题/2022年高考物理试卷（北京）（空白卷）.pdf",
         "old_sha256": "701debb666df6b7d225ce1a12e62aebee1cb5eb27f2286daaec520f488585e69",
