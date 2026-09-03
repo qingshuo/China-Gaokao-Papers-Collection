@@ -907,6 +907,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-物理-2023-090": {
+        "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（北京）物理高考真题/2023年高考物理试卷（北京）（空白卷）.pdf",
+        "old_sha256": "8652d92ebeafd05cbcccbf578d55baec487fbae020c8e8de379d9db69788346a",
+        "new_sha256": "c5422ed78fc43961d4fcad2f98a336def61b7f65dfd49d5ff5fc58d0c4634231",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）物理",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认轮胎压强、肥皂膜彩色条纹、波形图等首页题目，以及末页空气净化器、螺旋星系暗物质材料题与旧版一致。"
+            "新版本为无答案原卷，题目至第 21 题均完整；第 9 页为空白尾页，第 8 页已完整结束试题。旧版为含答案解析的 11 页版，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
