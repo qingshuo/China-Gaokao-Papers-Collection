@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2021-政治-52175982be51": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2021年高考政治试卷（北京）（空白卷）.pdf",
+        "sha256": "52175982be51e5203adceb95070246657b584bbfaed15d26ea97ac14a401acda",
+        "year": "2021",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "政治",
+        "title": "2021年普通高中学业水平等级性考试（北京卷）思想政治",
+        "local_path": "papers/2021/BJ/政治/北京政治-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2021年高考政治试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认革命文物直播、老地名公交站和吉祥戏院选择题，"
+            "博鳌亚洲论坛与职业培训券材料，以及全球价值链图和末页第 20 题中国共产党百年历史材料题完整。"
+            "候选为无答案的重排 PDF，题号连续覆盖第 1 至 20 题，正文在第 10 页结束，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2022-英语-670f3084c81b": {
         "source": "temp/版本2：英语（按省份分类）2008-2024/2008-2024·（北京）英语高考真题/2022年高考英语试卷（北京）（机考 无听力）（空白卷）.pdf",
         "sha256": "670f3084c81b2847276c18ec7b55b9c5a397ccda4002cb1aa408e0339251439e",

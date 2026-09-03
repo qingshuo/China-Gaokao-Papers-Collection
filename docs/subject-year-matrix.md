@@ -10,7 +10,7 @@
 | 2024 | [14](papers-index.md#2024-化学) | [7](papers-index.md#2024-历史) | [12](papers-index.md#2024-地理) | [6](papers-index.md#2024-政治) | [10](papers-index.md#2024-数学) | — | [36](papers-index.md#2024-物理) | [9](papers-index.md#2024-生物) | — | — | [4](papers-index.md#2024-英语) | [3](papers-index.md#2024-语文) | 101 |
 | 2023 | [1](papers-index.md#2023-化学) | [1](papers-index.md#2023-历史) | [1](papers-index.md#2023-地理) | [1](papers-index.md#2023-政治) | [9](papers-index.md#2023-数学) | — | [17](papers-index.md#2023-物理) | [1](papers-index.md#2023-生物) | — | — | [1](papers-index.md#2023-英语) | [1](papers-index.md#2023-语文) | 33 |
 | 2022 | [4](papers-index.md#2022-化学) | [4](papers-index.md#2022-历史) | [2](papers-index.md#2022-地理) | [2](papers-index.md#2022-政治) | [14](papers-index.md#2022-数学) | [1](papers-index.md#2022-日语) | [22](papers-index.md#2022-物理) | [3](papers-index.md#2022-生物) | [1](papers-index.md#2022-综合文综) | [2](papers-index.md#2022-综合理综) | [3](papers-index.md#2022-英语) | [4](papers-index.md#2022-语文) | 62 |
-| 2021 | [1](papers-index.md#2021-化学) | — | — | [1](papers-index.md#2021-政治) | [11](papers-index.md#2021-数学) | — | [18](papers-index.md#2021-物理) | — | — | — | [1](papers-index.md#2021-英语) | [1](papers-index.md#2021-语文) | 33 |
+| 2021 | [1](papers-index.md#2021-化学) | — | — | [2](papers-index.md#2021-政治) | [11](papers-index.md#2021-数学) | — | [18](papers-index.md#2021-物理) | — | — | — | [1](papers-index.md#2021-英语) | [1](papers-index.md#2021-语文) | 34 |
 | 2020 | — | — | — | — | [14](papers-index.md#2020-数学) | — | [11](papers-index.md#2020-物理) | — | — | — | — | — | 25 |
 | 2019 | — | — | — | — | [14](papers-index.md#2019-数学) | — | — | — | — | — | — | — | 14 |
 | 2018 | — | — | — | — | [14](papers-index.md#2018-数学) | — | — | — | — | — | — | — | 14 |
