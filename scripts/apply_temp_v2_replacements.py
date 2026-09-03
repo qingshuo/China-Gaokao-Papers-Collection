@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-历史-52b407805408": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（广东）历史高考真题/2024年高考历史试卷（广东）（空白卷）.pdf",
+        "sha256": "52b407805408e25964be04ba2b6f9cfd9c7ccd379e68b1fbad9fdc09795eb40c",
+        "year": "2024",
+        "region": "GD",
+        "paper_type": "广东卷",
+        "subject": "历史",
+        "title": "广东省2024年普通高中学业水平等级性考试历史",
+        "local_path": "papers/2024/GD/历史/广东历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2008-2024·（广东）历史高考真题/2024年高考历史试卷（广东）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认五爵礼器、魏书、两税法与中法新约选择题，"
+            "秦汉乡里制度及香槟集市—汉萨同盟材料题，以及末页‘广东与近代中国’开放题完整。"
+            "PDF 页码共 4 页，题号连续覆盖第 1 至 13 题，正文在第 4 页完整结束，作为新增广东卷归档。"
+        ),
+    },
     "temp-v2-2021-政治-52175982be51": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2021年高考政治试卷（北京）（空白卷）.pdf",
         "sha256": "52175982be51e5203adceb95070246657b584bbfaed15d26ea97ac14a401acda",
