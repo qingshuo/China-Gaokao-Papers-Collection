@@ -1,6 +1,6 @@
 # 中国高考试卷资料库
 
-按年份、学科和地区整理高考试卷。主库当前收录 **911 份完整试卷**，覆盖 **1987-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
+按年份、学科和地区整理高考试卷。主库当前收录 **912 份完整试卷**，覆盖 **1987-2026 年**；答案、解析和片段资料均单独归档，不混入主卷索引。
 
 **快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · [按地区浏览](docs/region-index.md) · [年份 × 学科](docs/subject-year-matrix.md) · [答案、解析与片段资料](docs/supplements-index.md) · [覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方卷制佐证](docs/target-evidence.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · [外部候选](docs/external-candidates.md) · [用卷范围线索](docs/usage-scope-leads.md) · [内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · [主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · [收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)
 
@@ -15,7 +15,7 @@
 | 2026 | 31 | [2026 年试卷](docs/year-index.md#2026-年) |
 | 2025 | 54 | [2025 年试卷](docs/year-index.md#2025-年) |
 | 2024 | 101 | [2024 年试卷](docs/year-index.md#2024-年) |
-| 2023 | 32 | [2023 年试卷](docs/year-index.md#2023-年) |
+| 2023 | 33 | [2023 年试卷](docs/year-index.md#2023-年) |
 | 2022 | 58 | [2022 年试卷](docs/year-index.md#2022-年) |
 | 2021 | 33 | [2021 年试卷](docs/year-index.md#2021-年) |
 | 2020 | 25 | [2020 年试卷](docs/year-index.md#2020-年) |
@@ -67,7 +67,7 @@
 | 生物 | 18 | [查看](docs/papers-index.md#生物) |
 | 综合文综 | 1 | [查看](docs/papers-index.md#综合文综) |
 | 综合理综 | 2 | [查看](docs/papers-index.md#综合理综) |
-| 英语 | 8 | [查看](docs/papers-index.md#英语) |
+| 英语 | 9 | [查看](docs/papers-index.md#英语) |
 | 语文 | 9 | [查看](docs/papers-index.md#语文) |
 
 ## 目录结构
