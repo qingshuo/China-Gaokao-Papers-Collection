@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-历史-d6cebc3653d3": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2012-2024·（安徽）历史高考真题/2024年高考历史试卷（安徽）（空白卷）.pdf",
+        "sha256": "d6cebc3653d39b6ff6aec2f511b953e5ad9219d2b1849f7b8c6bb32ffa8cbadd",
+        "year": "2024",
+        "region": "AH",
+        "paper_type": "安徽卷",
+        "subject": "历史",
+        "title": "2024年安徽省普通高中学业水平选择性考试历史",
+        "local_path": "papers/2024/AH/历史/安徽历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2012-2024·（安徽）历史高考真题/2024年高考历史试卷（安徽）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认青铜器、元代海运、役银分摊和恢复结婚证选择题，"
+            "秦汉西南部族分布图及末页田子茂生平史论题完整。"
+            "PDF 页码共 6 页，题号连续覆盖第 1 至 19 题，正文在第 6 页完整结束，作为新增安徽卷归档。"
+        ),
+    },
     "temp-v2-2024-政治-0eca27690a62": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（广东）政治高考真题/2024年高考政治试卷（广东）（空白卷）.pdf",
         "sha256": "0eca27690a6286349031879b7b70bb1e439c6a75d0fb9e5aa9be1516c2b8830d",
