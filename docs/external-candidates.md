@@ -3,7 +3,7 @@
 本页由 `python3 scripts/stats.py --write-external-candidates-index docs/external-candidates.md` 自动生成。
 这里的条目可帮助发现待补卷制，但文件**不在本仓库**；仍须核验卷制、内容完整性、来源稳定性和再发布许可，不能计入主库覆盖或作为自动去重依据。
 
-当前共有 **99** 条外部完整卷候选。
+当前共有 **98** 条外部完整卷候选。
 
 | 年份 | 地区 | 科目 | 卷种 | 候选文件/页面 | 来源 | 授权 | 状态 |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
@@ -32,7 +32,6 @@
 | 2023 | 广东 | 地理 | 广东卷 | [2023年广东地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年广东地理.docx) | github | 待核验 | discovered |
 | 2023 | 福建 | 地理 | 福建卷 | [2023年福建地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年福建地理.docx) | github | 待核验 | discovered |
 | 2023 | 重庆 | 地理 | 重庆卷 | [2023年重庆地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年重庆地理.docx) | github | 待核验 | discovered |
-| 2023 | 北京 | 地理 | 北京卷 | [2023年北京地理](https://raw.githubusercontent.com/Zaxaerith/GaokaoGEO/main/2023/2023年北京地理.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 语文 | 新高考II卷 | [2022年新高考II卷语文](https://raw.githubusercontent.com/Zaxaerith/GaokaoCHN/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83II%E5%8D%B7%E8%AF%AD%E6%96%87.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 英语 | 新高考I卷 | [2022年新高考I卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83I%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |
 | 2022 | 全国 | 英语 | 新高考II卷 | [2022年新高考II卷英语](https://raw.githubusercontent.com/Zaxaerith/GaokaoENG/main/2022/2022%E5%B9%B4%E6%96%B0%E9%AB%98%E8%80%83II%E5%8D%B7%E8%8B%B1%E8%AF%AD.docx) | github | 待核验 | discovered |

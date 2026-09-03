@@ -1183,6 +1183,27 @@ ADDITIONS = {
     },
 }
 
+# Materializations copy a reviewed local upload into an already catalogued
+# external-only candidate.  This preserves its record id and prevents the
+# same paper from appearing once as an external lead and again as a new row.
+MATERIALIZATIONS = {
+    "zaxaerith-2023-geo-bj": {
+        "source": "temp/版本2：地理（按省份分类）2008-2024/2008-2024·（北京）地理高考真题/2023年高考地理试卷（北京）（空白卷）.pdf",
+        "sha256": "eb95ecc06d72a10f410577bb9bf69be7f2b143ec8acf9ea285fcc29b7fa2d65f",
+        "year": "2023",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "地理",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）地理",
+        "local_path": "papers/2023/BJ/地理/北京地理-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：地理（按省份分类）2008-2024/2008-2024·（北京）地理高考真题/2023年高考地理试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认正式卷首、二十四节气网页图、垂直产业园图、青海省海南藏族自治州图，以及末页城市小微绿地材料题完整。"
+            "PDF 页码共 10 页，正文至第 9 页完整结束，第 10 页为空白尾页；以本地上传版本落库，原外部 DOCX 线索仅保留在既有说明中。"
+        ),
+    },
+}
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -1246,6 +1267,39 @@ def planned_additions(rows: list[dict[str, str]]) -> list[tuple[str, dict[str, s
     return plans
 
 
+def planned_materializations(
+    rows: list[dict[str, str]],
+) -> list[tuple[dict[str, str], dict[str, str], Path, Path]]:
+    """Return reviewed external candidates that can be safely made local."""
+    by_id = {row["record_id"]: row for row in rows}
+    plans = []
+    for record_id, decision in MATERIALIZATIONS.items():
+        row = by_id.get(record_id)
+        if row is None:
+            raise ValueError(f"materialization record not found: {record_id}")
+        source = ROOT / decision["source"]
+        destination = ROOT / decision["local_path"]
+        if (
+            row.get("sha256") == decision["sha256"]
+            and row.get("availability") == "local"
+            and row.get("local_path") == decision["local_path"]
+            and destination.is_file()
+            and sha256(destination) == decision["sha256"]
+        ):
+            continue
+        for field in ("year", "region", "subject"):
+            if row.get(field) != decision[field]:
+                raise ValueError(f"unexpected catalog identity for {record_id}: {field}")
+        if row.get("availability") != "external" or row.get("local_path"):
+            raise ValueError(f"unexpected materialization state for {record_id}")
+        if not source.is_file() or sha256(source) != decision["sha256"]:
+            raise ValueError(f"unexpected candidate hash for {record_id}")
+        if destination.exists():
+            raise FileExistsError(f"materialization destination already exists for {record_id}: {destination}")
+        plans.append((row, decision, source, destination))
+    return plans
+
+
 def mark_reviewed_replacements_verified(rows: list[dict[str, str]]) -> int:
     """Mark only already-applied, hash-locked review decisions as verified.
 
@@ -1279,11 +1333,17 @@ def main() -> int:
         rows = list(reader)
     plans = planned_replacements(rows)
     additions = planned_additions(rows)
+    materializations = planned_materializations(rows)
     for row, _, source, _, destination in plans:
         print(f"{row['record_id']}: {source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
     for _, decision, source, destination in additions:
         print(f"{source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
-    print(f"replacements={len(plans)} additions={len(additions)} mode={'apply' if args.apply else 'dry-run'}")
+    for row, _, source, destination in materializations:
+        print(f"{row['record_id']}: {source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
+    print(
+        f"replacements={len(plans)} additions={len(additions)} "
+        f"materializations={len(materializations)} mode={'apply' if args.apply else 'dry-run'}"
+    )
     if not args.apply:
         return 0
     for row, decision, source, current_destination, destination in plans:
@@ -1318,6 +1378,22 @@ def main() -> int:
             "status": "verified", "local_path": decision["local_path"], "sha256": decision["sha256"],
             "notes": decision["note"], "material_type": "完整试卷",
         })
+    for row, decision, source, destination in materializations:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        staged = destination.with_name(f".{destination.name}.temp-v2")
+        shutil.copy2(source, staged)
+        staged.replace(destination)
+        row["paper_type"] = decision["paper_type"]
+        row["title"] = decision["title"]
+        row["source_url"] = f"local://{quote(decision['source'], safe='/')}"
+        row["source_type"] = "local-upload"
+        row["license_status"] = "unknown"
+        row["availability"] = "local"
+        row["status"] = "verified"
+        row["local_path"] = decision["local_path"]
+        row["sha256"] = decision["sha256"]
+        if decision["note"] not in row["notes"]:
+            row["notes"] = f"{row['notes']}；{decision['note']}"
     verified_updates = mark_reviewed_replacements_verified(rows)
     if verified_updates:
         print(f"marked_verified={verified_updates}")
