@@ -865,6 +865,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2021-19-math": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2021年高考数学试卷（北京）（空白卷）.pdf",
+        "old_sha256": "a08b156fdef09fa60f955d165c09e6c7d94a53992136b98b2cf9d00922c43a7a",
+        "new_sha256": "b87d62489a1057e7720adbdff99b90f64ae4519e45515685f9a42b61370234f1",
+        "title": "2021年普通高等学校招生全国统一考试（北京卷）数学",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、四面体等首页题目，以及末页第 18 至 21 题核酸检测、函数、椭圆和数列题与旧版一致。"
+            "新版本保留正式卷首和“第 1 页/共 4 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
