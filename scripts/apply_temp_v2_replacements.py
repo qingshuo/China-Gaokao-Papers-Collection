@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-历史-e4971649b179": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（甘肃）历史高考真题/2024年高考历史试卷（甘肃）（空白卷）.pdf",
+        "sha256": "e4971649b179bb22af12d48587ea6aaa97d57dd7051f7ac74418c5e1774098ef",
+        "year": "2024",
+        "region": "GS",
+        "paper_type": "甘肃卷",
+        "subject": "历史",
+        "title": "2024年甘肃省普通高校招生统一考试历史",
+        "local_path": "papers/2024/GS/历史/甘肃历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2008-2024·（甘肃）历史高考真题/2024年高考历史试卷（甘肃）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认新石器大房子、秦代文书式、明代白银与古罗马军功财产选择题，"
+            "辽南北面官与格林纳达地图材料，以及末页第 20 题历史事件评述题完整。"
+            "PDF 页码共 6 页，卷首含‘机密★启用前’，题号连续覆盖第 1 至 20 题，正文在第 6 页完整结束，作为新增甘肃卷归档。"
+        ),
+    },
     "temp-v2-2024-生物-fbc270ca24c0": {
         "source": "temp/版本2：生物（按省份分类）2008-2024/2012-2024·（安徽）生物高考真题/2024年高考生物试卷（安徽）（空白卷）.pdf",
         "sha256": "fbc270ca24c03f2cc55a4a5218ac9442b3870384d073de7a4e6b2b0842880ccc",
