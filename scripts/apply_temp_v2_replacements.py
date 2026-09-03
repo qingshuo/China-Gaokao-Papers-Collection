@@ -18,6 +18,17 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-物理-4b8b23f5acb1": {
+        "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（湖南）物理高考真题/2024年高考物理试卷（湖南）（空白卷）.pdf",
+        "old_sha256": "4b8b23f5acb1e82820b34de666372c9293d16b68526fb6d3d515ce1f3133fb45",
+        "new_sha256": "53a18dc3499d46b71a283244b5375344a69ef6b82c60327a88571acb101914e7",
+        "title": "2024年普通高中学业水平选择性考试（湖南卷）物理",
+        "paper_type": "湖南卷",
+        "note": (
+            "内容复核：全文题干相似度 0.929；逐页视觉抽样确认第 1–6 题和末页圆轨道题图一致。"
+            "新版本保留“共 8 页”页码及正式卷首，旧版为 6 页重排版，故替换为新版本。"
+        ),
+    },
     "temp-2024-政治-8360f67645d2": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（山东）政治高考真题/2024年高考政治试卷（山东）（空白卷）.pdf",
         "old_sha256": "8360f67645d2b3c13eb4ae2acec799a9bf1ab43db678fbe3f33bc8efbeeb1c4b",
