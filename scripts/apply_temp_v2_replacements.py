@@ -1038,6 +1038,21 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2023-生物-3c668bfdb874": {
+        "source": "temp/版本2：生物（按省份分类）2008-2024/2008-2024·（北京）生物高考真题/2023年高考生物试卷（北京）（空白卷）.pdf",
+        "sha256": "3c668bfdb874659e07cd8232ca08b66f7cac0a60deb41391b6ec384c569668a0",
+        "year": "2023",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "生物",
+        "title": "2023年普通高中学业水平等级性考试（北京卷）生物",
+        "local_path": "papers/2023/BJ/生物/北京生物-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：生物（按省份分类）2008-2024/2008-2024·（北京）生物高考真题/2023年高考生物试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认正式卷首、运动供能比例与光合速率图、溶菌斑培养材料，以及末页 EdU/BrdU 双标记 DNA 复制图与基因敲除小鼠题完整。"
+            "PDF 页码共 10 页，正文至第 9 页完整结束，第 10 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2023-化学-e3c58da5936": {
         "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2024·（北京）化学高考真题/2023年高考化学试卷（北京）（空白卷）.pdf",
         "sha256": "e3c58da5936d302f4a4e3d177a985aad7b6c9fe88e7e738b0dfd099a335b3ac3",
