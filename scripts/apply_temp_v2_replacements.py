@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-生物-fbc270ca24c0": {
+        "source": "temp/版本2：生物（按省份分类）2008-2024/2012-2024·（安徽）生物高考真题/2024年高考生物试卷（安徽）（空白卷）.pdf",
+        "sha256": "fbc270ca24c03f2cc55a4a5218ac9442b3870384d073de7a4e6b2b0842880ccc",
+        "year": "2024",
+        "region": "AH",
+        "paper_type": "安徽卷",
+        "subject": "生物",
+        "title": "2024年安徽省普通高中学业水平选择性考试（安徽卷）生物学",
+        "local_path": "papers/2024/AH/生物/安徽生物-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：生物（按省份分类）2008-2024/2012-2024·（安徽）生物高考真题/2024年高考生物试卷（安徽）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认变形虫、PFK1、细胞信号通路与 RNA 聚合酶选择题，"
+            "OsNAC 图表和藻类培养实验，以及末页质粒构建、大肠杆菌发酵题完整。"
+            "PDF 页码共 9 页，题号连续覆盖第 1 至 20 题，正文在第 9 页完整结束，作为新增安徽卷归档。"
+        ),
+    },
     "temp-v2-2024-政治-579560302b13": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2012-2024·（安徽）政治高考真题/2024年高考政治试卷（安徽）（空白卷）.pdf",
         "sha256": "579560302b135fc44bd4855b36a3089b57b929d716a8c1fc8804beed780c3d22",
