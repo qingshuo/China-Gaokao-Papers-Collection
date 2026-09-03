@@ -18,6 +18,17 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-政治-1e6d66279d3e": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（湖南）政治高考真题/2024年高考政治试卷（湖南）（空白卷）.pdf",
+        "old_sha256": "1e6d66279d3ebb5075df46b4b565c5ec0d49d5f468d5ddd01b92a5b8991c447e",
+        "new_sha256": "3b5e2b1bbdab2f3c82b4948db068fc94e93458f0775d5bb993a96c0b8f2fda4f",
+        "title": "2024年湖南省普通高中学业水平选择性考试思想政治",
+        "paper_type": "湖南卷",
+        "note": (
+            "内容复核：全文题干相似度 0.960；逐页视觉抽样确认选择题、第 20 题和思维导图一致。"
+            "新版本保留“共 8 页”页码及完整正式页眉，旧版为 5 页重排版，故替换为新版本。"
+        ),
+    },
     "temp-2024-数学-3056423645c4": {
         "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（山东）数学高考真题/2024年高考数学试卷（新课标Ⅰ卷）（空白卷）.pdf",
         "old_sha256": "3056423645c4bc35e8bf2ad96f431bed0f140865a5de1a96d75fcd760c549e7e",

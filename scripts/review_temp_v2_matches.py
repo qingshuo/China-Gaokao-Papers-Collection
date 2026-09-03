@@ -11,13 +11,17 @@ from __future__ import annotations
 
 import argparse
 import csv
+import difflib
 import hashlib
+import logging
 import re
 from pathlib import Path
 
 from pypdf import PdfReader
 
 from stats import CATALOG, ROOT, read_csv
+
+logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 
 def normalized_text(path: Path) -> tuple[int | None, str, str]:
@@ -32,6 +36,14 @@ def normalized_text(path: Path) -> tuple[int | None, str, str]:
 
 def digest(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest() if text else ""
+
+
+def similarity(first: str, second: str) -> float:
+    """Return a layout-tolerant text similarity for human-review ordering."""
+    # This is only a prioritisation signal, never proof that two papers are
+    # identical.  Bounding the input and keeping SequenceMatcher's junk
+    # heuristic makes a full 400-pair review tractable for long Chinese PDFs.
+    return difflib.SequenceMatcher(None, first[:12_000], second[:12_000]).ratio()
 
 
 def compare(audit_rows: list[dict[str, str]], catalog_rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -57,6 +69,8 @@ def compare(audit_rows: list[dict[str, str]], catalog_rows: list[dict[str, str]]
                 result = "text_unavailable_or_too_short"
             elif candidate_pages == existing_pages and digest(candidate_text) == digest(existing_text):
                 result = "full_text_and_page_match"
+            elif similarity(candidate_text, existing_text) >= 0.72:
+                result = "likely_same_content_layout_difference"
             else:
                 result = "content_or_page_difference"
             eligible = (
@@ -70,6 +84,7 @@ def compare(audit_rows: list[dict[str, str]], catalog_rows: list[dict[str, str]]
                 "existing_pages": "" if existing_pages is None else str(existing_pages),
                 "candidate_text_sha256": digest(candidate_text), "existing_text_sha256": digest(existing_text),
                 "candidate_text_chars": str(len(candidate_text)), "existing_text_chars": str(len(existing_text)),
+                "text_similarity": f"{similarity(candidate_text, existing_text):.3f}" if candidate_text and existing_text else "",
                 "result": result, "replacement_candidate": "yes" if eligible else "no",
                 "candidate_error": candidate_error, "existing_error": existing_error,
             })
