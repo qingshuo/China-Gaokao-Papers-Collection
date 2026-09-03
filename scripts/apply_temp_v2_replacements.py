@@ -537,6 +537,29 @@ def planned_replacements(
     return plans
 
 
+def mark_reviewed_replacements_verified(rows: list[dict[str, str]]) -> int:
+    """Mark only already-applied, hash-locked review decisions as verified.
+
+    ``verified`` records the repository's content and layout review.  It does
+    not claim that a local upload has an official source or a redistribution
+    licence; those remain in their separate catalogue fields.
+    """
+    by_id = {row["record_id"]: row for row in rows}
+    updates = 0
+    for record_id, decision in REPLACEMENTS.items():
+        row = by_id[record_id]
+        destination = ROOT / decision.get("local_path", row["local_path"])
+        if (
+            row.get("sha256") == decision["new_sha256"]
+            and destination.is_file()
+            and sha256(destination) == decision["new_sha256"]
+            and row.get("status") != "verified"
+        ):
+            row["status"] = "verified"
+            updates += 1
+    return updates
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true", help="replace reviewed files and update the catalog")
@@ -563,9 +586,13 @@ def main() -> int:
         row["paper_type"] = decision["paper_type"]
         row["region"] = decision.get("region", row["region"])
         row["local_path"] = decision.get("local_path", row["local_path"])
+        row["status"] = "verified"
         row["source_url"] = f"local://{quote(decision['source'], safe='/')}"
         if decision["note"] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{decision['note']}"
+    verified_updates = mark_reviewed_replacements_verified(rows)
+    if verified_updates:
+        print(f"marked_verified={verified_updates}")
     with tempfile.NamedTemporaryFile("w", newline="", encoding="utf-8", dir=CATALOG.parent, delete=False) as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
