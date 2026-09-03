@@ -767,6 +767,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-数学-2017-008": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2017年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "91a3f2029d2e705d52c435f109f8cd5742d5ffa8ae4b2fdfa5fcff62c8f2d135",
+        "new_sha256": "16aa8936986fde7fca792c7d8b1dac0a0765502565ac5bfaa0e18a1c4ffa83c5",
+        "title": "2017年北京市高考数学试卷（文科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、程序框图等首页题目，以及末页第 20 题指数函数与三角函数题与旧版一致。"
+            "新版本保留“第 1 页/共 6 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-数学-2017-009": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2017年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "d2fb456023eb068a6e489e62150d6e8b02b8fc1a3ee6c5a64d372045e731ec70",
+        "new_sha256": "f07c84471eadfb29aaf18d1937c0e5fd142f8cde70053a92d5e681985d028853",
+        "title": "2017年北京市高考数学试卷（理科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、程序框图等首页题目，以及末页第 20 题等差数列最大值题与旧版一致。"
+            "新版本保留“第 1 页/共 6 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
