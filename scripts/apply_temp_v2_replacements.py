@@ -1038,6 +1038,23 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2022-历史-59b9779ecb96": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2022年高考历史试卷（北京）（空白卷）.pdf",
+        "sha256": "59b9779ecb96ccb495d81a90bb9449c4028d35dd662add1bbfb6f88af81c3413",
+        "year": "2022",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "历史",
+        "title": "2022年普通高中学业水平等级性考试（北京卷）历史",
+        "local_path": "papers/2022/BJ/历史/北京历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2022年高考历史试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认卷首越文化墓葬地图、1950 年高校课程与中非文化非洲行选择题，"
+            "拉丁美洲与欧洲交流材料题，以及末页第 20 题一战华工研究资料题完整。"
+            "候选将正式卷内容重排为 11 页，卷首保留的原题面说明为 9 页；题号连续覆盖第 1 至 20 题，"
+            "无答案内容，故作为内容已核验的本地重排 PDF 入库，不声称保留原始分页。"
+        ),
+    },
     "temp-v2-2022-政治-c937eed7070e": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2022年高考政治试卷（北京）（空白卷）.pdf",
         "sha256": "c937eed7070e1c5e8592fb7a09a13a66c32d7e0add83bebaf33724ca4548fdbc",
