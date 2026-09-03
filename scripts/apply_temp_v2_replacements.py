@@ -1053,6 +1053,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2022-生物-95e322c587f9": {
+        "source": "temp/版本2：生物（按省份分类）2008-2024/2008-2024·（北京）生物高考真题/2022年高考生物试卷（北京）（空白卷）.pdf",
+        "sha256": "95e322c587f97b63c4e737ab4681070b0dcb3b6eae68d07d808e8ab159b5cbdb",
+        "year": "2022",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "生物",
+        "title": "北京市2022年普通高中学业水平等级性考试生物",
+        "local_path": "papers/2022/BJ/生物/北京生物-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：生物（按省份分类）2008-2024/2008-2024·（北京）生物高考真题/2022年高考生物试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认鱼腥蓝细菌、光合速率与乳酸浓度图、实验操作顺序题，"
+            "蚜虫—布氏菌生态关系图及第 20 题转基因斑马鱼水体监测题完整。"
+            "PDF 页码共 11 页，正文至第 10 页完整结束，第 11 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2022-历史-59b9779ecb96": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（北京）历史高考真题/2022年高考历史试卷（北京）（空白卷）.pdf",
         "sha256": "59b9779ecb96ccb495d81a90bb9449c4028d35dd662add1bbfb6f88af81c3413",
