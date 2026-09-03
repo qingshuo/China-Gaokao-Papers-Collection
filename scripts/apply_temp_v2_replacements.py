@@ -682,6 +682,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2015-math-8b894ca18724": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2015年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "69517ac5eb73d4388a2b873c17b34aecd8a1c2e46108c10ba51b6134c0a6ca3b",
+        "new_sha256": "6316f0c6f9c39ee0561d1ea1e05d4382b60f536a4fdc74725ca58630f53843f6",
+        "title": "2015年北京市高考数学试卷（文科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、抽样教师人数表等首页题目，以及末页第 19、20 题与旧版一致。"
+            "新版本保留“第 1 页/共 6 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2015-math-1ee706d97561": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2015年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "8fafc5234c89a7b36412208941d4a003f2a692ad2afa067b9e6ed68e7b33fc6e",
+        "new_sha256": "0417f3cd05f5b0fa4c6d38a7fa11228f4ffd1d67ba859a6853b5a43178f4347b",
+        "title": "2015年北京市高考数学试卷（理科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认复数、程序框图、燃油效率图等首页题目，以及末页第 20 题数列集合题与旧版一致。"
+            "新版本保留“第 1 页/共 6 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
