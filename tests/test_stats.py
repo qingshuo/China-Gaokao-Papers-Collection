@@ -83,6 +83,11 @@ TEMP_V2_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_temp_v2", TEM
 audit_temp_v2 = importlib.util.module_from_spec(TEMP_V2_AUDIT_SPEC)
 TEMP_V2_AUDIT_SPEC.loader.exec_module(audit_temp_v2)
 
+TEMP_V2_REPLACEMENTS_SCRIPT = Path(__file__).parents[1] / "scripts" / "apply_temp_v2_replacements.py"
+TEMP_V2_REPLACEMENTS_SPEC = importlib.util.spec_from_file_location("apply_temp_v2_replacements", TEMP_V2_REPLACEMENTS_SCRIPT)
+apply_temp_v2_replacements = importlib.util.module_from_spec(TEMP_V2_REPLACEMENTS_SPEC)
+TEMP_V2_REPLACEMENTS_SPEC.loader.exec_module(apply_temp_v2_replacements)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -395,6 +400,12 @@ class StatsTests(unittest.TestCase):
         autumn = audit_temp_v2.identity("2020", "数学", "2020年高考数学试卷（上海）（秋考）", "SH")
         self.assertEqual(spring, ("2020", "SH", "数学", "春考", ""))
         self.assertEqual(autumn, ("2020", "SH", "数学", "秋考", ""))
+
+    def test_temp_v2_replacement_requires_explicit_hashes(self):
+        decision = apply_temp_v2_replacements.REPLACEMENTS["temp-2024-数学-3056423645c4"]
+        self.assertEqual(len(decision["old_sha256"]), 64)
+        self.assertEqual(len(decision["new_sha256"]), 64)
+        self.assertNotEqual(decision["old_sha256"], decision["new_sha256"])
 
     def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
         path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"
