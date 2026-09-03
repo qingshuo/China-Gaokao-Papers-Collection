@@ -935,6 +935,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2023-34-math": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（上海）数学高考真题/2023年高考数学试卷（上海）（秋考）（空白卷）.pdf",
+        "old_sha256": "bb82523adccff1f04a7767fbd70ab537f7834910e37dcd8f3618d57163c8f0da",
+        "new_sha256": "6f2b5d9bb662ea4a90ee50fa85460f68f48f597b50524679142f77abe928db24",
+        "title": "2023年普通高等学校招生考试（上海卷）数学（秋考）",
+        "paper_type": "上海卷（秋考）",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认不等式、向量、等比数列等首页填空题，身高体重散点图、汽车模型概率题以及末页第 20、21 题与旧版一致。"
+            "候选文件名明确为秋考，已与另存的上海春考候选区分；候选卷首标注原卷共 5 页，当前重排 PDF 正文为 6 页并有第 7 页空白尾页，试题内容完整。"
+            "旧版将同卷横排为 2 页 A3，故替换为新版本。替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
