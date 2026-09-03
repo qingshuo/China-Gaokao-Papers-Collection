@@ -18,6 +18,17 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-生物-80efc04d9ec6": {
+        "source": "temp/版本2：生物（按省份分类）2008-2024/2008-2024·（广东）生物高考真题/2024年高考生物试卷（广东）（空白卷）.pdf",
+        "old_sha256": "80efc04d9ec65cc287524eb1a94d65f78e89ad60e92ba3441f2e7baa497080b3",
+        "new_sha256": "d3bde4db925411b608fffce54d27fbdbc670b24d643fbf3ba98f1727b946dda0",
+        "title": "2024年广东省普通高中学业水平选择性考试生物",
+        "paper_type": "广东卷",
+        "note": (
+            "内容复核：全文题干相似度 0.923；逐页视觉抽样确认“碳汇渔业”选择题及末页蓝光敏蛋白图、材料题一致。"
+            "新版本保留“第 1 页/共 11 页”页码及完整正式标题，旧版为 7 页重排版，故替换为新版本。"
+        ),
+    },
     "temp-2024-历史-abec439eb632": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（湖北）历史高考真题/2024年高考历史试卷（湖北）（空白卷）.pdf",
         "old_sha256": "abec439eb632166ef421d9a0ee27a2c191b91b4da99d29ba1b35decfa81f35c9",

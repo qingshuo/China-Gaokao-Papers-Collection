@@ -7,8 +7,8 @@
 
 | 结果 | 数量 |
 | --- | ---: |
-| exact_existing_hash | 15 |
-| same_identity_existing | 416 |
+| exact_existing_hash | 16 |
+| same_identity_existing | 415 |
 | temp_identity_duplicate | 2990 |
 | new_candidate | 1581 |
 | ambiguous_scope | 17 |
