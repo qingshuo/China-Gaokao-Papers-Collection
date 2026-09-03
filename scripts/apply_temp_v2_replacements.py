@@ -18,6 +18,20 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-政治-d225361190fe": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2010-2024·（辽宁）政治高考真题/2024年高考政治试卷（辽宁）（空白卷）.pdf",
+        "old_sha256": "d225361190fe41a5734f8c767ec13cd1fb445913490d729c8de85081e04f4847",
+        "new_sha256": "135163656649ab04db7682a6181aea87260813a42564d09c3782be1b9c34d2c8",
+        "title": "2024年普通高等学校招生选择性考试（辽宁卷）思想政治",
+        "paper_type": "辽宁卷",
+        "region": "LN",
+        "local_path": "papers/2024/LN/政治/辽宁政治-试题-p.pdf",
+        "note": (
+            "内容复核：全文题干相似度 0.939；逐页视觉抽样确认选择题、末页“冰上丝绸之路”地图和材料题一致。"
+            "新版本保留“共 8 页”页码及完整正式标题，旧版为 5 页重排版，故替换为新版本。"
+            "文件标题与内容均明确为辽宁卷，修正原先误置于全国目录的记录。"
+        ),
+    },
     "temp-2024-历史-1c421feb1b55": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（内蒙古）历史高考真题/2024年高考历史试卷（全国甲卷）（空白卷）.pdf",
         "old_sha256": "1c421feb1b55f909c241e20508e701732a5ef0fd81d0678bf90ac04122493836",
@@ -128,7 +142,9 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def planned_replacements(rows: list[dict[str, str]]) -> list[tuple[dict[str, str], dict[str, str], Path, Path]]:
+def planned_replacements(
+    rows: list[dict[str, str]],
+) -> list[tuple[dict[str, str], dict[str, str], Path, Path, Path]]:
     by_id = {row["record_id"]: row for row in rows}
     plans = []
     for record_id, decision in REPLACEMENTS.items():
@@ -136,17 +152,20 @@ def planned_replacements(rows: list[dict[str, str]]) -> list[tuple[dict[str, str
         if row is None:
             raise ValueError(f"replacement record not found: {record_id}")
         source = ROOT / decision["source"]
-        destination = ROOT / row["local_path"]
-        if not source.is_file() or not destination.is_file():
+        current_destination = ROOT / row["local_path"]
+        destination = ROOT / decision.get("local_path", row["local_path"])
+        if not source.is_file() or not current_destination.is_file():
             raise FileNotFoundError(f"replacement files missing for {record_id}")
-        current_hash = sha256(destination)
+        current_hash = sha256(current_destination)
         if row.get("sha256") == decision["new_sha256"] and current_hash == decision["new_sha256"]:
             continue
         if row.get("sha256") != decision["old_sha256"] or current_hash != decision["old_sha256"]:
             raise ValueError(f"unexpected current hash for {record_id}")
         if sha256(source) != decision["new_sha256"]:
             raise ValueError(f"unexpected candidate hash for {record_id}")
-        plans.append((row, decision, source, destination))
+        if destination != current_destination and destination.exists():
+            raise FileExistsError(f"new destination already exists for {record_id}: {destination}")
+        plans.append((row, decision, source, current_destination, destination))
     return plans
 
 
@@ -159,23 +178,28 @@ def main() -> int:
         fieldnames = list(reader.fieldnames or [])
         rows = list(reader)
     plans = planned_replacements(rows)
-    for row, _, source, destination in plans:
+    for row, _, source, _, destination in plans:
         print(f"{row['record_id']}: {source.relative_to(ROOT)} -> {destination.relative_to(ROOT)}")
     print(f"replacements={len(plans)} mode={'apply' if args.apply else 'dry-run'}")
     if not args.apply:
         return 0
-    for row, decision, source, destination in plans:
+    for row, decision, source, current_destination, destination in plans:
+        destination.parent.mkdir(parents=True, exist_ok=True)
         staged = destination.with_name(f".{destination.name}.temp-v2")
         shutil.copy2(source, staged)
         staged.replace(destination)
+        if current_destination != destination:
+            current_destination.unlink()
         row["sha256"] = decision["new_sha256"]
         row["title"] = decision["title"]
         row["paper_type"] = decision["paper_type"]
+        row["region"] = decision.get("region", row["region"])
+        row["local_path"] = decision.get("local_path", row["local_path"])
         row["source_url"] = f"local://{quote(decision['source'], safe='/')}"
         if decision["note"] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{decision['note']}"
     with tempfile.NamedTemporaryFile("w", newline="", encoding="utf-8", dir=CATALOG.parent, delete=False) as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
         temporary = Path(handle.name)

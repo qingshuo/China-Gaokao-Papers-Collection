@@ -102,7 +102,11 @@ def main() -> int:
     output = ROOT / args.report
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]) if rows else ["candidate_source"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(rows[0]) if rows else ["candidate_source"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
     counts: dict[str, int] = {}

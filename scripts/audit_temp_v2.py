@@ -222,7 +222,7 @@ def main() -> int:
     report = ROOT / args.report
     report.parent.mkdir(parents=True, exist_ok=True)
     with report.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     summary = ROOT / args.summary
