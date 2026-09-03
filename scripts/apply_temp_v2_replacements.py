@@ -570,6 +570,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2011-math-17b51fb3a9cb": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2011年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "1ba0def5e75e0a4d7cc4e4e52a11a65ad598b98bc2a8e6c98df8f29fb6b9f4a6",
+        "new_sha256": "3c0c87811e8e49a52fca5971e7f72de6f63526db75ba425fec38d458c3750ac4",
+        "title": "2011年普通高等学校招生全国统一考试数学（文）（北京卷）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、四棱锥三视图等首页题目，以及末页第 19、20 题与旧版一致。"
+            "新版本保留完整卷首和“第 1 页/共 4 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2011-math-01e8125ad329": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2011年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "79351b2b5d5afd29a2d46d50526284443edad4deb64fbaf841db31ce2570c311",
+        "new_sha256": "814da2b336298457349b0950a594aff9274ca68cc85f714382721d639386df84",
+        "title": "2011年普通高等学校招生全国统一考试数学（理）（北京卷）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、程序框图等首页题目，以及末页第 18–20 题与旧版一致。"
+            "新版本保留“绝密★使用完毕前”卷首和“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
