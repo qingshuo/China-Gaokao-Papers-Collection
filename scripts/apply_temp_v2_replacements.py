@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-政治-0eca27690a62": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（广东）政治高考真题/2024年高考政治试卷（广东）（空白卷）.pdf",
+        "sha256": "0eca27690a6286349031879b7b70bb1e439c6a75d0fb9e5aa9be1516c2b8830d",
+        "year": "2024",
+        "region": "GD",
+        "paper_type": "广东卷",
+        "subject": "政治",
+        "title": "2024年广东省普通高中学业水平选择性考试政治",
+        "local_path": "papers/2024/GD/政治/广东政治-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：政治（按省份分类）2008-2024/2008-2024·（广东）政治高考真题/2024年高考政治试卷（广东）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认改革开放、低空经济与政协—检察衔接选择题，"
+            "全国人大备案审查材料、以旧换新压力锅案例，以及末页人工智能教学材料题完整。"
+            "PDF 页码共 8 页，题号连续覆盖第 1 至 20 题，正文在第 8 页完整结束，作为新增广东卷归档。"
+        ),
+    },
     "temp-v2-2024-化学-042fdcf7d971": {
         "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2024·（广东）化学高考真题/2024年高考化学试卷（广东）（空白卷）.pdf",
         "sha256": "042fdcf7d971f58c70dc73170b8914b1483cb493895929b29d031d2672441eb1",
