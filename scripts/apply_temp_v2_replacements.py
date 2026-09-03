@@ -626,6 +626,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2013-math-c7ee5ce59274": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2013年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "e5d575877a60255378c48143be5cb34e493eabf93499370c80f92f21d3c4f60b",
+        "new_sha256": "0d50635724e3db09785a34c2d25db47abcd41e2d454a90ab8658e5b542e7db68",
+        "title": "2013年北京市高考数学试卷（文科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、程序框图、空气质量指数图等首页题目，以及末页第 19、20 题与旧版一致。"
+            "新版本保留“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2013-math-62d175a989c1": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2013年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "d219d2bb0c93287c0eedfdc5f12ea85682a5ac3b2ddf2f2146e69e2337797062",
+        "new_sha256": "529c1f4565045928e6cc8dba5ffb030c270b8e01b29e2929e4f986d8fe74251b",
+        "title": "2013年北京市高考数学试卷（理科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、程序框图等首页题目，以及末页第 20 题非负整数数列题与旧版一致。"
+            "新版本保留“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
