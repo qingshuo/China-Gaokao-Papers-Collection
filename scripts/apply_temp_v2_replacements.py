@@ -527,6 +527,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2009-math-a1fa9a48ba12": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2009年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "5b310eb0f16d1bd48553d20e7f16b10784e6c83787ef7dd8fa96e3065ef4c159",
+        "new_sha256": "b4bf76ab92171093934f8cc1a4886ab06728759198e447a86c73511fa05c39ee",
+        "title": "2009年普通高等学校招生全国统一考试数学（文史类）（北京卷）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、向量与四棱锥等首页题目，以及末页第 18–20 题与旧版一致。"
+            "新版本保留完整卷首和“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2009-math-702797abf0a6": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2009年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "f5ca2006abecc7e9529b7adcddcda172d995b4910e43445e33125234efcfc4c2",
+        "new_sha256": "4cdafd7948bc5fa2ecc30593fc71933da292b7595b1ac739533a0265be6e37c2",
+        "title": "2009年普通高等学校招生全国统一考试数学（理工农医类）（北京卷）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认复数、向量与三棱锥等首页题目，以及末页第 18–20 题与旧版一致。"
+            "新版本保留完整卷首和“第 1 页/共 4 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
