@@ -339,6 +339,7 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(stats.review_hint(complete), "优先版本；待官方核验")
         self.assertEqual(stats.review_hint(conflict), "题干冲突；待官方核验")
         self.assertEqual(stats.review_hint(ordinary), "—")
+        self.assertEqual(stats.review_hint({**ordinary, "status": "verified"}), "内容已核验")
 
     def test_pdf_format_deduplication_requires_exact_catalog_identity(self):
         base = {

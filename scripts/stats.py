@@ -68,6 +68,8 @@ def material_type(row: dict[str, str]) -> str:
 
 def review_hint(row: dict[str, str]) -> str:
     """Expose evidence-backed variant cautions in every main-paper index."""
+    if row.get("status") == "verified":
+        return "内容已核验"
     notes = row.get("notes", "")
     if "第 9 题多出一条背景句" in notes:
         return "优先版本；待官方核验"
