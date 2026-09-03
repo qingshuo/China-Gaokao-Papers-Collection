@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-化学-042fdcf7d971": {
+        "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2024·（广东）化学高考真题/2024年高考化学试卷（广东）（空白卷）.pdf",
+        "sha256": "042fdcf7d971f58c70dc73170b8914b1483cb493895929b29d031d2672441eb1",
+        "year": "2024",
+        "region": "GD",
+        "paper_type": "广东卷",
+        "subject": "化学",
+        "title": "2024年普通高中学业水平选择性考试（广东卷）化学",
+        "local_path": "papers/2024/GD/化学/广东化学-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：化学（按省份分类）2008-2024/2008-2024·（广东）化学高考真题/2024年高考化学试卷（广东）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认龙纹文物、氯气制备装置与可运动员补充能量物质选择题，"
+            "镓提取的 LAEM 工艺图，以及末页固载铜催化材料的绿色合成题完整。"
+            "PDF 页码共 11 页，题号连续覆盖第 1 至 20 题，正文在第 11 页完整结束，作为新增广东卷归档。"
+        ),
+    },
     "temp-v2-2024-历史-52b407805408": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（广东）历史高考真题/2024年高考历史试卷（广东）（空白卷）.pdf",
         "sha256": "52b407805408e25964be04ba2b6f9cfd9c7ccd379e68b1fbad9fdc09795eb40c",
