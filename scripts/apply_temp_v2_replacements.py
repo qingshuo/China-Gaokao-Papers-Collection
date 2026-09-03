@@ -499,6 +499,34 @@ REPLACEMENTS = {
             "候选虽位于省份分类目录，但卷首明确为新课标Ⅰ卷，仍按全国唯一身份归档。"
         ),
     },
+    "deekur-2008-math-518f683a3be0": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2008年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "9d725e3f7011f50eddddd9bebd62825365c218b08fa0c920ac23b57228f590f9",
+        "new_sha256": "21f21a98477ed68d4141ac7a4330280ef2acf225ae58f26f1988cc16eb4eb541",
+        "title": "2008年普通高等学校招生考试（北京卷·文史类）数学",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、三棱锥与数列等首页题目，以及末页第 19、20 题与旧版一致。"
+            "新版本保留“机密★启用前”卷首和“第 1 页/共 4 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2008-math-f6e40a326bfd": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2008年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "1ba43840bfc822e6bcd4a1c04e69becd857890f1abf3da09910b4f26ae25c9a8",
+        "new_sha256": "c66113185120c2d22bdc3d2625fbedc3d833a8130a7e78c2d6d01a7638aafba7",
+        "title": "2008年普通高等学校招生考试（北京卷·理工农医类）数学",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数与三棱锥等首页题目，以及末页第 18–20 题与旧版一致。"
+            "新版本保留完整卷首和“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
@@ -721,6 +749,8 @@ def main() -> int:
         row["local_path"] = decision.get("local_path", row["local_path"])
         row["status"] = "verified"
         row["source_url"] = f"local://{quote(decision['source'], safe='/')}"
+        row["source_type"] = decision.get("source_type", row["source_type"])
+        row["license_status"] = decision.get("license_status", row["license_status"])
         if decision["note"] not in row["notes"]:
             row["notes"] = f"{row['notes']}；{decision['note']}"
     for record_id, decision, source, destination in additions:
