@@ -78,6 +78,11 @@ IMPORT_DEEKUR_SPEC = importlib.util.spec_from_file_location("import_deekur_math"
 import_deekur_math = importlib.util.module_from_spec(IMPORT_DEEKUR_SPEC)
 IMPORT_DEEKUR_SPEC.loader.exec_module(import_deekur_math)
 
+TEMP_V2_AUDIT_SCRIPT = Path(__file__).parents[1] / "scripts" / "audit_temp_v2.py"
+TEMP_V2_AUDIT_SPEC = importlib.util.spec_from_file_location("audit_temp_v2", TEMP_V2_AUDIT_SCRIPT)
+audit_temp_v2 = importlib.util.module_from_spec(TEMP_V2_AUDIT_SPEC)
+TEMP_V2_AUDIT_SPEC.loader.exec_module(audit_temp_v2)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -376,6 +381,20 @@ class StatsTests(unittest.TestCase):
         pending, reviewed = audit_duplicates.partition_groups(audit_duplicates.candidate_groups([conflict_a, conflict_b, pending_a, pending_b]))
         self.assertEqual(len(pending), 1)
         self.assertEqual(len(reviewed), 1)
+
+    def test_temp_v2_audit_maps_national_papers_out_of_province_directories(self):
+        key = audit_temp_v2.identity("2015", "数学", "2015年高考数学试卷（理）（新课标Ⅰ）（空白卷）", "HE")
+        self.assertEqual(key, ("2015", "全国", "数学", "全国1卷", "理"))
+
+    def test_temp_v2_audit_keeps_explicit_local_scope_and_flags_directory_mismatch(self):
+        key = audit_temp_v2.identity("2019", "语文", "2019年高考语文试卷（浙江）（空白卷）", "JX")
+        self.assertEqual(key, ("2019", "ZJ", "语文", "地方卷", ""))
+
+    def test_temp_v2_audit_distinguishes_spring_and_autumn_papers(self):
+        spring = audit_temp_v2.identity("2020", "数学", "2020年高考数学试卷（上海）（春考）", "SH")
+        autumn = audit_temp_v2.identity("2020", "数学", "2020年高考数学试卷（上海）（秋考）", "SH")
+        self.assertEqual(spring, ("2020", "SH", "数学", "春考", ""))
+        self.assertEqual(autumn, ("2020", "SH", "数学", "秋考", ""))
 
     def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
         path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"
