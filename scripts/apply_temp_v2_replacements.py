@@ -725,6 +725,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "temp-2024-化学-94ba9126754e": {
+        "source": "temp/版本2：化学（按省份分类）2008-2024/2008-2024·（甘肃）化学高考真题/2024年高考化学试卷（甘肃）（空白卷）.pdf",
+        "old_sha256": "94ba9126754e005694c77986f714e05d8bc46bd7f8cff3d642d9c4455b0519c6",
+        "new_sha256": "b2bd2ca630c5a2e035447a0ef4e68af3b737c3ba1f71d417aeb55b86a55d565d",
+        "title": "2024年甘肃省普通高校招生统一考试化学",
+        "paper_type": "甘肃卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：逐页检查确认金戈铁马、固体电解池、高炉渣、粗硅制备及末页山药素-1 合成路线等题目与旧版一致。"
+            "新版本含“机密★启用前”正式卷首、注意事项和“第 1 页/共 9 页”连续页码；旧版为 5 页重排版，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
