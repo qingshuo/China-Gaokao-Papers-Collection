@@ -18,6 +18,21 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "deekur-物理-2022-073": {
+        "source": "temp/版本2：物理（按省份分类）2008-2024/2008-2024·（北京）物理高考真题/2022年高考物理试卷（北京）（空白卷）.pdf",
+        "old_sha256": "701debb666df6b7d225ce1a12e62aebee1cb5eb27f2286daaec520f488585e69",
+        "new_sha256": "db0f19fd954d419de97388cd1d3957069fdf42be487032f6ad86a807fc1dc70c",
+        "title": "北京市2022年普通高中学业水平等级性考试物理",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认氢原子、理想气体、变压器等卷首题目，雪如意跳台滑雪、重锤纸带实验、"
+            "排球与平行板、流浪地球题，以及末页第 20 题地磁场测量题完整。"
+            "候选无答案；旧版为 13 页且含红色答案解析，故替换为本地上传的无答案版本。"
+            "候选将原题面标注的 8 页内容重排为 10 页，正文至第 9 页结束，第 10 页为空白尾页。"
+        ),
+    },
     "temp-2024-生物-4cc5169272d9": {
         "source": "temp/版本2：生物（按省份分类）2008-2024/2010-2024·（辽宁）生物高考真题/2024年高考生物试卷（辽宁）（空白卷）.pdf",
         "old_sha256": "4cc5169272d91080fdfc66da8561592fbd2a8f1d13020c1ed184aab989cab46f",
