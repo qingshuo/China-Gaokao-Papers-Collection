@@ -18,6 +18,17 @@ from urllib.parse import quote
 from stats import CATALOG, ROOT
 
 REPLACEMENTS = {
+    "temp-2024-政治-8360f67645d2": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（山东）政治高考真题/2024年高考政治试卷（山东）（空白卷）.pdf",
+        "old_sha256": "8360f67645d2b3c13eb4ae2acec799a9bf1ab43db678fbe3f33bc8efbeeb1c4b",
+        "new_sha256": "670459b88c6624489c0cb13ff1cf4e7631ac38fcd3b2a5496cef1d4741e3c4e1",
+        "title": "2024年全省普通高中学业水平等级考试思想政治",
+        "paper_type": "山东卷",
+        "note": (
+            "内容复核：全文题干相似度 0.953；逐页视觉抽样确认选择题、图表材料及第 18–19 题一致。"
+            "新版本保留“共 8 页”页码及完整正式页眉，旧版为 5 页重排版，故替换为新版本。"
+        ),
+    },
     "temp-2024-政治-1e6d66279d3e": {
         "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（湖南）政治高考真题/2024年高考政治试卷（湖南）（空白卷）.pdf",
         "old_sha256": "1e6d66279d3ebb5075df46b4b565c5ec0d49d5f468d5ddd01b92a5b8991c447e",
