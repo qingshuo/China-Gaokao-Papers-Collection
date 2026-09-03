@@ -1038,6 +1038,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2022-政治-c937eed7070e": {
+        "source": "temp/版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2022年高考政治试卷（北京）（空白卷）.pdf",
+        "sha256": "c937eed7070e1c5e8592fb7a09a13a66c32d7e0add83bebaf33724ca4548fdbc",
+        "year": "2022",
+        "region": "BJ",
+        "paper_type": "北京卷",
+        "subject": "政治",
+        "title": "2022年北京市普通高中学业水平等级性考试思想政治",
+        "local_path": "papers/2022/BJ/政治/北京政治-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：政治（按省份分类）2008-2024/2008-2024·（北京）政治高考真题/2022年高考政治试卷（北京）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认卷首百年团史材料、飞花令和北京证券交易所选择题，"
+            "以及第 8 页滨水空间协商议事表与第 9 页第 20 题习近平新时代中国特色社会主义思想材料题完整。"
+            "PDF 页码共 10 页，卷首明确试卷正文共 9 页，正文至第 9 页完整结束，第 10 页为空白尾页，作为新增北京卷归档。"
+        ),
+    },
     "temp-v2-2023-英语-4d30bc52c504": {
         "source": "temp/版本2：英语（按省份分类）2008-2024/2008-2024·（北京）英语高考真题/2023年高考英语试卷（北京）（机考 无听力）（空白卷）.pdf",
         "sha256": "4d30bc52c504eb1084ed172343016b361a4341b43908c2b752958c15f945f852",
