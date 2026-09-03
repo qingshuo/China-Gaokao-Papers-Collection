@@ -739,6 +739,34 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2016-math-3c69c19aa5f4": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2016年高考数学试卷（文）（北京）（空白卷）.pdf",
+        "old_sha256": "f25691253d50ee9aae94243518695e8e7793e32e4b3f22077c9bf6407272d89e",
+        "new_sha256": "e1eac11cff30c5c92922255da9a18da7aa2c8ab55e3ef63b1f72bbb279154319",
+        "title": "2016年北京市高考数学试卷（文科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、程序框图等首页题目，以及末页第 19 题椭圆与第 20 题三次函数题与旧版一致。"
+            "新版本保留“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
+    "deekur-2016-math-9da0398f5d9a": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2016年高考数学试卷（理）（北京）（空白卷）.pdf",
+        "old_sha256": "9be74675257a9c576c925b30d079b06834f2ea7fef941acafdbed8a816cc9aa9",
+        "new_sha256": "90a39e2937afb6c4d1b1fb1cd4c68191b75b95652a714a616622201967dd9908",
+        "title": "2016年北京市高考数学试卷（理科）",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、线性规划、程序框图等首页题目，以及末页第 19 题椭圆与第 20 题数列“G 时刻”题与旧版一致。"
+            "新版本保留“第 1 页/共 5 页”连续页码；旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
