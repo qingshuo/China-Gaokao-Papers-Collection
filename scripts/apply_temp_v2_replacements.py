@@ -921,6 +921,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2023-40-math": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（天津）数学高考真题/2023年高考数学试卷（天津）（空白卷）.pdf",
+        "old_sha256": "e2d92d8f065a9a4fbc2c400748d3b505d031f4fc94420e72efff773cc4318a67",
+        "new_sha256": "3912f7e58071db603807b97702869f80f0eb684ad66c2d552ccd3d342c607a41",
+        "title": "2023年普通高等学校招生全国统一考试（天津卷）数学",
+        "paper_type": "天津卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、函数图像等首页题目，鸢尾花散点图、立体几何图以及末页第 18 至 20 题椭圆、数列、函数题与旧版一致。"
+            "新版本为无答案原卷，全部题目完整；第 5 页为空白尾页，第 4 页已完整结束试题。旧版将同卷横排为 2 页 A3，故替换为新版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
