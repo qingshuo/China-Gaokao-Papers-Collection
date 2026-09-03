@@ -879,6 +879,20 @@ REPLACEMENTS = {
             "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
         ),
     },
+    "deekur-2022-29-math": {
+        "source": "temp/版本2：数学（按省份分类）2008-2024/2008-2024·（北京）数学高考真题/2022年高考数学试卷（北京）（空白卷）.pdf",
+        "old_sha256": "87067dae2d627c1bb91a24b8e1be3b429d5c8def474a82ea8e95a226fbd28544",
+        "new_sha256": "094fe01402dc49b2088d8fe270937e30cd7f11f2d0c0e1b5bcfbe3e4fe7d92f9",
+        "title": "2022年普通高等学校招生全国统一考试（北京卷）数学",
+        "paper_type": "北京卷",
+        "source_type": "local-upload",
+        "license_status": "unknown",
+        "note": (
+            "内容复核：视觉比对确认集合、复数、圆的对称轴等首页题目，以及末页第 18 至 21 题频率估计、椭圆、函数和连续可表数题与旧版一致。"
+            "候选保留正式卷首和全部题目内容；卷首标注原卷共 5 页，但当前 A4 重排 PDF 物理页为 4 页。旧版将同卷横排为 2 页 A3，故替换为该完整内容版本。"
+            "替换文件来自用户 temp 目录，来源与授权状态相应更新为本地上传/未知。"
+        ),
+    },
 }
 
 # New candidates use the same hash-locked, explicit-review workflow as
