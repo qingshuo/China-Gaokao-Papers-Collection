@@ -13,18 +13,29 @@ import argparse
 import csv
 import difflib
 import hashlib
+import importlib.util
 import logging
 import re
 from pathlib import Path
-
-from pypdf import PdfReader
 
 from stats import CATALOG, ROOT, read_csv
 
 logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 
+def is_replacement_candidate(result: str, existing: dict[str, str]) -> bool:
+    """Allow replacement only for a matching, explicitly unverified upload."""
+    return (
+        result == "full_text_and_page_match"
+        and existing.get("status") != "verified"
+        and existing.get("source_type") == "local-upload"
+        and existing.get("license_status") == "unknown"
+    )
+
+
 def normalized_text(path: Path) -> tuple[int | None, str, str]:
+    from pypdf import PdfReader
+
     try:
         reader = PdfReader(path)
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
@@ -73,11 +84,7 @@ def compare(audit_rows: list[dict[str, str]], catalog_rows: list[dict[str, str]]
                 result = "likely_same_content_layout_difference"
             else:
                 result = "content_or_page_difference"
-            eligible = (
-                result == "full_text_and_page_match"
-                and existing.get("source_type") == "local-upload"
-                and existing.get("license_status") == "unknown"
-            )
+            eligible = is_replacement_candidate(result, existing)
             report.append({
                 "candidate_source": candidate["source"], "existing_record_id": record_id,
                 "candidate_pages": "" if candidate_pages is None else str(candidate_pages),
@@ -114,6 +121,8 @@ def main() -> int:
             removed = set(args.remove_record_id)
             rows = [row for row in reader if row.get("existing_record_id") not in removed]
     else:
+        if importlib.util.find_spec("pypdf") is None:
+            parser.error("pypdf is required for text comparison; install it or use the bundled workspace Python")
         with (ROOT / args.audit).open(newline="", encoding="utf-8") as handle:
             audit_rows = list(csv.DictReader(handle))
         rows = compare(audit_rows, read_csv(CATALOG))

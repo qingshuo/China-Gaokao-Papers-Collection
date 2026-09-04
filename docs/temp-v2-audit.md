@@ -7,10 +7,10 @@
 
 | 结果 | 数量 |
 | --- | ---: |
-| exact_existing_hash | 53 |
-| same_identity_existing | 378 |
-| temp_identity_duplicate | 2990 |
-| new_candidate | 1581 |
+| exact_existing_hash | 140 |
+| same_identity_existing | 366 |
+| temp_identity_duplicate | 2964 |
+| new_candidate | 1532 |
 | ambiguous_scope | 17 |
 
 完整逐文件清单见 [temp-v2-audit.csv](temp-v2-audit.csv)，其中含原始相对路径、SHA-256、页数和候选替换记录。

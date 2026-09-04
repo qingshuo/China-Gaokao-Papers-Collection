@@ -88,6 +88,16 @@ TEMP_V2_REPLACEMENTS_SPEC = importlib.util.spec_from_file_location("apply_temp_v
 apply_temp_v2_replacements = importlib.util.module_from_spec(TEMP_V2_REPLACEMENTS_SPEC)
 TEMP_V2_REPLACEMENTS_SPEC.loader.exec_module(apply_temp_v2_replacements)
 
+TEMP_V2_REVIEW_SCRIPT = Path(__file__).parents[1] / "scripts" / "review_temp_v2_matches.py"
+TEMP_V2_REVIEW_SPEC = importlib.util.spec_from_file_location("review_temp_v2_matches", TEMP_V2_REVIEW_SCRIPT)
+review_temp_v2_matches = importlib.util.module_from_spec(TEMP_V2_REVIEW_SPEC)
+TEMP_V2_REVIEW_SPEC.loader.exec_module(review_temp_v2_matches)
+
+TEMP_V2_SAMPLE_SCRIPT = Path(__file__).parents[1] / "scripts" / "sample_temp_v2_review.py"
+TEMP_V2_SAMPLE_SPEC = importlib.util.spec_from_file_location("sample_temp_v2_review", TEMP_V2_SAMPLE_SCRIPT)
+sample_temp_v2_review = importlib.util.module_from_spec(TEMP_V2_SAMPLE_SPEC)
+TEMP_V2_SAMPLE_SPEC.loader.exec_module(sample_temp_v2_review)
+
 
 class StatsTests(unittest.TestCase):
     def test_empty_catalog_is_valid(self):
@@ -160,6 +170,9 @@ class StatsTests(unittest.TestCase):
         self.assertIn("| 2024 | 1 |", readme)
         self.assertIn("PDF 完整性审计", readme)
         self.assertIn("DOCX 完整性审计", readme)
+        self.assertIn("可检索、可校验、可追溯", readme)
+        self.assertIn("数据可信度", readme)
+        self.assertIn("贡献指南", readme)
 
     def test_readme_excludes_external_papers_from_local_index_counts(self):
         rows = [
@@ -414,6 +427,30 @@ class StatsTests(unittest.TestCase):
         self.assertEqual(len(materialization["sha256"]), 64)
         self.assertEqual(materialization["region"], "BJ")
         self.assertTrue(materialization["local_path"].endswith(".pdf"))
+
+    def test_temp_v2_review_never_proposes_replacing_verified_records(self):
+        existing = {"status": "verified", "source_type": "local-upload", "license_status": "unknown"}
+        self.assertFalse(review_temp_v2_matches.is_replacement_candidate("full_text_and_page_match", existing))
+        self.assertTrue(
+            review_temp_v2_matches.is_replacement_candidate(
+                "full_text_and_page_match", {**existing, "status": "indexed"}
+            )
+        )
+
+    def test_temp_v2_sample_is_stratified_and_deduplicates_high_risk_hashes(self):
+        base = {
+            "year": "2024", "region": "BJ", "subject": "物理", "paper_family": "地方卷", "track": "",
+            "pages": "5", "page_error": "", "existing_record_ids": "",
+        }
+        rows = [
+            {**base, "action": "ambiguous_scope", "source": "temp/a.pdf", "sha256": "same"},
+            {**base, "action": "ambiguous_scope", "source": "temp/b.pdf", "sha256": "same"},
+            {**base, "action": "new_candidate", "source": "temp/c.pdf", "sha256": "c"},
+            {**base, "action": "new_candidate", "source": "temp/d.pdf", "sha256": "d", "subject": "化学"},
+        ]
+        selected = sample_temp_v2_review.sample_rows(rows, rate=0.01, minimum=1, seed="test")
+        self.assertEqual(sum(row["action"] == "ambiguous_scope" for row in selected), 1)
+        self.assertEqual({row["subject"] for row in selected if row["action"] == "new_candidate"}, {"物理", "化学"})
 
     def test_deekur_historical_import_keeps_unicode_filename_and_assigns_nationwide_region(self):
         path = "普通高考/2016/2016全国2文(甘肃,青海,内蒙古,黑龙江,吉林,辽宁,海南,宁夏,新疆,西藏,陕西,重庆).pdf"

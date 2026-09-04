@@ -22,6 +22,25 @@ jobs:
       - name: Rebuild reports
         run: |
           python scripts/stats.py --write docs/coverage.md
+          python scripts/stats.py --write-readme README.md
           python scripts/stats.py --write-index docs/papers-index.md
+          python scripts/stats.py --write-external-candidates-index docs/external-candidates.md
+          python scripts/stats.py --write-year-index docs/year-index.md
+          python scripts/stats.py --write-region-index docs/region-index.md
+          python scripts/stats.py --write-subject-year-matrix docs/subject-year-matrix.md
+          python scripts/stats.py --write-supplements-index docs/supplements-index.md
+          python scripts/stats.py --write-official-evidence-index docs/official-evidence.md
+          python scripts/stats.py --write-official-portals-index docs/official-portals.md
       - name: Check generated reports
-        run: git diff --exit-code -- docs/coverage.md docs/papers-index.md
+        run: |
+          git diff --exit-code -- \
+            README.md \
+            docs/coverage.md \
+            docs/papers-index.md \
+            docs/external-candidates.md \
+            docs/year-index.md \
+            docs/region-index.md \
+            docs/subject-year-matrix.md \
+            docs/supplements-index.md \
+            docs/official-evidence.md \
+            docs/official-portals.md

@@ -326,21 +326,29 @@ def render_readme(summary: dict[str, object]) -> str:
     lines = [
         "# 中国高考试卷资料库",
         "",
-        "按年份、学科和地区整理高考试卷。主库当前收录 "
+        "一个可检索、可校验、可追溯的中国高考试卷集合，按年份、学科和地区统一整理。主库当前收录 "
         f"**{summary['complete_local_papers']} 份完整试卷**，覆盖 **{min(years)}-{max(years)} 年**；"
         "答案、解析和片段资料均单独归档，不混入主卷索引。",
         "",
-        "**快速入口：** [按学科浏览](docs/papers-index.md) · [按年份浏览](docs/year-index.md) · "
-        "[按地区浏览](docs/region-index.md) · [年份 × 学科](docs/subject-year-matrix.md) · [答案、解析与片段资料](docs/supplements-index.md) · "
-        "[覆盖统计](docs/coverage.md) · [卷制目标与缺口](docs/target-coverage.md) · [官方卷制佐证](docs/target-evidence.md) · [官方渠道核查](docs/official-portals.md) · [来源可追溯性](docs/traceability.md) · [官方身份佐证](docs/official-evidence.md) · "
-        "[外部候选](docs/external-candidates.md) · "
-        "[用卷范围线索](docs/usage-scope-leads.md) · "
-        "[内容审查记录](docs/content-review.md) · [候选重复核验队列](docs/candidate-duplicates.md) · [完全相同文件审计](docs/binary-duplicates.md) · "
-        "[主试卷真实性观察](docs/authenticity-watch.md) · [PDF 完整性审计](docs/pdf-integrity.md) · [DOCX 完整性审计](docs/docx-integrity.md) · "
-        "[收集与核验计划](docs/collection-plan.md) · [项目说明](docs/project.md)",
+        "## 快速开始",
+        "",
+        "| 需求 | 入口 |",
+        "| --- | --- |",
+        "| 查找某年试卷 | [按年份浏览](docs/year-index.md) |",
+        "| 查找某学科试卷 | [按学科浏览](docs/papers-index.md) |",
+        "| 查找某地区试卷 | [按地区浏览](docs/region-index.md) |",
+        "| 查看年份与学科覆盖 | [年份 × 学科矩阵](docs/subject-year-matrix.md) |",
+        "| 查找答案、解析或片段 | [附属资料索引](docs/supplements-index.md) |",
+        "| 查看缺口和待收集目标 | [卷制目标与缺口](docs/target-coverage.md) |",
         "",
         f"附属资料 **{summary['supplementary_files']} 份**、片段资料 **{summary['partial_files']} 份**已单独整理，"
         "不计入下方完整试卷统计。",
+        "",
+        "## 数据可信度",
+        "",
+        f"- 完整试卷中 **{summary['verified']} 份**已完成内容核验；其余 `indexed` 记录表示文件已入库，但不声称已经人工确认。",
+        "- 每个本地文件在 [`data/exams.csv`](data/exams.csv) 中记录来源、SHA-256、格式、资料类别和授权状态。",
+        "- `verified` 仅表示内容/版本复核，不等于官方发布或获得再分发授权；请分别查看 [官方身份佐证](docs/official-evidence.md)、[来源可追溯性](docs/traceability.md) 和 [第三方资料归属](THIRD-PARTY-NOTICES.md)。",
         "",
         "## 年份总览",
         "",
@@ -365,6 +373,13 @@ def render_readme(summary: dict[str, object]) -> str:
         "完整试卷放在 `papers/<年份>/<地区>/<学科>/`；答案、解析放在 `papers/supplements/`，"
         "片段资料放在 `papers/partials/`。PDF 可直接在线预览，DOCX/DOC 适合继续编辑。 "
         "每份文件的来源、SHA-256、格式、资料类别和授权状态记录在 [`data/exams.csv`](data/exams.csv)。",
+        "",
+        "## 质量与贡献",
+        "",
+        "[覆盖统计](docs/coverage.md) · [内容审查记录](docs/content-review.md) · [PDF 完整性审计](docs/pdf-integrity.md) · "
+        "[DOCX 完整性审计](docs/docx-integrity.md) · [候选重复审计](docs/candidate-duplicates.md) · [收集与核验计划](docs/collection-plan.md)",
+        "",
+        "补充试卷前请阅读 [贡献指南](CONTRIBUTING.md) 和 [数据字典](docs/data-dictionary.md)。批量候选集应先审计、再分层抽验，具体见 [temp 版本 2 整理流程](docs/temp-v2-workflow.md)。",
         "",
         "本仓库只记录当前收集到的资料，不代表试卷全集。导入时会排除带推广、网盘或引流内容的文档；"
         "资料授权状态默认标记为“待核验”，使用和再分发前请查看 [第三方资料归属](THIRD-PARTY-NOTICES.md)。",

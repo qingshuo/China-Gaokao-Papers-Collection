@@ -24,6 +24,12 @@ scripts/audit_traceability.py 生成来源可追溯性审计
 scripts/normalize_paper_layout.py 将旧来源目录迁入统一布局
 scripts/normalize_national_regions.py 纠正明确全国卷的地区与目录
 scripts/apply_content_review.py 应用经过内容核验的去重与分类结论
+scripts/audit_temp_v2.py 审计 temp 版本 2 候选集（只读）
+scripts/review_temp_v2_matches.py 比较 temp 候选与现有库内容
+scripts/apply_temp_v2_replacements.py 应用显式、哈希锁定的 temp 决策
+scripts/temp_v2_status.py 生成精简的 temp 任务状态与交接记忆
+scripts/sample_temp_v2_review.py 生成可重复的分层抽验清单
+scripts/clean_temp_v2_cache.py 清理仅限 `tmp/pdfs/` 的验证缓存
 scripts/target_coverage.py 校验卷制目标并生成缺口报告
 docs/papers-index.md 自动生成的试卷索引
 docs/external-candidates.md 不在仓库内、待核验的外部完整卷候选索引
@@ -44,6 +50,8 @@ docs/subject-year-matrix.md 年份 × 学科导航矩阵
 docs/usage-scope-leads.md 社区用卷范围线索索引
 docs/content-review.md 已执行内容审查的依据与结论
 docs/coverage.md     自动生成的覆盖统计
+docs/temp-v2-workflow.md temp 版本 2 的固定整理与核验流程
+docs/temp-v2-status.md temp 版本 2 的精简当前状态
 ```
 
 ## 收录状态

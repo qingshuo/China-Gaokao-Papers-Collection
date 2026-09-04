@@ -1068,6 +1068,22 @@ REPLACEMENTS = {
 # New candidates use the same hash-locked, explicit-review workflow as
 # replacements.  Nothing in temp/ is bulk-imported by this script.
 ADDITIONS = {
+    "temp-v2-2024-历史-ea6bcd5b49f3": {
+        "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（江苏）历史高考真题/2024年高考历史试卷（江苏）（空白卷）.pdf",
+        "sha256": "ea6bcd5b49f3836eba41f0c7d56723f54307aafbc33850fa1f745189403c98fb",
+        "year": "2024",
+        "region": "JS",
+        "paper_type": "江苏卷",
+        "subject": "历史",
+        "title": "2024年江苏省普通高中学业水平选择性考试历史",
+        "local_path": "papers/2024/JS/历史/江苏历史-试题-p.pdf",
+        "note": (
+            "用户 temp 目录导入；原始相对路径：版本2：历史（按省份分类）2008-2024/2008-2024·（江苏）历史高考真题/2024年高考历史试卷（江苏）（空白卷）.pdf；格式：pdf；"
+            "内容复核：视觉检查确认毛家坪遗址、北宋常平仓、扬州城变迁图与上海洋布店选择题，"
+            "毛瑟枪—八一式马步枪、南诏古道材料，以及末页古代文明文化论述题完整。"
+            "PDF 页码共 6 页，题号连续覆盖第 1 至 19 题，正文在第 6 页完整结束，作为新增江苏卷归档。"
+        ),
+    },
     "temp-v2-2024-历史-e4971649b179": {
         "source": "temp/版本2：历史（按省份分类）2008-2024/2008-2024·（甘肃）历史高考真题/2024年高考历史试卷（甘肃）（空白卷）.pdf",
         "sha256": "e4971649b179bb22af12d48587ea6aaa97d57dd7051f7ac74418c5e1774098ef",
